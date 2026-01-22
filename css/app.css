@@ -1,1 +1,206 @@
+/* ======================================================
+   V5 BASE
+   iOS 26 – Liquid Glass
+   Light + Dark Mode Ready
+====================================================== */
 
+/* ======================================================
+   1. CSS RESET / BASE
+   🔍 keyword: V5 BASE
+====================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+
+  width: 100%;
+  min-height: 100%;
+
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+
+  background: var(--app-bg);
+  color: var(--text-primary);
+
+  overflow-x: hidden;
+}
+
+/* ======================================================
+   2. DESIGN TOKENS
+   🔍 keyword: DESIGN TOKENS
+====================================================== */
+
+/* ---------- Light Mode (Default) ---------- */
+:root {
+  /* App background */
+  --app-bg: #f2f2f7;
+
+  /* Text */
+  --text-primary: #1c1c1e;
+  --text-secondary: #5f6368;
+
+  /* Accent */
+  --accent: #007aff;
+  --danger: #ff3b30;
+  --success: #34c759;
+
+  /* Glass */
+  --glass-bg: rgba(255, 255, 255, 0.75);
+  --glass-border: rgba(255, 255, 255, 0.35);
+  --glass-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+
+  /* Blur */
+  --glass-blur: blur(24px) saturate(1.3);
+
+  /* Radius */
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+
+  /* Motion (base only) */
+  --ease-out: cubic-bezier(.2,.8,.2,1);
+}
+
+/* ---------- Dark Mode ---------- */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --app-bg: #000000;
+
+    --text-primary: #f5f5f7;
+    --text-secondary: #a1a1a6;
+
+    --accent: #0a84ff;
+    --danger: #ff453a;
+    --success: #32d74b;
+
+    --glass-bg: rgba(28, 28, 30, 0.75);
+    --glass-border: rgba(255, 255, 255, 0.12);
+    --glass-shadow:
+      0 20px 60px rgba(0, 0, 0, 0.6),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
+    --glass-blur: blur(28px) saturate(1.4);
+  }
+}
+
+/* ======================================================
+   3. APP ROOT LAYOUT
+   🔍 keyword: APP ROOT
+====================================================== */
+
+#app {
+  min-height: 100dvh;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* ======================================================
+   4. HEADER ROOT (Glass-ready)
+   🔍 keyword: HEADER ROOT
+====================================================== */
+
+#appHeader {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+
+  padding:
+    calc(14px + env(safe-area-inset-top))
+    16px
+    14px;
+
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+
+  border-bottom: 1px solid var(--glass-border);
+}
+
+/* ======================================================
+   5. OVERLAY / SHEET SYSTEM (CORE)
+   🔍 keyword: OVERLAY SYSTEM
+====================================================== */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(0, 0, 0, 0.28);
+
+  opacity: 0;
+  pointer-events: none;
+
+  transition: opacity .25s var(--ease-out);
+}
+
+.overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ----- Glass Surface (ใช้กับ content ภายใน overlay) ----- */
+.glass-surface {
+  width: 100%;
+  max-width: 420px;
+
+  margin: 0 16px;
+  padding: 20px 18px;
+
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+/* ======================================================
+   6. GLOBAL UI
+   🔍 keyword: GLOBAL UI
+====================================================== */
+
+#toastContainer {
+  position: fixed;
+  top: env(safe-area-inset-top, 12px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3000;
+}
+
+#loadingOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 4000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(0,0,0,0.35);
+}
+
+#loadingOverlay.hidden {
+  display: none;
+}
+
+/* ======================================================
+   7. UTILITIES
+   🔍 keyword: UTILITIES
+====================================================== */
+
+.hidden {
+  display: none !important;
+}
