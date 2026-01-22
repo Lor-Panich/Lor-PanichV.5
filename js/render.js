@@ -79,7 +79,6 @@ Render.shopHeader = function (title = "", subtitle = "") {
         }
       </div>
 
-      <!-- 🔍 Search Icon (Right Action) -->
       <button
         class="header-icon-btn"
         id="searchToggleBtn"
