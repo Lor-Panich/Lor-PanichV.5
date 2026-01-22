@@ -109,6 +109,14 @@ html, body {
 #appHeader {
   position: sticky;
   top: 0;
+
+  /*
+    🔵 POINT 3 — Z-INDEX RULE (LOCKED)
+    - Header = App Chrome (เหมือน UINavigationBar)
+    - ต้องอยู่เหนือ content ปกติ
+    - ต้องอยู่ใต้ overlay / sheet เสมอ
+    - overlay / sheet ต้องใช้ z-index >= 1000
+  */
   z-index: 20;
 
   padding:
@@ -121,7 +129,44 @@ html, body {
   -webkit-backdrop-filter: var(--glass-blur);
 
   border-bottom: 1px solid var(--glass-border);
+
+  /* 🔵 POINT 1 — iOS-like depth separation */
+  box-shadow:
+    0 1px 0 rgba(0, 0, 0, 0.04),
+    0 4px 12px rgba(0, 0, 0, 0.06);
 }
+
+/* ======================================================
+   🔵 POINT 2 — HEADER TYPOGRAPHY (LOCKED)
+   iOS 26 / Liquid Glass
+====================================================== */
+
+/* Header content wrapper */
+.shop-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Shop title (ชื่อร้าน) */
+.shop-title {
+  font-size: 22px;              /* iOS-style compact title */
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  line-height: 1.2;
+
+  color: var(--text-primary);
+}
+
+/* Shop subtitle */
+.shop-subtitle {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.2;
+
+  color: var(--text-secondary);
+}
+
 
 /* ======================================================
    5. OVERLAY / SHEET SYSTEM (CORE)
