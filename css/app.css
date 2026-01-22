@@ -170,11 +170,20 @@ html, body {
 /* ======================================================
    SEARCH BAR (SUB HEADER)
    🔍 keyword: SEARCH BAR
+   ✅ FIX 2 — visibility locked
 ====================================================== */
 
+/* 🔒 default: hidden (ยังไม่กด 🔍) */
 .search-bar {
+  display: none;
+
   padding: 12px 16px;
   background: var(--app-bg);
+}
+
+/* 🔓 show only when search is opened */
+body.search-open .search-bar {
+  display: block;
 }
 
 .search-input {
