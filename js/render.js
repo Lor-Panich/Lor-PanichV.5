@@ -26,12 +26,21 @@ Render.afterRender = function () {
 };
 
 /* ======================================================
-   CANONICAL: BASE WRAPPER
+   CANONICAL: BASE WRAPPER (USAGE LOCKED)
    🔍 keyword: CANONICAL COMPONENT
 ====================================================== */
 
 /**
  * แม่แบบโครงหน้า (ใช้ทั้ง Viewer / Admin)
+ *
+ * ⚠️ IMPORTANT USAGE RULE
+ * - header: ใช้ได้เฉพาะ sub-header / section header เท่านั้น
+ * - ❌ ห้ามใช้กับ App Header (Shop / Admin)
+ * - App Header ต้องใช้:
+ *     - Render.shopHeader()
+ *     - Render.adminHeader()
+ *
+ * ❗ Render.page() ไม่มีหน้าที่ควบคุม App Chrome
  */
 Render.page = function ({ header = "", content = "" }) {
   return `
@@ -43,12 +52,22 @@ Render.page = function ({ header = "", content = "" }) {
 };
 
 /* ======================================================
-   CANONICAL: SHOP HEADER (VIEWER)
+   CANONICAL: SHOP HEADER (VIEWER / APP CHROME)
    🔍 keyword: CANONICAL SHOP HEADER
 ====================================================== */
 
+/**
+ * Header สำหรับ Viewer
+ * - เป็น App Chrome (เหมือน UINavigationBar)
+ * - มี side-effect
+ * - ❌ ไม่คืน HTML
+ * - ❌ ไม่เป็น content
+ */
 Render.shopHeader = function (title = "", subtitle = "") {
-  return `
+  const headerEl = document.getElementById("appHeader");
+  if (!headerEl) return;
+
+  headerEl.innerHTML = `
     <div class="shop-header">
       <div class="shop-title">${title}</div>
       ${
