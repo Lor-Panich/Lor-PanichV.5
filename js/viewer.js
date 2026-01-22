@@ -69,8 +69,8 @@ Viewer._mount = function (html) {
 
 /* ---------- Shared Header ---------- */
 Viewer._shopHeader = function () {
-  return Render.header(
-    "Lor-Panich",
+  return Render.shopHeader(
+    "ร้านค้า Lor-Panich",
     "สินค้าทั้งหมด • พร้อมขาย"
   );
 };
@@ -101,7 +101,10 @@ Viewer._renderError = function (message) {
 
   Viewer._mount(
     Render.page({
-      header: Render.header("เกิดข้อผิดพลาด"),
+      header: Render.shopHeader(
+        "เกิดข้อผิดพลาด",
+        "ไม่สามารถโหลดข้อมูลได้"
+      ),
       content: Render.empty("ไม่สามารถโหลดข้อมูลได้")
     })
   );
