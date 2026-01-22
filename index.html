@@ -1,1 +1,124 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
 
+  <!-- =================================================
+       V5 HTML SHELL
+       Mobile-First / iOS-Safe / GitHub Pages Ready
+  ================================================== -->
+
+  <!-- Mobile First / iOS Safe -->
+  <meta
+    name="viewport"
+    content="
+      width=device-width,
+      initial-scale=1,
+      maximum-scale=1,
+      user-scalable=no,
+      viewport-fit=cover
+    "
+  />
+
+  <title>StockBuilder V5</title>
+
+  <!-- iOS status bar color -->
+  <meta name="theme-color" content="#f2f2f7" />
+
+  <!-- =================================================
+       CSS
+       🔍 keyword: APP CSS
+       (cache-safe สำหรับ GitHub Pages)
+  ================================================== -->
+  <link rel="stylesheet" href="./css/app.css?v=v5" />
+</head>
+
+<body>
+
+  <!-- =================================================
+       HEADER ROOT
+       🔍 keyword: HEADER ROOT
+  ================================================== -->
+  <header id="appHeader"></header>
+
+  <!-- =================================================
+       APP ROOT
+       🔍 keyword: APP ROOT
+       (render.js จะ inject HTML ที่นี่)
+  ================================================== -->
+  <main id="app"></main>
+
+  <!-- =================================================
+       GLOBAL UI LAYERS
+       🔍 keyword: GLOBAL UI
+  ================================================== -->
+
+  <!-- Toast -->
+  <div id="toastContainer"></div>
+
+  <!-- Loading Overlay -->
+  <div id="loadingOverlay" class="hidden">
+    <div id="loadingText">กำลังโหลด...</div>
+  </div>
+
+  <!-- =================================================
+       OVERLAY / SHEET ROOT
+       🔍 keyword: OVERLAY ROOT
+       (ใช้ร่วมกับ ui.js)
+  ================================================== -->
+
+  <!-- Product Detail -->
+  <div id="productSheet" class="overlay hidden"></div>
+
+  <!-- Cart -->
+  <div id="cartSheet" class="overlay hidden"></div>
+
+  <!-- Quantity Input -->
+  <div id="qtySheet" class="overlay hidden"></div>
+
+  <!-- Confirm Dialog -->
+  <div id="confirmSheet" class="overlay hidden"></div>
+
+  <!-- Global Backdrop (ต้องมีตัวเดียว) -->
+  <div id="globalBackdrop" class="overlay hidden"></div>
+
+  <!-- =================================================
+       SCRIPT LOAD ORDER (LOCK)
+       🔍 keyword: SCRIPT LOAD ORDER
+       ❌ ห้ามสลับ
+  ================================================== -->
+
+  <!-- CORE (config + state) -->
+  <script src="./js/core.js"></script>
+
+  <!-- API -->
+  <script src="./js/api.js"></script>
+
+  <!-- UI (toast / overlay / motion) -->
+  <script src="./js/ui.js"></script>
+
+  <!-- RENDER (HTML only) -->
+  <script src="./js/render.js"></script>
+
+  <!-- FLOWS -->
+  <script src="./js/viewer.js"></script>
+  <script src="./js/admin.js"></script>
+
+  <!-- BOOTSTRAP -->
+  <script src="./js/init.js"></script>
+
+  <!-- =================================================
+       DEBUG GUARD (ลบได้ใน production)
+       🔍 keyword: DEBUG GUARD
+  ================================================== -->
+  <script>
+    window.addEventListener("load", () => {
+      if (!window.Core)  console.warn("[BOOT] Core not loaded");
+      if (!window.API)   console.warn("[BOOT] API not loaded");
+      if (!window.UI)    console.warn("[BOOT] UI not loaded");
+      if (!window.Render)console.warn("[BOOT] Render not loaded");
+    });
+  </script>
+
+</body>
+</html>
