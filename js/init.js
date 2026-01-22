@@ -31,24 +31,25 @@
     return;
   }
 
-/* ====================================================
-   APP START
-   🔍 keyword: APP BOOTSTRAP
-==================================================== */
+  /* ====================================================
+     APP BOOTSTRAP
+     🔍 keyword: APP BOOTSTRAP
+  ==================================================== */
 
-document.addEventListener("DOMContentLoaded", async () => {
-  try {
-    if (Core.config.debug) {
-      console.log("[INIT] StockBuilder V5 starting...");
+  document.addEventListener("DOMContentLoaded", async () => {
+    try {
+      if (Core.config?.debug) {
+        console.log("[INIT] StockBuilder V5 starting...");
+      }
+
+      // ✅ Canonical entry point
+      // init.js ไม่รู้ flow ภายใน Viewer
+      await Viewer.init();
+
+    } catch (err) {
+      console.error("[INIT] Fatal error", err);
+      UI.showToast("ระบบไม่พร้อมใช้งาน", "error");
     }
-
-    // เข้า Viewer ทันที (Canonical Entry)
-    await Viewer.enter();
-
-  } catch (err) {
-    console.error("[INIT] Fatal error", err);
-    UI.showToast("ระบบไม่พร้อมใช้งาน", "error");
-  }
-});
+  });
 
 })();
