@@ -167,6 +167,78 @@ html, body {
   color: var(--text-secondary);
 }
 
+/* ======================================================
+   🔧 STEP B — HEADER SEARCH MODE (CSS ONLY)
+   iOS 26 / Liquid Glass
+====================================================== */
+
+/* layout when header has right action */
+.shop-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/* search input (hidden by default) */
+.header-search {
+  display: none;
+  flex: 1;
+}
+
+/* search input field */
+.header-search input {
+  width: 100%;
+  padding: 8px 12px;
+
+  font-size: 16px;
+  line-height: 1.2;
+
+  border-radius: 12px;
+  border: 1px solid var(--glass-border);
+
+  background: rgba(255, 255, 255, 0.6);
+  color: var(--text-primary);
+
+  outline: none;
+}
+
+/* dark mode tweak */
+@media (prefers-color-scheme: dark) {
+  .header-search input {
+    background: rgba(28, 28, 30, 0.6);
+  }
+}
+
+/* -------------------------------
+   SEARCH ACTIVE MODE
+-------------------------------- */
+
+#appHeader.search-active .shop-header {
+  display: none;
+}
+
+#appHeader.search-active .header-search {
+  display: block;
+}
+
+/* cancel button (future use) */
+.header-cancel-btn {
+  display: none;
+
+  background: transparent;
+  border: none;
+
+  font-size: 16px;
+  color: var(--accent);
+
+  padding: 6px 8px;
+}
+
+#appHeader.search-active .header-cancel-btn {
+  display: inline-block;
+}
+
 
 /* ======================================================
    5. OVERLAY / SHEET SYSTEM (CORE)
