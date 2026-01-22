@@ -8,11 +8,24 @@
 window.Viewer = {};
 
 /* ======================================================
-   VIEWER ENTRY
+   VIEWER INIT
    🔍 keyword: VIEWER INIT
+   🔴 CHANGED
 ====================================================== */
 
 Viewer.init = async function () {
+  // init ควรทำหน้าที่เบาที่สุด
+  // เผื่ออนาคตมี bind event / restore ui
+  await Viewer.enter();
+};
+
+/* ======================================================
+   VIEWER ENTER (ENTRY POINT)
+   🔍 keyword: VIEWER ENTER
+   ➕ ADDED
+====================================================== */
+
+Viewer.enter = async function () {
   Core.state.mode = "viewer";
 
   Viewer._renderLoading();
@@ -112,7 +125,17 @@ Viewer._renderError = function (message) {
 
 /* ---------- Product List ---------- */
 Viewer._renderList = function (products) {
-  const itemsHTML = products
+  // ใช้ state เป็นหลัก ถ้า param ไม่ถูกต้อง
+  const list = Array.isArray(products)
+    ? products
+    : Core.state.viewer.products;
+
+  // guard empty / invalid
+  if (!Array.isArray(list) || list.length === 0) {
+    return Viewer._renderEmpty();
+  }
+
+  const itemsHTML = list
     .map(p => Render.productCard(p))
     .join("");
 
