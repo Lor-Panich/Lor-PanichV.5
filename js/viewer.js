@@ -88,7 +88,10 @@ Viewer._renderLoading = function () {
 Viewer._renderEmpty = function () {
   Viewer._mount(
     Render.page({
-      header: Render.header("รายการสินค้า"),
+      header: Render.header(
+        "Lor-Panich",
+        "สินค้าทั้งหมด • พร้อมขาย"
+      ),
       content: Render.empty("ยังไม่มีสินค้าในระบบ")
     })
   );
@@ -108,20 +111,45 @@ Viewer._renderError = function (message) {
 
 /* ---------- Product List ---------- */
 Viewer._renderList = function (products) {
-  const itemsHTML = products
-    .map(p =>
-      Render.card(`
-        <div class="product-name">${p.name || "-"}</div>
-        <div class="product-meta">
-          ราคา: ${p.price ?? 0} บาท
+  const itemsHTML = products.map(p => `
+    <div class="product-card">
+      <img
+        class="product-thumb"
+        src="${p.image || ""}"
+        alt="${p.name || ""}"
+      />
+
+      <div class="product-info">
+        <div class="product-name">
+          ${p.name || "-"}
         </div>
-      `)
-    )
-    .join("");
+
+        <div class="product-code">
+          รหัส: ${p.productId || "-"}
+        </div>
+
+        <div class="product-price">
+          ฿${p.price ?? 0}
+        </div>
+
+        <div class="product-meta">
+          <span class="stock-text">
+            คงเหลือ ${p.stock ?? 0}
+          </span>
+          <span class="badge-ready">
+            พร้อมขาย
+          </span>
+        </div>
+      </div>
+    </div>
+  `).join("");
 
   Viewer._mount(
     Render.page({
-      header: Render.header("รายการสินค้า"),
+      header: Render.header(
+        "Lor-Panich",
+        "สินค้าทั้งหมด • พร้อมขาย"
+      ),
       content: Render.list(itemsHTML)
     })
   );
