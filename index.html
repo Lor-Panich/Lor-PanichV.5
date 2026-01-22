@@ -28,7 +28,6 @@
   <!-- =================================================
        CSS
        🔍 keyword: APP CSS
-       (cache-safe สำหรับ GitHub Pages)
   ================================================== -->
   <link rel="stylesheet" href="./css/app.css?v=v5" />
 </head>
@@ -36,7 +35,7 @@
 <body>
 
   <!-- =================================================
-       HEADER ROOT
+       HEADER ROOT (App Chrome)
        🔍 keyword: HEADER ROOT
   ================================================== -->
   <header id="appHeader"></header>
@@ -44,7 +43,7 @@
   <!-- =================================================
        APP ROOT
        🔍 keyword: APP ROOT
-       (render.js จะ inject HTML ที่นี่)
+       render.js จะ inject content ที่นี่
   ================================================== -->
   <main id="app"></main>
 
@@ -64,23 +63,23 @@
   <!-- =================================================
        OVERLAY / SHEET ROOT
        🔍 keyword: OVERLAY ROOT
-       (ใช้ร่วมกับ ui.js)
+       ใช้ร่วมกับ ui.js
   ================================================== -->
 
-  <!-- Product Detail -->
+  <!-- Product Detail Sheet -->
   <div id="productSheet" class="overlay hidden"></div>
 
-  <!-- Cart -->
+  <!-- (Reserved for future use) -->
   <div id="cartSheet" class="overlay hidden"></div>
-
-  <!-- Quantity Input -->
   <div id="qtySheet" class="overlay hidden"></div>
-
-  <!-- Confirm Dialog -->
   <div id="confirmSheet" class="overlay hidden"></div>
 
-  <!-- Global Backdrop (ต้องมีตัวเดียว) -->
-  <div id="globalBackdrop" class="overlay hidden"></div>
+  <!-- =================================================
+       GLOBAL BACKDROP (single instance)
+       🔍 keyword: GLOBAL BACKDROP
+       ❗ ไม่ใช้ class overlay
+  ================================================== -->
+  <div id="globalBackdrop" class="hidden"></div>
 
   <!-- =================================================
        SCRIPT LOAD ORDER (LOCK)
@@ -94,7 +93,7 @@
   <!-- API -->
   <script src="./js/api.js"></script>
 
-  <!-- UI (toast / overlay / motion) -->
+  <!-- UI (toast / overlay / search state) -->
   <script src="./js/ui.js"></script>
 
   <!-- RENDER (HTML only) -->
@@ -113,10 +112,11 @@
   ================================================== -->
   <script>
     window.addEventListener("load", () => {
-      if (!window.Core)  console.warn("[BOOT] Core not loaded");
-      if (!window.API)   console.warn("[BOOT] API not loaded");
-      if (!window.UI)    console.warn("[BOOT] UI not loaded");
-      if (!window.Render)console.warn("[BOOT] Render not loaded");
+      if (!window.Core)   console.warn("[BOOT] Core not loaded");
+      if (!window.API)    console.warn("[BOOT] API not loaded");
+      if (!window.UI)     console.warn("[BOOT] UI not loaded");
+      if (!window.Render) console.warn("[BOOT] Render not loaded");
+      if (!window.Viewer) console.warn("[BOOT] Viewer not loaded");
     });
   </script>
 
