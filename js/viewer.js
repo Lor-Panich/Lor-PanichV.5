@@ -72,6 +72,13 @@ Viewer.loadProducts = async function () {
    🔍 keyword: VIEWER RENDER STATES
 ====================================================== */
 
+Viewer._searchKeyword = "";
+
+Viewer._onSearchInput = function (value) {
+  Viewer._searchKeyword = value || "";
+  Viewer._renderList();
+};
+
 Viewer._mount = function (html) {
   const app = document.getElementById("app");
   if (!app) return;
