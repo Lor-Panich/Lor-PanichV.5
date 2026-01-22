@@ -169,15 +169,35 @@ UI.bindHeaderSearch = function () {
   if (!header) return;
 
   const toggleBtn = header.querySelector("#searchToggleBtn");
+  if (!toggleBtn) return;
 
-  if (toggleBtn) {
-    toggleBtn.onclick = function () {
-      // 🔵 ให้ Viewer เป็นคนควบคุม state
+  toggleBtn.onclick = function () {
+    const isOpen = document.body.classList.contains("search-open");
+
+    if (isOpen) {
+      // 🔒 CLOSE SEARCH
+      document.body.classList.remove("search-open");
+
       if (typeof Viewer !== "undefined") {
-        Viewer._isSearchOpen = true;
+        Viewer._searchKeyword = "";
         Viewer._renderList();
       }
-    };
-  }
+
+    } else {
+      // 🔓 OPEN SEARCH
+      document.body.classList.add("search-open");
+
+      if (typeof Viewer !== "undefined") {
+        Viewer._renderList();
+      }
+
+      // focus input หลัง render
+      setTimeout(() => {
+        const input = document.querySelector(".search-input");
+        if (input) input.focus();
+      }, 0);
+    }
+  };
 };
+
 
