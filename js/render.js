@@ -43,11 +43,11 @@ Render.page = function ({ header = "", content = "" }) {
 };
 
 /* ======================================================
-   CANONICAL: HEADER (SHOP STYLE)
-   🔴 CHANGED
+   CANONICAL: SHOP HEADER (VIEWER)
+   🔍 keyword: CANONICAL SHOP HEADER
 ====================================================== */
 
-Render.header = function (title = "", subtitle = "") {
+Render.shopHeader = function (title = "", subtitle = "") {
   return `
     <div class="shop-header">
       <div class="shop-title">${title}</div>
@@ -56,6 +56,22 @@ Render.header = function (title = "", subtitle = "") {
           ? `<div class="shop-subtitle">${subtitle}</div>`
           : ""
       }
+    </div>
+  `;
+};
+
+/* ======================================================
+   CANONICAL: ADMIN HEADER
+   🔍 keyword: CANONICAL ADMIN HEADER
+====================================================== */
+
+Render.adminHeader = function (title = "", rightHTML = "") {
+  return `
+    <div class="admin-header">
+      <div class="admin-title">${title}</div>
+      <div class="admin-actions">
+        ${rightHTML}
+      </div>
     </div>
   `;
 };
@@ -111,3 +127,50 @@ Render.card = function (content = "") {
     </div>
   `;
 };
+
+/* ======================================================
+   CANONICAL: PRODUCT CARD (VIEWER)
+   🔍 keyword: CANONICAL PRODUCT CARD
+====================================================== */
+
+/**
+ * Product Card มาตรฐานสำหรับ Viewer
+ * @param {Object} p - product data
+ */
+Render.productCard = function (p = {}) {
+  return `
+    <div class="product-card">
+      <img
+        class="product-thumb"
+        src="${p.image || ""}"
+        alt="${p.name || ""}"
+        loading="lazy"
+      />
+
+      <div class="product-info">
+        <div class="product-name">
+          ${p.name || "-"}
+        </div>
+
+        <div class="product-sku">
+          รหัส: ${p.productId || "-"}
+        </div>
+
+        <div class="product-price">
+          ฿${p.price ?? 0}
+        </div>
+
+        <div class="product-meta">
+          <div class="product-stock">
+            คงเหลือ ${p.stock ?? 0}
+          </div>
+
+          <div class="badge-ready">
+            พร้อมขาย
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+};
+
