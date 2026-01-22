@@ -153,7 +153,6 @@ Viewer._renderError = function (message) {
   UI.bindHeaderSearch();
 };
 
-/* ---------- Product List ---------- */
 Viewer._renderList = function (products) {
   // ใช้ state เป็นหลัก ถ้า param ไม่ถูกต้อง
   const allProducts = Array.isArray(products)
@@ -181,8 +180,10 @@ Viewer._renderList = function (products) {
 
   Viewer._mount(
     Render.page({
-      // 🔽 Sub-header: Search Bar (ใต้ Header)
-      header: Render.searchBar(Viewer._searchKeyword),
+      // ✅ แสดง search bar เฉพาะตอนเปิด search
+      header: Viewer._isSearchOpen
+        ? Render.searchBar(Viewer._searchKeyword)
+        : "",
 
       // 📦 Content
       content: filteredProducts.length
@@ -196,11 +197,14 @@ Viewer._renderList = function (products) {
   );
 
   // 🔗 bind search input → viewer state
-  const input = document.querySelector(".search-input");
-  if (input) {
-    input.oninput = e => Viewer._onSearchInput(e.target.value);
+  if (Viewer._isSearchOpen) {
+    const input = document.querySelector(".search-input");
+    if (input) {
+      input.oninput = e => Viewer._onSearchInput(e.target.value);
+      input.focus(); // UX แบบ iOS
+    }
   }
 
-  // 🔵 STEP C — bind header search icon
+  // 🔵 bind header search icon
   UI.bindHeaderSearch();
 };
