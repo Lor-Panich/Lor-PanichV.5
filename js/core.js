@@ -14,7 +14,7 @@ window.Core = {};
    🔍 keyword: APP CONFIG
 ====================================================== */
 
-Core.config = {
+Core.config = Object.freeze({
   appName: "StockBuilder V5",
   locale: "th-TH",
 
@@ -23,7 +23,7 @@ Core.config = {
 
   // ใช้สำหรับ debug / log
   debug: true
-};
+});
 
 /* ======================================================
    GLOBAL STATE (V5)
@@ -37,8 +37,7 @@ Core.state = {
   /* ================= VIEWER ================= */
   viewer: {
     products: [],        // จาก backend เท่านั้น
-    cart: [],            // frontend only
-    search: "",          // keyword search
+    search: "",          // keyword search (Single Source)
     activeProduct: null  // product ที่เปิดอยู่
   },
 
@@ -68,9 +67,9 @@ Core.state = {
  * reset viewer state (ไม่แตะ admin)
  */
 Core.resetViewerState = function () {
-  Core.state.viewer.cart = [];
-  Core.state.viewer.activeProduct = null;
+  Core.state.viewer.products = [];
   Core.state.viewer.search = "";
+  Core.state.viewer.activeProduct = null;
 };
 
 /**
@@ -104,6 +103,10 @@ Core.resetAll = function () {
  * RULES:
  * 1. ห้ามไฟล์อื่นสร้าง state ใหม่
  * 2. ห้าม shadow Core.state
- * 3. api.js / ui.js / render.js อ่าน state ได้ แต่
- *    - mutate ต้องผ่าน flow (viewer / admin)
+ * 3. ui.js / render.js / api.js
+ *    - อ่าน state ได้
+ *    - ❌ ห้าม mutate state โดยตรง
+ * 4. mutate state ต้องผ่าน flow:
+ *    - viewer.js
+ *    - admin.js
  */
