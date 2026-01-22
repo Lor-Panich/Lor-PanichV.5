@@ -80,9 +80,15 @@ Viewer._mount = function (html) {
   Render.afterRender();
 };
 
-/* ---------- Shared Header ---------- */
+/* ---------- Shared Header (SIDE-EFFECT ONLY) ---------- */
+/*
+  ⚠️ V5 RULE
+  - function นี้มีหน้าที่ "render App Header" เท่านั้น
+  - ไม่คืนค่า
+  - ห้ามนำไปใช้เป็น content
+*/
 Viewer._shopHeader = function () {
-  return Render.shopHeader(
+  Render.shopHeader(
     "ร้านค้า Lor-Panich",
     "สินค้าทั้งหมด • พร้อมขาย"
   );
@@ -90,37 +96,53 @@ Viewer._shopHeader = function () {
 
 /* ---------- Loading ---------- */
 Viewer._renderLoading = function () {
+  Render.shopHeader(
+    "ร้านค้า Lor-Panich",
+    "สินค้าทั้งหมด • พร้อมขาย"
+  );
+
   Viewer._mount(
     Render.page({
-      header: Viewer._shopHeader(),
       content: Render.loading("กำลังเตรียมข้อมูล...")
     })
   );
+
+  UI.bindHeaderSearch(); // 🔵 STEP C
 };
 
 /* ---------- Empty ---------- */
 Viewer._renderEmpty = function () {
+  // 🔵 App Header (SIDE-EFFECT)
+  Viewer._shopHeader();
+
   Viewer._mount(
     Render.page({
-      header: Viewer._shopHeader(),
       content: Render.empty("ยังไม่มีสินค้าในระบบ")
     })
   );
+
+  // 🔵 STEP C — bind search interaction
+  UI.bindHeaderSearch();
 };
 
 /* ---------- Error ---------- */
 Viewer._renderError = function (message) {
   UI.showToast(message, "error");
 
+  // 🔵 App Header (SIDE-EFFECT)
+  Render.shopHeader(
+    "เกิดข้อผิดพลาด",
+    "ไม่สามารถโหลดข้อมูลได้"
+  );
+
   Viewer._mount(
     Render.page({
-      header: Render.shopHeader(
-        "เกิดข้อผิดพลาด",
-        "ไม่สามารถโหลดข้อมูลได้"
-      ),
       content: Render.empty("ไม่สามารถโหลดข้อมูลได้")
     })
   );
+
+  // 🔵 STEP C — bind search interaction
+  UI.bindHeaderSearch();
 };
 
 /* ---------- Product List ---------- */
@@ -139,10 +161,15 @@ Viewer._renderList = function (products) {
     .map(p => Render.productCard(p))
     .join("");
 
+  // 🔵 App Header (SIDE-EFFECT)
+  Viewer._shopHeader();
+
   Viewer._mount(
     Render.page({
-      header: Viewer._shopHeader(),
       content: Render.list(itemsHTML)
     })
   );
+
+  // 🔵 STEP C — bind search interaction
+  UI.bindHeaderSearch();
 };
