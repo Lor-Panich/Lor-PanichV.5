@@ -130,34 +130,25 @@ UI._syncBackdrop = function () {
 };
 
 /* ======================================================
-   🔧 STEP C — HEADER SEARCH INTERACTION (SKELETON)
-   - Toggle search-active class
-   - Focus input
-   - Cancel search mode
+   HEADER SEARCH STATE (V5)
+   - No local state
+   - Use body.search-open only
 ====================================================== */
 
-UI._searchActive = false;
-
 UI.openHeaderSearch = function () {
-  const header = document.getElementById("appHeader");
-  if (!header) return;
+  // 🔓 OPEN SEARCH
+  document.body.classList.add("search-open");
 
-  header.classList.add("search-active");
-  UI._searchActive = true;
-
-  // focus input (next tick)
+  // focus input หลัง viewer render
   setTimeout(() => {
-    const input = header.querySelector(".header-search input");
+    const input = document.querySelector(".search-input");
     if (input) input.focus();
   }, 0);
 };
 
 UI.closeHeaderSearch = function () {
-  const header = document.getElementById("appHeader");
-  if (!header) return;
-
-  header.classList.remove("search-active");
-  UI._searchActive = false;
+  // 🔒 CLOSE SEARCH
+  document.body.classList.remove("search-open");
 };
 
 /**
