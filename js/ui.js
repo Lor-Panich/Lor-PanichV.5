@@ -128,3 +128,63 @@ UI._syncBackdrop = function () {
     backdrop.onclick = null;
   }
 };
+
+/* ======================================================
+   🔧 STEP C — HEADER SEARCH INTERACTION (SKELETON)
+   - Toggle search-active class
+   - Focus input
+   - Cancel search mode
+====================================================== */
+
+UI._searchActive = false;
+
+UI.openHeaderSearch = function () {
+  const header = document.getElementById("appHeader");
+  if (!header) return;
+
+  header.classList.add("search-active");
+  UI._searchActive = true;
+
+  // focus input (next tick)
+  setTimeout(() => {
+    const input = header.querySelector(".header-search input");
+    if (input) input.focus();
+  }, 0);
+};
+
+UI.closeHeaderSearch = function () {
+  const header = document.getElementById("appHeader");
+  if (!header) return;
+
+  header.classList.remove("search-active");
+  UI._searchActive = false;
+};
+
+/**
+ * Bind search header buttons
+ * ต้องเรียกหลัง Render.shopHeader()
+ */
+UI.bindHeaderSearch = function () {
+  const header = document.getElementById("appHeader");
+  if (!header) return;
+
+  const toggleBtn = header.querySelector("#searchToggleBtn");
+  const cancelBtn = header.querySelector(".header-cancel-btn");
+
+  if (toggleBtn) {
+    toggleBtn.onclick = function () {
+      if (!UI._searchActive) {
+        UI.openHeaderSearch();
+      }
+    };
+  }
+
+  if (cancelBtn) {
+    cancelBtn.onclick = function () {
+      if (UI._searchActive) {
+        UI.closeHeaderSearch();
+      }
+    };
+  }
+};
+
