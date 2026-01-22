@@ -62,19 +62,32 @@ Render.page = function ({ header = "", content = "" }) {
  * - มี side-effect
  * - ❌ ไม่คืน HTML
  * - ❌ ไม่เป็น content
+ * - รองรับ Right Action (Search)
  */
 Render.shopHeader = function (title = "", subtitle = "") {
   const headerEl = document.getElementById("appHeader");
   if (!headerEl) return;
 
   headerEl.innerHTML = `
-    <div class="shop-header">
-      <div class="shop-title">${title}</div>
-      ${
-        subtitle
-          ? `<div class="shop-subtitle">${subtitle}</div>`
-          : ""
-      }
+    <div class="shop-header-row">
+      <div class="shop-header">
+        <div class="shop-title">${title}</div>
+        ${
+          subtitle
+            ? `<div class="shop-subtitle">${subtitle}</div>`
+            : ""
+        }
+      </div>
+
+      <!-- 🔍 Search Icon (Right Action) -->
+      <button
+        class="header-icon-btn"
+        id="searchToggleBtn"
+        aria-label="ค้นหา"
+        type="button"
+      >
+        🔍
+      </button>
     </div>
   `;
 };
