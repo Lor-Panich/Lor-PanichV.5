@@ -169,20 +169,13 @@ UI.bindHeaderSearch = function () {
   if (!header) return;
 
   const toggleBtn = header.querySelector("#searchToggleBtn");
-  const cancelBtn = header.querySelector(".header-cancel-btn");
 
   if (toggleBtn) {
     toggleBtn.onclick = function () {
-      if (!UI._searchActive) {
-        UI.openHeaderSearch();
-      }
-    };
-  }
-
-  if (cancelBtn) {
-    cancelBtn.onclick = function () {
-      if (UI._searchActive) {
-        UI.closeHeaderSearch();
+      // 🔵 ให้ Viewer เป็นคนควบคุม state
+      if (typeof Viewer !== "undefined") {
+        Viewer._isSearchOpen = true;
+        Viewer._renderList();
       }
     };
   }
