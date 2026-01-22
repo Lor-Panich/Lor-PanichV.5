@@ -9,20 +9,14 @@ window.Viewer = {};
 
 /* ======================================================
    VIEWER INIT
-   🔍 keyword: VIEWER INIT
-   🔴 CHANGED
 ====================================================== */
 
 Viewer.init = async function () {
-  // init ควรทำหน้าที่เบาที่สุด
-  // เผื่ออนาคตมี bind event / restore ui
   await Viewer.enter();
 };
 
 /* ======================================================
-   VIEWER ENTER (ENTRY POINT)
-   🔍 keyword: VIEWER ENTER
-   ➕ ADDED
+   VIEWER ENTER
 ====================================================== */
 
 Viewer.enter = async function () {
@@ -33,8 +27,7 @@ Viewer.enter = async function () {
 };
 
 /* ======================================================
-   LOAD PRODUCTS FLOW
-   🔍 keyword: LOAD PRODUCTS
+   LOAD PRODUCTS
 ====================================================== */
 
 Viewer.loadProducts = async function () {
@@ -69,11 +62,9 @@ Viewer.loadProducts = async function () {
 
 /* ======================================================
    RENDER STATES
-   🔍 keyword: VIEWER RENDER STATES
 ====================================================== */
 
 Viewer._searchKeyword = "";
-Viewer._isSearchOpen = false;
 
 Viewer._onSearchInput = function (value) {
   Viewer._searchKeyword = value || "";
@@ -88,13 +79,10 @@ Viewer._mount = function (html) {
   Render.afterRender();
 };
 
-/* ---------- Shared Header (SIDE-EFFECT ONLY) ---------- */
-/*
-  ⚠️ V5 RULE
-  - function นี้มีหน้าที่ "render App Header" เท่านั้น
-  - ไม่คืนค่า
-  - ห้ามนำไปใช้เป็น content
-*/
+/* ======================================================
+   APP HEADER (SIDE-EFFECT ONLY)
+====================================================== */
+
 Viewer._shopHeader = function () {
   Render.shopHeader(
     "ร้านค้า Lor-Panich",
@@ -102,12 +90,12 @@ Viewer._shopHeader = function () {
   );
 };
 
-/* ---------- Loading ---------- */
+/* ======================================================
+   LOADING
+====================================================== */
+
 Viewer._renderLoading = function () {
-  Render.shopHeader(
-    "ร้านค้า Lor-Panich",
-    "สินค้าทั้งหมด • พร้อมขาย"
-  );
+  Viewer._shopHeader();
 
   Viewer._mount(
     Render.page({
@@ -115,12 +103,14 @@ Viewer._renderLoading = function () {
     })
   );
 
-  UI.bindHeaderSearch(); // 🔵 STEP C
+  UI.bindHeaderSearch();
 };
 
-/* ---------- Empty ---------- */
+/* ======================================================
+   EMPTY
+====================================================== */
+
 Viewer._renderEmpty = function () {
-  // 🔵 App Header (SIDE-EFFECT)
   Viewer._shopHeader();
 
   Viewer._mount(
@@ -129,15 +119,16 @@ Viewer._renderEmpty = function () {
     })
   );
 
-  // 🔵 STEP C — bind search interaction
   UI.bindHeaderSearch();
 };
 
-/* ---------- Error ---------- */
+/* ======================================================
+   ERROR
+====================================================== */
+
 Viewer._renderError = function (message) {
   UI.showToast(message, "error");
 
-  // 🔵 App Header (SIDE-EFFECT)
   Render.shopHeader(
     "เกิดข้อผิดพลาด",
     "ไม่สามารถโหลดข้อมูลได้"
@@ -149,22 +140,22 @@ Viewer._renderError = function (message) {
     })
   );
 
-  // 🔵 STEP C — bind search interaction
   UI.bindHeaderSearch();
 };
 
+/* ======================================================
+   PRODUCT LIST + SEARCH
+====================================================== */
+
 Viewer._renderList = function (products) {
-  // ใช้ state เป็นหลัก ถ้า param ไม่ถูกต้อง
   const allProducts = Array.isArray(products)
     ? products
     : Core.state.viewer.products;
 
-  // guard invalid
   if (!Array.isArray(allProducts) || allProducts.length === 0) {
     return Viewer._renderEmpty();
   }
 
-  // 🔍 SEARCH FILTER
   const keyword = Viewer._searchKeyword.trim().toLowerCase();
 
   const filteredProducts = keyword
@@ -175,17 +166,18 @@ Viewer._renderList = function (products) {
       })
     : allProducts;
 
-  // 🔵 App Header (SIDE-EFFECT ONLY)
+  const isSearchOpen =
+    document.body.classList.contains("search-open");
+
   Viewer._shopHeader();
 
   Viewer._mount(
     Render.page({
-      // ✅ แสดง search bar เฉพาะตอนเปิด search
-      header: Viewer._isSearchOpen
+      // 🔽 Search bar แสดงเฉพาะตอน search-open
+      header: isSearchOpen
         ? Render.searchBar(Viewer._searchKeyword)
         : "",
 
-      // 📦 Content
       content: filteredProducts.length
         ? Render.list(
             filteredProducts
@@ -196,15 +188,15 @@ Viewer._renderList = function (products) {
     })
   );
 
-  // 🔗 bind search input → viewer state
-  if (Viewer._isSearchOpen) {
+  // bind input
+  if (isSearchOpen) {
     const input = document.querySelector(".search-input");
     if (input) {
-      input.oninput = e => Viewer._onSearchInput(e.target.value);
-      input.focus(); // UX แบบ iOS
+      input.oninput = e =>
+        Viewer._onSearchInput(e.target.value);
+      input.focus();
     }
   }
 
-  // 🔵 bind header search icon
   UI.bindHeaderSearch();
 };
