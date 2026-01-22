@@ -6,7 +6,6 @@
 
 /* ======================================================
    1. CSS RESET / BASE
-   🔍 keyword: V5 BASE
 ====================================================== */
 
 *,
@@ -33,46 +32,36 @@ html, body {
 
 /* ======================================================
    2. DESIGN TOKENS
-   🔍 keyword: DESIGN TOKENS
 ====================================================== */
 
-/* ---------- Light Mode (Default) ---------- */
 :root {
-  /* App background */
   --app-bg: #f2f2f7;
 
-  /* Text */
   --text-primary: #1c1c1e;
   --text-secondary: #5f6368;
 
-  /* Accent */
   --accent: #007aff;
   --danger: #ff3b30;
   --success: #34c759;
 
-  /* Glass */
   --glass-bg: rgba(255, 255, 255, 0.75);
   --glass-border: rgba(255, 255, 255, 0.35);
   --glass-shadow:
     0 20px 50px rgba(0, 0, 0, 0.18),
     inset 0 1px 0 rgba(255, 255, 255, 0.6);
 
-  /* Blur */
   --glass-blur: blur(24px) saturate(1.3);
 
-  /* Radius */
   --radius-sm: 12px;
   --radius-md: 16px;
   --radius-lg: 24px;
 
-  /* Motion (base only) */
   --ease-out: cubic-bezier(.2,.8,.2,1);
 }
 
-/* ---------- Dark Mode ---------- */
 @media (prefers-color-scheme: dark) {
   :root {
-    --app-bg: #000000;
+    --app-bg: #000;
 
     --text-primary: #f5f5f7;
     --text-secondary: #a1a1a6;
@@ -83,6 +72,7 @@ html, body {
 
     --glass-bg: rgba(28, 28, 30, 0.75);
     --glass-border: rgba(255, 255, 255, 0.12);
+
     --glass-shadow:
       0 20px 60px rgba(0, 0, 0, 0.6),
       inset 0 1px 0 rgba(255, 255, 255, 0.08);
@@ -92,8 +82,7 @@ html, body {
 }
 
 /* ======================================================
-   3. APP ROOT LAYOUT
-   🔍 keyword: APP ROOT
+   3. APP ROOT
 ====================================================== */
 
 #app {
@@ -102,21 +91,12 @@ html, body {
 }
 
 /* ======================================================
-   4. HEADER ROOT (Glass-ready)
-   🔍 keyword: HEADER ROOT
+   4. APP HEADER (Glass)
 ====================================================== */
 
 #appHeader {
   position: sticky;
   top: 0;
-
-  /*
-    🔵 POINT 3 — Z-INDEX RULE (LOCKED)
-    - Header = App Chrome (เหมือน UINavigationBar)
-    - ต้องอยู่เหนือ content ปกติ
-    - ต้องอยู่ใต้ overlay / sheet เสมอ
-    - overlay / sheet ต้องใช้ z-index >= 1000
-  */
   z-index: 20;
 
   padding:
@@ -130,58 +110,79 @@ html, body {
 
   border-bottom: 1px solid var(--glass-border);
 
-  /* 🔵 POINT 1 — iOS-like depth separation */
   box-shadow:
-    0 1px 0 rgba(0, 0, 0, 0.04),
-    0 4px 12px rgba(0, 0, 0, 0.06);
+    0 1px 0 rgba(0,0,0,.04),
+    0 4px 12px rgba(0,0,0,.06);
 }
 
 /* ======================================================
-   🔵 POINT 2 — HEADER TYPOGRAPHY (LOCKED)
-   iOS 26 / Liquid Glass
+   HEADER LAYOUT
 ====================================================== */
 
-/* Header content wrapper */
+.shop-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
 .shop-header {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  flex: 1;
+  min-width: 0;
 }
 
-/* Shop title (ชื่อร้าน) */
 .shop-title {
-  font-size: 22px;              /* iOS-style compact title */
+  font-size: 22px;
   font-weight: 600;
   letter-spacing: -0.2px;
   line-height: 1.2;
-
-  color: var(--text-primary);
 }
 
-/* Shop subtitle */
 .shop-subtitle {
   font-size: 14px;
-  font-weight: 400;
-  line-height: 1.2;
-
   color: var(--text-secondary);
 }
 
 /* ======================================================
-   SEARCH BAR (SUB HEADER)
-   🔍 keyword: SEARCH BAR
-   ✅ FIX 2 — visibility locked
+   HEADER ICON BUTTON
 ====================================================== */
 
-/* 🔒 default: hidden (ยังไม่กด 🔍) */
+.header-icon-btn {
+  appearance: none;
+  border: none;
+  background: transparent;
+
+  width: 36px;
+  height: 36px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 18px;
+  color: var(--text-primary);
+
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.header-icon-btn:active {
+  background: rgba(0,0,0,.08);
+}
+
+/* ======================================================
+   SEARCH BAR (SUB HEADER)
+====================================================== */
+
 .search-bar {
   display: none;
-
   padding: 12px 16px;
   background: var(--app-bg);
 }
 
-/* 🔓 show only when search is opened */
 body.search-open .search-bar {
   display: block;
 }
@@ -202,38 +203,7 @@ body.search-open .search-bar {
 }
 
 /* ======================================================
-   HEADER ICON BUTTON (App Chrome)
-   🔍 keyword: HEADER ICON BUTTON
-====================================================== */
-
-.header-icon-btn {
-  appearance: none;
-  border: none;
-  background: transparent;
-
-  width: 36px;
-  height: 36px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  font-size: 18px;
-  line-height: 1;
-
-  color: var(--text-primary);
-
-  border-radius: 10px;
-  cursor: pointer;
-}
-
-.header-icon-btn:active {
-  background: rgba(0, 0, 0, 0.08);
-}
-
-/* ======================================================
-   5. OVERLAY / SHEET SYSTEM (CORE)
-   🔍 keyword: OVERLAY SYSTEM
+   5. OVERLAY / GLOBAL UI
 ====================================================== */
 
 .overlay {
@@ -241,12 +211,7 @@ body.search-open .search-bar {
   inset: 0;
   z-index: 1000;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  background: rgba(0, 0, 0, 0.28);
-
+  background: rgba(0,0,0,.28);
   opacity: 0;
   pointer-events: none;
 
@@ -257,28 +222,6 @@ body.search-open .search-bar {
   opacity: 1;
   pointer-events: auto;
 }
-
-/* ----- Glass Surface (ใช้กับ content ภายใน overlay) ----- */
-.glass-surface {
-  width: 100%;
-  max-width: 420px;
-
-  margin: 0 16px;
-  padding: 20px 18px;
-
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow);
-}
-
-/* ======================================================
-   6. GLOBAL UI
-   🔍 keyword: GLOBAL UI
-====================================================== */
 
 #toastContainer {
   position: fixed;
@@ -297,7 +240,7 @@ body.search-open .search-bar {
   align-items: center;
   justify-content: center;
 
-  background: rgba(0,0,0,0.35);
+  background: rgba(0,0,0,.35);
 }
 
 #loadingOverlay.hidden {
@@ -305,8 +248,7 @@ body.search-open .search-bar {
 }
 
 /* ======================================================
-   7. UTILITIES
-   🔍 keyword: UTILITIES
+   UTILITIES
 ====================================================== */
 
 .hidden {
