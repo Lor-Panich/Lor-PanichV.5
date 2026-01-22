@@ -11,14 +11,12 @@ window.UI = {};
 
 /* ======================================================
    INTERNAL GUARDS
-   🔍 keyword: UI GUARDS
 ====================================================== */
 
 UI._isLoading = false;
 
 /* ======================================================
-   TOAST SYSTEM (SKELETON)
-   🔍 keyword: UI.TOAST
+   TOAST SYSTEM
 ====================================================== */
 
 UI.showToast = function (message = "", type = "info", timeout = 2500) {
@@ -42,8 +40,7 @@ UI.showToast = function (message = "", type = "info", timeout = 2500) {
 };
 
 /* ======================================================
-   LOADING OVERLAY (SKELETON)
-   🔍 keyword: UI.LOADING
+   LOADING OVERLAY
 ====================================================== */
 
 UI.showLoading = function (text = "กำลังโหลด...") {
@@ -72,8 +69,7 @@ UI.hideLoading = function () {
 };
 
 /* ======================================================
-   OVERLAY STACK SYSTEM (SKELETON)
-   🔍 keyword: UI.OVERLAY STACK
+   OVERLAY STACK SYSTEM
 ====================================================== */
 
 UI.openOverlay = function (overlayId) {
@@ -113,7 +109,6 @@ UI.closeTopOverlay = function () {
 
 /* ======================================================
    BACKDROP SYNC
-   🔍 keyword: UI BACKDROP
 ====================================================== */
 
 UI._syncBackdrop = function () {
@@ -130,16 +125,15 @@ UI._syncBackdrop = function () {
 };
 
 /* ======================================================
-   HEADER SEARCH STATE (V5)
-   - No local state
-   - Use body.search-open only
+   HEADER SEARCH MODE (V5 CANONICAL)
+   - UI controls mode only
+   - No Viewer reference
 ====================================================== */
 
 UI.openHeaderSearch = function () {
-  // 🔓 OPEN SEARCH
   document.body.classList.add("search-open");
 
-  // focus input หลัง viewer render
+  // focus input after render
   setTimeout(() => {
     const input = document.querySelector(".search-input");
     if (input) input.focus();
@@ -147,12 +141,11 @@ UI.openHeaderSearch = function () {
 };
 
 UI.closeHeaderSearch = function () {
-  // 🔒 CLOSE SEARCH
   document.body.classList.remove("search-open");
 };
 
 /**
- * Bind search header buttons
+ * Bind 🔍 icon in App Header
  * ต้องเรียกหลัง Render.shopHeader()
  */
 UI.bindHeaderSearch = function () {
@@ -166,29 +159,9 @@ UI.bindHeaderSearch = function () {
     const isOpen = document.body.classList.contains("search-open");
 
     if (isOpen) {
-      // 🔒 CLOSE SEARCH
-      document.body.classList.remove("search-open");
-
-      if (typeof Viewer !== "undefined") {
-        Viewer._searchKeyword = "";
-        Viewer._renderList();
-      }
-
+      UI.closeHeaderSearch();
     } else {
-      // 🔓 OPEN SEARCH
-      document.body.classList.add("search-open");
-
-      if (typeof Viewer !== "undefined") {
-        Viewer._renderList();
-      }
-
-      // focus input หลัง render
-      setTimeout(() => {
-        const input = document.querySelector(".search-input");
-        if (input) input.focus();
-      }, 0);
+      UI.openHeaderSearch();
     }
   };
 };
-
-
