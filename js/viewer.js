@@ -73,6 +73,7 @@ Viewer.loadProducts = async function () {
 ====================================================== */
 
 Viewer._searchKeyword = "";
+Viewer._isSearchOpen = false;
 
 Viewer._onSearchInput = function (value) {
   Viewer._searchKeyword = value || "";
