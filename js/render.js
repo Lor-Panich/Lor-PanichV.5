@@ -10,10 +10,19 @@ window.Render = {};
 
 /* ======================================================
    AFTER RENDER HOOK (EXTENSION POINT)
-   🔍 keyword: AFTER RENDER HOOK
 ====================================================== */
 
 Render._afterHooks = [];
+
+/**
+ * Register after-render hook
+ * @param {Function} fn
+ */
+Render.after = function (fn) {
+  if (typeof fn === "function") {
+    Render._afterHooks.push(fn);
+  }
+};
 
 Render.afterRender = function () {
   Render._afterHooks.forEach(fn => {
@@ -27,21 +36,8 @@ Render.afterRender = function () {
 
 /* ======================================================
    CANONICAL: BASE WRAPPER (USAGE LOCKED)
-   🔍 keyword: CANONICAL COMPONENT
 ====================================================== */
 
-/**
- * แม่แบบโครงหน้า (ใช้ทั้ง Viewer / Admin)
- *
- * ⚠️ IMPORTANT USAGE RULE
- * - header: ใช้ได้เฉพาะ sub-header / section header เท่านั้น
- * - ❌ ห้ามใช้กับ App Header (Shop / Admin)
- * - App Header ต้องใช้:
- *     - Render.shopHeader()
- *     - Render.adminHeader()
- *
- * ❗ Render.page() ไม่มีหน้าที่ควบคุม App Chrome
- */
 Render.page = function ({ header = "", content = "" }) {
   return `
     ${header}
@@ -52,21 +48,16 @@ Render.page = function ({ header = "", content = "" }) {
 };
 
 /* ======================================================
-   CANONICAL: SHOP HEADER (VIEWER / APP CHROME)
-   🔍 keyword: CANONICAL SHOP HEADER
+   CANONICAL: SHOP HEADER (APP CHROME)
+   - side-effect only
 ====================================================== */
 
-/**
- * Header สำหรับ Viewer
- * - เป็น App Chrome (เหมือน UINavigationBar)
- * - มี side-effect
- * - ❌ ไม่คืน HTML
- * - ❌ ไม่เป็น content
- * - รองรับ Right Action (Search)
- */
 Render.shopHeader = function (title = "", subtitle = "") {
   const headerEl = document.getElementById("appHeader");
   if (!headerEl) return;
+
+  // 🔒 reset previous header completely
+  headerEl.textContent = "";
 
   headerEl.innerHTML = `
     <div class="shop-header-row">
@@ -82,8 +73,8 @@ Render.shopHeader = function (title = "", subtitle = "") {
       <button
         class="header-icon-btn"
         id="searchToggleBtn"
-        aria-label="ค้นหา"
         type="button"
+        aria-label="ค้นหา"
       >
         🔍
       </button>
@@ -93,7 +84,6 @@ Render.shopHeader = function (title = "", subtitle = "") {
 
 /* ======================================================
    CANONICAL: ADMIN HEADER
-   🔍 keyword: CANONICAL ADMIN HEADER
 ====================================================== */
 
 Render.adminHeader = function (title = "", rightHTML = "") {
@@ -120,8 +110,7 @@ Render.empty = function (message = "ไม่มีข้อมูล") {
 };
 
 /* ======================================================
-   CANONICAL: SEARCH BAR (VIEWER)
-   🔍 keyword: CANONICAL SEARCH BAR
+   CANONICAL: SEARCH BAR (SUB HEADER)
 ====================================================== */
 
 Render.searchBar = function (value = "") {
@@ -129,14 +118,13 @@ Render.searchBar = function (value = "") {
     <div class="search-bar">
       <input
         type="search"
+        class="search-input"
         placeholder="ค้นหาจากชื่อสินค้า หรือรหัสสินค้า"
         value="${value}"
-        class="search-input"
       />
     </div>
   `;
 };
-
 
 /* ======================================================
    CANONICAL: LOADING PLACEHOLDER
@@ -166,10 +154,6 @@ Render.list = function (itemsHTML = "") {
    CANONICAL: CARD (NEUTRAL)
 ====================================================== */
 
-/**
- * การ์ดกลาง ใช้ได้ทั้ง viewer / admin
- * content = HTML ด้านใน
- */
 Render.card = function (content = "") {
   return `
     <div class="card">
@@ -180,13 +164,8 @@ Render.card = function (content = "") {
 
 /* ======================================================
    CANONICAL: PRODUCT CARD (VIEWER)
-   🔍 keyword: CANONICAL PRODUCT CARD
 ====================================================== */
 
-/**
- * Product Card มาตรฐานสำหรับ Viewer
- * @param {Object} p - product data
- */
 Render.productCard = function (p = {}) {
   return `
     <div class="product-card">
@@ -223,4 +202,3 @@ Render.productCard = function (p = {}) {
     </div>
   `;
 };
-
