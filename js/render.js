@@ -43,19 +43,17 @@ Render.page = function ({ header = "", content = "" }) {
 };
 
 /* ======================================================
-   CANONICAL: HEADER
+   CANONICAL: HEADER (SHOP STYLE)
+   🔴 CHANGED
 ====================================================== */
 
-/**
- * Header มาตรฐาน (ยังไม่ใส่ปุ่ม)
- */
 Render.header = function (title = "", subtitle = "") {
   return `
-    <div class="header-inner">
-      <div class="header-title">${title}</div>
+    <div class="shop-header">
+      <div class="shop-title">${title}</div>
       ${
         subtitle
-          ? `<div class="header-subtitle">${subtitle}</div>`
+          ? `<div class="shop-subtitle">${subtitle}</div>`
           : ""
       }
     </div>
