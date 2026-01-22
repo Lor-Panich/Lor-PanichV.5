@@ -31,24 +31,24 @@
     return;
   }
 
-  /* ====================================================
-     APP START
-     🔍 keyword: APP BOOTSTRAP
-  ==================================================== */
+/* ====================================================
+   APP START
+   🔍 keyword: APP BOOTSTRAP
+==================================================== */
 
-  document.addEventListener("DOMContentLoaded", () => {
-    try {
-      if (Core.config.debug) {
-        console.log("[INIT] StockBuilder V5 starting...");
-      }
-
-      // เข้า Viewer ทันที (ตามที่ล็อกไว้)
-      Viewer.init();
-
-    } catch (err) {
-      console.error("[INIT] Fatal error", err);
-      UI.showToast("ระบบไม่พร้อมใช้งาน", "error");
+document.addEventListener("DOMContentLoaded", async () => {
+  try {
+    if (Core.config.debug) {
+      console.log("[INIT] StockBuilder V5 starting...");
     }
-  });
+
+    // เข้า Viewer ทันที (Canonical Entry)
+    await Viewer.enter();
+
+  } catch (err) {
+    console.error("[INIT] Fatal error", err);
+    UI.showToast("ระบบไม่พร้อมใช้งาน", "error");
+  }
+});
 
 })();
