@@ -155,28 +155,51 @@ Viewer._renderError = function (message) {
 /* ---------- Product List ---------- */
 Viewer._renderList = function (products) {
   // ใช้ state เป็นหลัก ถ้า param ไม่ถูกต้อง
-  const list = Array.isArray(products)
+  const allProducts = Array.isArray(products)
     ? products
     : Core.state.viewer.products;
 
-  // guard empty / invalid
-  if (!Array.isArray(list) || list.length === 0) {
+  // guard invalid
+  if (!Array.isArray(allProducts) || allProducts.length === 0) {
     return Viewer._renderEmpty();
   }
 
-  const itemsHTML = list
-    .map(p => Render.productCard(p))
-    .join("");
+  // 🔍 SEARCH FILTER
+  const keyword = Viewer._searchKeyword.trim().toLowerCase();
 
-  // 🔵 App Header (SIDE-EFFECT)
+  const filteredProducts = keyword
+    ? allProducts.filter(p => {
+        const name = (p.name || "").toLowerCase();
+        const id = (p.productId || "").toLowerCase();
+        return name.includes(keyword) || id.includes(keyword);
+      })
+    : allProducts;
+
+  // 🔵 App Header (SIDE-EFFECT ONLY)
   Viewer._shopHeader();
 
   Viewer._mount(
     Render.page({
-      content: Render.list(itemsHTML)
+      // 🔽 Sub-header: Search Bar (ใต้ Header)
+      header: Render.searchBar(Viewer._searchKeyword),
+
+      // 📦 Content
+      content: filteredProducts.length
+        ? Render.list(
+            filteredProducts
+              .map(p => Render.productCard(p))
+              .join("")
+          )
+        : Render.empty("ไม่พบสินค้าที่ค้นหา")
     })
   );
 
-  // 🔵 STEP C — bind search interaction
+  // 🔗 bind search input → viewer state
+  const input = document.querySelector(".search-input");
+  if (input) {
+    input.oninput = e => Viewer._onSearchInput(e.target.value);
+  }
+
+  // 🔵 STEP C — bind header search icon
   UI.bindHeaderSearch();
 };
