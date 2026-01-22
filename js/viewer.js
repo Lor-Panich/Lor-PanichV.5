@@ -13,13 +13,9 @@ window.Viewer = {};
 ====================================================== */
 
 Viewer.init = async function () {
-  // ตั้งโหมดแอป
   Core.state.mode = "viewer";
 
-  // render โครงเริ่มต้น
   Viewer._renderLoading();
-
-  // โหลดข้อมูลจริง
   await Viewer.loadProducts();
 };
 
@@ -34,17 +30,14 @@ Viewer.loadProducts = async function () {
 
     const products = await API.fetchProducts();
 
-    // บังคับ type safety
     if (!Array.isArray(products)) {
       throw new Error("รูปแบบข้อมูลสินค้าไม่ถูกต้อง");
     }
 
-    // เก็บลง state (viewer เท่านั้น)
     Core.state.viewer.products = products;
 
     UI.hideLoading();
 
-    // ตัดสินใจ render
     if (products.length === 0) {
       Viewer._renderEmpty();
     } else {
@@ -74,11 +67,19 @@ Viewer._mount = function (html) {
   Render.afterRender();
 };
 
+/* ---------- Shared Header ---------- */
+Viewer._shopHeader = function () {
+  return Render.header(
+    "Lor-Panich",
+    "สินค้าทั้งหมด • พร้อมขาย"
+  );
+};
+
 /* ---------- Loading ---------- */
 Viewer._renderLoading = function () {
   Viewer._mount(
     Render.page({
-      header: Render.header("รายการสินค้า"),
+      header: Viewer._shopHeader(),
       content: Render.loading("กำลังเตรียมข้อมูล...")
     })
   );
@@ -88,10 +89,7 @@ Viewer._renderLoading = function () {
 Viewer._renderEmpty = function () {
   Viewer._mount(
     Render.page({
-      header: Render.header(
-        "Lor-Panich",
-        "สินค้าทั้งหมด • พร้อมขาย"
-      ),
+      header: Viewer._shopHeader(),
       content: Render.empty("ยังไม่มีสินค้าในระบบ")
     })
   );
@@ -111,45 +109,13 @@ Viewer._renderError = function (message) {
 
 /* ---------- Product List ---------- */
 Viewer._renderList = function (products) {
-  const itemsHTML = products.map(p => `
-    <div class="product-card">
-      <img
-        class="product-thumb"
-        src="${p.image || ""}"
-        alt="${p.name || ""}"
-      />
-
-      <div class="product-info">
-        <div class="product-name">
-          ${p.name || "-"}
-        </div>
-
-        <div class="product-code">
-          รหัส: ${p.productId || "-"}
-        </div>
-
-        <div class="product-price">
-          ฿${p.price ?? 0}
-        </div>
-
-        <div class="product-meta">
-          <span class="stock-text">
-            คงเหลือ ${p.stock ?? 0}
-          </span>
-          <span class="badge-ready">
-            พร้อมขาย
-          </span>
-        </div>
-      </div>
-    </div>
-  `).join("");
+  const itemsHTML = products
+    .map(p => Render.productCard(p))
+    .join("");
 
   Viewer._mount(
     Render.page({
-      header: Render.header(
-        "Lor-Panich",
-        "สินค้าทั้งหมด • พร้อมขาย"
-      ),
+      header: Viewer._shopHeader(),
       content: Render.list(itemsHTML)
     })
   );
