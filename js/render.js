@@ -113,14 +113,14 @@ Render.empty = function (message = "ไม่มีข้อมูล") {
    CANONICAL: SEARCH BAR (SUB HEADER)
 ====================================================== */
 
-Render.searchBar = function (value = "") {
+Render.searchBar = function () {
   return `
     <div class="search-bar">
       <input
         type="search"
-        class="search-input"
         placeholder="ค้นหาจากชื่อสินค้า หรือรหัสสินค้า"
-        value="${value}"
+        class="search-input"
+        autocomplete="off"
       />
     </div>
   `;
