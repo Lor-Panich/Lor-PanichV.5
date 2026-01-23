@@ -97,6 +97,41 @@ Viewer._onSearchInput = function (value) {
 };
 
 /**
+ * 🔍 Open Search Mode
+ * 🔧 STEP 6 — Viewer controls DOM side-effect
+ */
+Viewer.openSearch = function () {
+  if (Viewer._searchOpen) return;
+
+  Viewer._searchOpen = true;
+  document.body.classList.add("search-open");
+
+  // re-render เพื่อแสดง search bar
+  Viewer._renderList();
+
+  // auto focus หลัง render
+  setTimeout(() => {
+    const input = document.querySelector(".search-input");
+    if (input) input.focus();
+  }, 0);
+};
+
+/**
+ * 🔍 Close Search Mode
+ */
+Viewer.closeSearch = function () {
+  if (!Viewer._searchOpen) return;
+
+  Viewer._searchOpen = false;
+  Viewer._searchKeyword = "";
+
+  document.body.classList.remove("search-open");
+
+  Viewer._renderList();
+};
+
+
+/**
  * mount html to app root
  * 🔧 STEP 4 — show search bar only when searchOpen = true
  */
