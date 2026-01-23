@@ -315,15 +315,21 @@ Viewer._renderList = function (products) {
     })
   );
 
-  // bind input
-  if (isSearchOpen) {
-    const input = document.querySelector(".search-input");
-    if (input) {
-      input.oninput = e =>
-        Viewer._onSearchInput(e.target.value);
-      input.focus();
+// bind input
+if (isSearchOpen) {
+  const input = document.querySelector(".search-input");
+  if (input) {
+    // 🔧 FIX 2 — sync ค่าเพียงครั้งเดียว (ไม่เขียนทับตอนพิมพ์)
+    if (input.value !== Viewer._searchKeyword) {
+      input.value = Viewer._searchKeyword;
     }
-  }
 
-  UI.bindHeaderSearch();
+    input.oninput = e =>
+      Viewer._onSearchInput(e.target.value);
+
+    input.focus();
+  }
+}
+
+UI.bindHeaderSearch();
 };
