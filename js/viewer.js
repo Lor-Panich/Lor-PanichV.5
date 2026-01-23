@@ -130,6 +130,9 @@ Viewer.closeSearch = function () {
 
   document.body.classList.remove("search-open");
 
+  // 🔵 STEP 7 — cleanup
+  Viewer._unbindSearchAutoClose(); 
+
   Viewer._renderList();
 };
 
