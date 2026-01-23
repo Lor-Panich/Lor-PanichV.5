@@ -158,6 +158,11 @@ UI.closeHeaderSearch = function () {
  * Bind 🔍 icon in App Header
  * ต้องเรียกหลัง Render.shopHeader()
  */
+/**
+ * Bind 🔍 icon in App Header
+ * 🔧 STEP 5 — UI แจ้ง Viewer เท่านั้น
+ * ต้องเรียกหลัง Render.shopHeader()
+ */
 UI.bindHeaderSearch = function () {
   const header = document.getElementById("appHeader");
   if (!header) return;
@@ -166,13 +171,11 @@ UI.bindHeaderSearch = function () {
   if (!toggleBtn) return;
 
   toggleBtn.onclick = function () {
-    const isOpen =
-      window.Viewer && Viewer._searchOpen === true;
-
-    if (isOpen) {
-      UI.closeHeaderSearch();
+    if (window.Viewer && Viewer._searchOpen === true) {
+      Viewer.closeSearch();
     } else {
-      UI.openHeaderSearch();
+      Viewer.openSearch();
     }
   };
 };
+
