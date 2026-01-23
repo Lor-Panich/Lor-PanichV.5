@@ -11,7 +11,6 @@ window.Core = {};
 
 /* ======================================================
    APP CONFIG (V5)
-   🔍 keyword: APP CONFIG
 ====================================================== */
 
 Core.config = Object.freeze({
@@ -27,7 +26,6 @@ Core.config = Object.freeze({
 
 /* ======================================================
    GLOBAL STATE (V5)
-   🔍 keyword: GLOBAL STATE
 ====================================================== */
 
 Core.state = {
@@ -37,8 +35,20 @@ Core.state = {
   /* ================= VIEWER ================= */
   viewer: {
     products: [],        // จาก backend เท่านั้น
-    search: "",          // keyword search (Single Source)
+    search: "",          // keyword search
     activeProduct: null  // product ที่เปิดอยู่
+  },
+
+  /* ================= CART ================= */
+  cart: {                // 🔴 ADDED
+    items: [],           // [{ productId, name, price, qty }]
+    total: 0             // คำนวณจาก items เท่านั้น
+  },
+
+  /* ================= ORDER ================= */
+  order: {               // 🔴 ADDED
+    lastCreated: null,   // order ล่าสุด
+    isSubmitting: false  // guard createOrder
   },
 
   /* ================= ADMIN ================= */
@@ -60,21 +70,24 @@ Core.state = {
 
 /* ======================================================
    STATE HELPERS
-   🔍 keyword: STATE HELPERS
 ====================================================== */
 
-/**
- * reset viewer state (ไม่แตะ admin)
- */
 Core.resetViewerState = function () {
   Core.state.viewer.products = [];
   Core.state.viewer.search = "";
   Core.state.viewer.activeProduct = null;
 };
 
-/**
- * reset admin session
- */
+Core.resetCart = function () {          // 🔴 ADDED
+  Core.state.cart.items = [];
+  Core.state.cart.total = 0;
+};
+
+Core.resetOrder = function () {         // 🔴 ADDED
+  Core.state.order.lastCreated = null;
+  Core.state.order.isSubmitting = false;
+};
+
 Core.resetAdminState = function () {
   Core.state.admin.loggedIn = false;
   Core.state.admin.user = null;
@@ -83,30 +96,28 @@ Core.resetAdminState = function () {
   Core.state.admin.stockLogs = [];
 };
 
-/**
- * full app reset (ใช้ตอน logout / fatal error)
- */
 Core.resetAll = function () {
   Core.state.mode = Core.config.defaultMode;
+
   Core.resetViewerState();
+  Core.resetCart();     // 🔴 ADDED
+  Core.resetOrder();    // 🔴 ADDED
   Core.resetAdminState();
+
   Core.state.ui.overlays = [];
   Core.state.ui.loading = false;
 };
 
 /* ======================================================
-   FREEZE RULE (IMPORTANT)
-   🔍 keyword: DO NOT VIOLATE
+   RULES (DO NOT VIOLATE)
 ====================================================== */
-
-/**
- * RULES:
- * 1. ห้ามไฟล์อื่นสร้าง state ใหม่
- * 2. ห้าม shadow Core.state
- * 3. ui.js / render.js / api.js
- *    - อ่าน state ได้
- *    - ❌ ห้าม mutate state โดยตรง
- * 4. mutate state ต้องผ่าน flow:
- *    - viewer.js
- *    - admin.js
- */
+/*
+1. ห้ามไฟล์อื่นสร้าง state ใหม่
+2. ห้าม shadow Core.state
+3. ui.js / render.js / api.js
+   - อ่าน state ได้
+   - ❌ ห้าม mutate state โดยตรง
+4. mutate state ได้เฉพาะ:
+   - viewer.js
+   - admin.js
+*/
