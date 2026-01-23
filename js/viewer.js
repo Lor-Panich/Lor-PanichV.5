@@ -61,12 +61,32 @@ Viewer.loadProducts = async function () {
 };
 
 /* ======================================================
-   RENDER STATES
+   SEARCH STATE (VIEWER OWNS THIS)
 ====================================================== */
 
 // 🔍 Search State
 Viewer._searchOpen = false;
 Viewer._searchKeyword = "";
+
+/**
+ * เปิด Search Mode
+ * - ถูกเรียกจาก UI
+ */
+Viewer.openSearch = function () {
+  Viewer._searchOpen = true;
+  Viewer._renderList();
+};
+
+/**
+ * ปิด Search Mode
+ * - reset keyword
+ * - re-render list ปกติ
+ */
+Viewer.closeSearch = function () {
+  Viewer._searchOpen = false;
+  Viewer._searchKeyword = "";
+  Viewer._renderList();
+};
 
 /**
  * handle search input change
