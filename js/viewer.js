@@ -70,40 +70,6 @@ Viewer._searchKeyword = "";
 Viewer._searchDebounceTimer = null;
 
 /**
- * เปิด Search Mode
- * - ถูกเรียกจาก UI
- * - Viewer คุม state + DOM side-effect
- */
-Viewer.openSearch = function () {
-  if (Viewer._searchOpen) return;
-
-  Viewer._searchOpen = true;
-
-  // 🔹 iOS-style: toggle global state
-  document.body.classList.add("search-open");
-
-  // re-render เพื่อแสดง search bar (พร้อม animation)
-  Viewer._renderList();
-
-  // auto focus หลัง render
-  setTimeout(() => {
-    const input = document.querySelector(".search-input");
-    if (input) input.focus();
-  }, 0);
-};
-
-/**
- * ปิด Search Mode
- * - reset keyword
- * - re-render list ปกติ
- */
-Viewer.closeSearch = function () {
-  Viewer._searchOpen = false;
-  Viewer._searchKeyword = "";
-  Viewer._renderList();
-};
-
-/**
  * handle search input change (debounced)
  * 🔧 STEP 8 — reduce re-render
  */
