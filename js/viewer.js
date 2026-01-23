@@ -98,12 +98,22 @@ Viewer._onSearchInput = function (value) {
 
 /**
  * mount html to app root
+ * 🔧 STEP 4 — show search bar only when searchOpen = true
  */
 Viewer._mount = function (html) {
   const app = document.getElementById("app");
   if (!app) return;
 
+  // mount page
   app.innerHTML = html;
+
+  // 🔍 Toggle search-open class (Viewer controls)
+  if (Viewer._searchOpen) {
+    document.body.classList.add("search-open");
+  } else {
+    document.body.classList.remove("search-open");
+  }
+
   Render.afterRender();
 };
 
