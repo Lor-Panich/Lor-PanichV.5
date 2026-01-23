@@ -109,6 +109,9 @@ Viewer.openSearch = function () {
   // re-render เพื่อแสดง search bar
   Viewer._renderList();
 
+    // 🔵 STEP 7 — bind auto close
+  Viewer._bindSearchAutoClose();
+   
   // auto focus หลัง render
   setTimeout(() => {
     const input = document.querySelector(".search-input");
@@ -130,6 +133,54 @@ Viewer.closeSearch = function () {
   Viewer._renderList();
 };
 
+/* ======================================================
+   🔧 STEP 7 — SEARCH AUTO CLOSE (SCROLL / TAP OUTSIDE)
+====================================================== */
+
+Viewer._bindSearchAutoClose = function () {
+  // ปิดเมื่อ scroll
+  Viewer._onSearchScroll = function () {
+    Viewer.closeSearch();
+  };
+
+  // ปิดเมื่อ tap นอก search bar
+  Viewer._onSearchTapOutside = function (e) {
+    const searchBar = document.querySelector(".search-bar");
+    if (!searchBar) return;
+
+    if (!searchBar.contains(e.target)) {
+      Viewer.closeSearch();
+    }
+  };
+
+  window.addEventListener("scroll", Viewer._onSearchScroll, {
+    once: true,
+    passive: true
+  });
+
+  document.addEventListener(
+    "pointerdown",
+    Viewer._onSearchTapOutside
+  );
+};
+
+Viewer._unbindSearchAutoClose = function () {
+  if (Viewer._onSearchScroll) {
+    window.removeEventListener(
+      "scroll",
+      Viewer._onSearchScroll
+    );
+    Viewer._onSearchScroll = null;
+  }
+
+  if (Viewer._onSearchTapOutside) {
+    document.removeEventListener(
+      "pointerdown",
+      Viewer._onSearchTapOutside
+    );
+    Viewer._onSearchTapOutside = null;
+  }
+};
 
 /**
  * mount html to app root
