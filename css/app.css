@@ -203,6 +203,43 @@ body.search-open .search-bar {
 }
 
 /* ======================================================
+   ✨ STEP 9 — iOS SEARCH BAR ANIMATION
+   Slide + Glass Morph
+====================================================== */
+
+.search-bar {
+  position: relative;
+
+  transform: translateY(-12px);
+  opacity: 0;
+
+  transition:
+    transform 260ms cubic-bezier(.2,.8,.2,1),
+    opacity 200ms ease;
+}
+
+/* when search is active */
+body.search-open .search-bar {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* subtle glass morph */
+.search-input {
+  transition:
+    background 220ms ease,
+    box-shadow 220ms ease,
+    transform 220ms ease;
+}
+
+body.search-open .search-input {
+  box-shadow:
+    0 8px 30px rgba(0,0,0,.12),
+    inset 0 1px 0 rgba(255,255,255,.6);
+}
+
+
+/* ======================================================
    5. OVERLAY / GLOBAL UI
 ====================================================== */
 
