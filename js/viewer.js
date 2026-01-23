@@ -67,6 +67,7 @@ Viewer.loadProducts = async function () {
 // 🔍 Search State
 Viewer._searchOpen = false;
 Viewer._searchKeyword = "";
+Viewer._searchDebounceTimer = null;
 
 /**
  * เปิด Search Mode
@@ -89,11 +90,21 @@ Viewer.closeSearch = function () {
 };
 
 /**
- * handle search input change
+ * handle search input change (debounced)
+ * 🔧 STEP 8 — reduce re-render
  */
 Viewer._onSearchInput = function (value) {
   Viewer._searchKeyword = value || "";
-  Viewer._renderList();
+
+  // clear previous debounce
+  if (Viewer._searchDebounceTimer) {
+    clearTimeout(Viewer._searchDebounceTimer);
+  }
+
+  // debounce render
+  Viewer._searchDebounceTimer = setTimeout(() => {
+    Viewer._renderList();
+  }, 180);
 };
 
 /**
