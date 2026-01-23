@@ -124,58 +124,20 @@ UI._syncBackdrop = function () {
   }
 };
 
-/* ======================================================
-   HEADER SEARCH MODE (V5 CANONICAL)
-   - UI controls mode only
-   - No Viewer reference
-====================================================== */
-
-UI.openHeaderSearch = function () {
-  // 🔔 แจ้ง Viewer ว่าเปิด search
-  if (window.Viewer) {
-    Viewer._searchOpen = true;
-  }
-
-  document.body.classList.add("search-open");
-
-  // focus input after render
-  setTimeout(() => {
-    const input = document.querySelector(".search-input");
-    if (input) input.focus();
-  }, 0);
-};
-
-UI.closeHeaderSearch = function () {
-  // 🔔 แจ้ง Viewer ว่าปิด search
-  if (window.Viewer) {
-    Viewer._searchOpen = false;
-  }
-
-  document.body.classList.remove("search-open");
-};
-
-/**
- * Bind 🔍 icon in App Header
- * ต้องเรียกหลัง Render.shopHeader()
- */
 /**
  * Bind 🔍 icon in App Header
  * 🔧 STEP 5 — UI แจ้ง Viewer เท่านั้น
  * ต้องเรียกหลัง Render.shopHeader()
  */
+
 UI.bindHeaderSearch = function () {
-  const header = document.getElementById("appHeader");
-  if (!header) return;
+  const btn = document.getElementById("searchToggleBtn");
+  if (!btn || !window.Viewer) return;
 
-  const toggleBtn = header.querySelector("#searchToggleBtn");
-  if (!toggleBtn) return;
-
-  toggleBtn.onclick = function () {
-    if (window.Viewer && Viewer._searchOpen === true) {
-      Viewer.closeSearch();
-    } else {
-      Viewer.openSearch();
-    }
+  btn.onclick = function () {
+    Viewer._searchOpen
+      ? Viewer.closeSearch()
+      : Viewer.openSearch();
   };
 };
 
