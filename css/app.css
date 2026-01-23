@@ -238,6 +238,70 @@ body.search-open .search-input {
     inset 0 1px 0 rgba(255,255,255,.6);
 }
 
+/* ======================================================
+   ✨ STEP 9.1 — SEARCH BAR MICRO-INTERACTION
+====================================================== */
+
+.search-bar {
+  transform: translateY(-12px) scale(0.98);
+  opacity: 0;
+
+  transition:
+    transform 260ms cubic-bezier(.2,.8,.2,1),
+    opacity 200ms ease;
+}
+
+body.search-open .search-bar {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+/* input focus micro-interaction */
+.search-input {
+  transition:
+    box-shadow 180ms ease,
+    transform 180ms ease,
+    background 180ms ease;
+}
+
+.search-input:focus {
+  transform: scale(1.01);
+  box-shadow:
+    0 10px 30px rgba(0,0,0,.14),
+    inset 0 1px 0 rgba(255,255,255,.6);
+}
+
+/* ======================================================
+   ✨ STEP 9.1 — HEADER ICON MICRO-INTERACTION
+====================================================== */
+
+.header-icon-btn {
+  appearance: none;
+  border: none;
+  background: transparent;
+
+  font-size: 20px;
+  line-height: 1;
+
+  padding: 6px;
+  border-radius: 10px;
+
+  transition:
+    transform 120ms ease,
+    background 120ms ease,
+    opacity 120ms ease;
+}
+
+.header-icon-btn:active {
+  transform: scale(0.92);
+  background: rgba(0,0,0,0.06);
+}
+
+@media (prefers-color-scheme: dark) {
+  .header-icon-btn:active {
+    background: rgba(255,255,255,0.12);
+  }
+}
 
 /* ======================================================
    5. OVERLAY / GLOBAL UI
