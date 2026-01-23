@@ -162,52 +162,44 @@ Viewer.closeSearch = function () {
 };
 
 /* ======================================================
-   🔧 STEP 7 — SEARCH AUTO CLOSE (SCROLL / TAP OUTSIDE)
+   🔧 STEP B — SEARCH AUTO CLOSE (SAFE TAP ONLY)
+   - ❌ no scroll close
+   - ✅ close only when tap header background
 ====================================================== */
 
 Viewer._bindSearchAutoClose = function () {
-  // ปิดเมื่อ scroll
-  Viewer._onSearchScroll = function () {
-    Viewer.closeSearch();
-  };
+  const header = document.getElementById("appHeader");
+  if (!header) return;
 
-  // ปิดเมื่อ tap นอก search bar
-  Viewer._onSearchTapOutside = function (e) {
-    const searchBar = document.querySelector(".search-bar");
-    if (!searchBar) return;
+  Viewer._onSearchTapHeader = function (e) {
+    // ❌ ไม่ปิด ถ้ากดที่ search input
+    if (e.target.closest(".search-input")) return;
 
-    if (!searchBar.contains(e.target)) {
+    // ❌ ไม่ปิด ถ้ากดปุ่มแว่นขยาย
+    if (e.target.closest("#searchToggleBtn")) return;
+
+    // ✅ ปิดเฉพาะตอน search เปิดอยู่
+    if (Viewer._searchOpen) {
       Viewer.closeSearch();
     }
   };
 
-  window.addEventListener("scroll", Viewer._onSearchScroll, {
-    once: true,
-    passive: true
-  });
-
-  document.addEventListener(
+  header.addEventListener(
     "pointerdown",
-    Viewer._onSearchTapOutside
+    Viewer._onSearchTapHeader
   );
 };
 
 Viewer._unbindSearchAutoClose = function () {
-  if (Viewer._onSearchScroll) {
-    window.removeEventListener(
-      "scroll",
-      Viewer._onSearchScroll
-    );
-    Viewer._onSearchScroll = null;
-  }
+  const header = document.getElementById("appHeader");
+  if (!header || !Viewer._onSearchTapHeader) return;
 
-  if (Viewer._onSearchTapOutside) {
-    document.removeEventListener(
-      "pointerdown",
-      Viewer._onSearchTapOutside
-    );
-    Viewer._onSearchTapOutside = null;
-  }
+  header.removeEventListener(
+    "pointerdown",
+    Viewer._onSearchTapHeader
+  );
+
+  Viewer._onSearchTapHeader = null;
 };
 
 /**
