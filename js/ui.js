@@ -131,6 +131,11 @@ UI._syncBackdrop = function () {
 ====================================================== */
 
 UI.openHeaderSearch = function () {
+  // 🔔 แจ้ง Viewer ว่าเปิด search
+  if (window.Viewer) {
+    Viewer._searchOpen = true;
+  }
+
   document.body.classList.add("search-open");
 
   // focus input after render
@@ -141,6 +146,11 @@ UI.openHeaderSearch = function () {
 };
 
 UI.closeHeaderSearch = function () {
+  // 🔔 แจ้ง Viewer ว่าปิด search
+  if (window.Viewer) {
+    Viewer._searchOpen = false;
+  }
+
   document.body.classList.remove("search-open");
 };
 
@@ -156,7 +166,8 @@ UI.bindHeaderSearch = function () {
   if (!toggleBtn) return;
 
   toggleBtn.onclick = function () {
-    const isOpen = document.body.classList.contains("search-open");
+    const isOpen =
+      window.Viewer && Viewer._searchOpen === true;
 
     if (isOpen) {
       UI.closeHeaderSearch();
