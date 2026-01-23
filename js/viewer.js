@@ -64,13 +64,21 @@ Viewer.loadProducts = async function () {
    RENDER STATES
 ====================================================== */
 
+// 🔍 Search State
+Viewer._searchOpen = false;
 Viewer._searchKeyword = "";
 
+/**
+ * handle search input change
+ */
 Viewer._onSearchInput = function (value) {
   Viewer._searchKeyword = value || "";
   Viewer._renderList();
 };
 
+/**
+ * mount html to app root
+ */
 Viewer._mount = function (html) {
   const app = document.getElementById("app");
   if (!app) return;
