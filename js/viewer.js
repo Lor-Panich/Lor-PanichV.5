@@ -191,11 +191,14 @@ Viewer._mount = function (html) {
 };
 
 /* ======================================================
-   APP HEADER (SIDE-EFFECT ONLY)
+   APP HEADER (VIEWER OWNS MOUNT)
 ====================================================== */
 
 Viewer._shopHeader = function () {
-  Render.shopHeader(
+  const headerEl = document.getElementById("appHeader");
+  if (!headerEl) return;
+
+  headerEl.innerHTML = Render.shopHeader(
     "ร้านค้า Lor-Panich",
     "สินค้าทั้งหมด • พร้อมขาย"
   );
