@@ -126,14 +126,16 @@ Viewer.closeSearch = function () {
   if (!Viewer._searchOpen) return;
 
   Viewer._searchOpen = false;
-  Viewer._searchKeyword = "";
+
+  // 🔒 DO NOT reset search keyword here
+  // search state is owned by Core.state.viewer.search
 
   document.body.classList.remove("search-open");
 
-  // 🔵 STEP 7 — cleanup
   Viewer._unbindSearchAutoClose(); 
 
-  Viewer._renderList();
+  // re-render list without search bar
+  Viewer._renderList(null, { skipSubHeader: true });
 };
 
 /* ======================================================
@@ -180,10 +182,12 @@ Viewer._unbindSearchAutoClose = function () {
   Viewer._onSearchTapHeader = null;
 };
 
-/**
- * mount html to app root
- * 🔧 STEP 4 — show search bar only when searchOpen = true
- */
+/* ======================================================
+   MOUNT PAGE (VIEWER)
+   🔒 search-open class is controlled ONLY by
+   openSearch / closeSearch
+====================================================== */
+
 Viewer._mount = function (html) {
   const app = document.getElementById("app");
   if (!app) return;
@@ -191,15 +195,11 @@ Viewer._mount = function (html) {
   // mount page
   app.innerHTML = html;
 
-  // 🔍 Toggle search-open class (Viewer controls)
-  if (Viewer._searchOpen) {
-    document.body.classList.add("search-open");
-  } else {
-    document.body.classList.remove("search-open");
-  }
+  // ❌ DO NOT touch search-open class here
+  // search-open is controlled by openSearch / closeSearch ONLY
 
   Render.afterRender();
-  Viewer.bindHeaderSearch(); // 🔴 ADD
+  Viewer.bindHeaderSearch();
 };
 
 /* ======================================================
@@ -303,8 +303,8 @@ Viewer._renderList = function (products, options = {}) {
       })
     : allProducts;
 
-  const isSearchOpen =
-    document.body.classList.contains("search-open");
+  // 🔒 single source of truth
+  const isSearchOpen = Viewer._searchOpen;
 
   // mount app header (global chrome)
   Viewer._shopHeader();
