@@ -135,15 +135,3 @@ UI._syncBackdrop = function () {
   }
 };
 
-/* ======================================================
-   HEADER SEARCH BINDING
-   - UI ONLY
-   - callback-based (V5 compliant)
-====================================================== */
-
-UI.bindHeaderSearch = function (onToggle) {
-  const btn = document.getElementById("searchToggleBtn");
-  if (!btn || typeof onToggle !== "function") return;
-
-  btn.onclick = onToggle;
-};
