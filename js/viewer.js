@@ -205,18 +205,20 @@ Viewer._shopHeader = function () {
 };
 
 /* ======================================================
-   LOADING
+   LOADING STATE (VIEWER)
 ====================================================== */
 
 Viewer._renderLoading = function () {
+  // mount app header (global chrome)
   Viewer._shopHeader();
 
+  // mount page content (no subHeader in loading)
   Viewer._mount(
     Render.page({
+      subHeader: "",
       content: Render.loading("กำลังเตรียมข้อมูล...")
     })
   );
-
 };
 
 /* ======================================================
