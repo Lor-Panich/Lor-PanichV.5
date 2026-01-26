@@ -138,10 +138,13 @@ Viewer.closeSearch = function () {
   if (!Viewer._searchOpen) return;
 
   Viewer._searchOpen = false;
+  Viewer._isTypingSearch = false; // ✅ reset typing state
   document.body.classList.remove("search-open");
 
-  Core.state.viewer.search = "";
-  Viewer._renderList();
+  Core.state.viewer.search = ""; // reset keyword
+
+  // ❌ ไม่ต้อง render list ที่นี่
+  // list จะ render จาก flow ปกติเอง
 
   Viewer._unbindSearchAutoClose();
 };
