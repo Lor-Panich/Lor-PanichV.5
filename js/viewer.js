@@ -322,8 +322,12 @@ Viewer.bindHeaderSearch = function () {
   const btn = document.getElementById("searchToggleBtn");
   if (!btn) return;
 
+  // 🔒 guard กัน bind ซ้ำ
+  if (btn._searchBound) return;
+  btn._searchBound = true;
+
   btn.onclick = function (e) {
-    e.stopPropagation(); // ป้องกัน auto-close
+    e.stopPropagation();
     if (Viewer._searchOpen) {
       Viewer.closeSearch();
     } else {
@@ -331,3 +335,7 @@ Viewer.bindHeaderSearch = function () {
     }
   };
 };
+
+
+
+
