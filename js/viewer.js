@@ -92,24 +92,18 @@ Viewer._isTypingSearch = false;
  * 🔒 DO NOT re-render search bar while typing
  */
 Viewer._onSearchInput = function (value) {
-  // 🔒 mark typing state (IMPORTANT)
   Viewer._isTypingSearch = true;
-
-  // 🔑 single source of truth
   Core.state.viewer.search = value || "";
 
-  // clear previous debounce
   if (Viewer._searchDebounceTimer) {
     clearTimeout(Viewer._searchDebounceTimer);
   }
 
-  // debounce list update only
   Viewer._searchDebounceTimer = setTimeout(() => {
-    // typing finished
     Viewer._isTypingSearch = false;
 
-    // 🔒 update list without touching subHeader
-    Viewer._renderList(null, { skipSubHeader: true });
+    // 🔒 แค่ render list ใหม่ (search-bar ไม่โดนแตะ)
+    Viewer._renderList();
   }, 180);
 };
 
@@ -146,7 +140,10 @@ Viewer.closeSearch = function () {
   Viewer._searchOpen = false;
   document.body.classList.remove("search-open");
 
-  // ❌ ไม่ต้อง render อะไรเพิ่ม
+  Core.state.viewer.search = "";
+  Viewer._renderList();
+
+  Viewer._unbindSearchAutoClose();
 };
 
 /* ======================================================
