@@ -41,6 +41,8 @@ UI.showToast = function (message = "", type = "info", timeout = 2500) {
 
 /* ======================================================
    LOADING OVERLAY
+   - UI ONLY
+   - ❌ No Core.state mutation
 ====================================================== */
 
 UI.showLoading = function (text = "กำลังโหลด...") {
@@ -55,17 +57,17 @@ UI.showLoading = function (text = "กำลังโหลด...") {
   overlay.classList.remove("hidden");
 
   UI._isLoading = true;
-  Core.state.ui.loading = true;
 };
 
 UI.hideLoading = function () {
+  if (!UI._isLoading) return;
+
   const overlay = document.getElementById("loadingOverlay");
   if (!overlay) return;
 
   overlay.classList.add("hidden");
 
   UI._isLoading = false;
-  Core.state.ui.loading = false;
 };
 
 /* ======================================================
@@ -86,15 +88,24 @@ UI.openOverlay = function (overlayId) {
   UI._syncBackdrop();
 };
 
+/* ======================================================
+   CLOSE OVERLAY (SAFE / STACK-AWARE)
+====================================================== */
+
 UI.closeOverlay = function (overlayId) {
+  const stack = Core.state.ui.overlays;
+
+  // 🔒 Guard: overlay ต้องอยู่ใน stack เท่านั้น
+  if (!stack.includes(overlayId)) return;
+
   const el = document.getElementById(overlayId);
   if (!el) return;
 
   el.classList.remove("show");
   el.classList.add("hidden");
 
-  Core.state.ui.overlays =
-    Core.state.ui.overlays.filter(id => id !== overlayId);
+  // 🔒 remove เฉพาะตัวที่มีอยู่จริง
+  Core.state.ui.overlays = stack.filter(id => id !== overlayId);
 
   UI._syncBackdrop();
 };
@@ -124,20 +135,15 @@ UI._syncBackdrop = function () {
   }
 };
 
-/**
- * Bind 🔍 icon in App Header
- * 🔧 STEP 5 — UI แจ้ง Viewer เท่านั้น
- * ต้องเรียกหลัง Render.shopHeader()
- */
+/* ======================================================
+   HEADER SEARCH BINDING
+   - UI ONLY
+   - callback-based (V5 compliant)
+====================================================== */
 
-UI.bindHeaderSearch = function () {
+UI.bindHeaderSearch = function (onToggle) {
   const btn = document.getElementById("searchToggleBtn");
-  if (!btn || !window.Viewer) return;
+  if (!btn || typeof onToggle !== "function") return;
 
-  btn.onclick = function () {
-    Viewer._searchOpen
-      ? Viewer.closeSearch()
-      : Viewer.openSearch();
-  };
+  btn.onclick = onToggle;
 };
-
