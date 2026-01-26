@@ -35,12 +35,14 @@ Render.afterRender = function () {
 };
 
 /* ======================================================
-   CANONICAL: BASE WRAPPER (USAGE LOCKED)
+   CANONICAL: PAGE WRAPPER
+   - appHeader อยู่ข้างนอก (viewer/admin เป็นคน mount)
+   - subHeader = search bar / filter bar / etc.
 ====================================================== */
 
-Render.page = function ({ header = "", content = "" }) {
+Render.page = function ({ subHeader = "", content = "" }) {
   return `
-    ${header}
+    ${subHeader}
     <section class="page-content">
       ${content}
     </section>
