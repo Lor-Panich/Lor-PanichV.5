@@ -35,14 +35,12 @@ Render.afterRender = function () {
 };
 
 /* ======================================================
-   CANONICAL: PAGE WRAPPER
-   - appHeader อยู่ข้างนอก (viewer/admin เป็นคน mount)
-   - subHeader = search bar / filter bar / etc.
+   CANONICAL: BASE WRAPPER (USAGE LOCKED)
 ====================================================== */
 
-Render.page = function ({ subHeader = "", content = "" }) {
+Render.page = function ({ header = "", content = "" }) {
   return `
-    ${subHeader}
+    ${header}
     <section class="page-content">
       ${content}
     </section>
@@ -54,15 +52,14 @@ Render.page = function ({ subHeader = "", content = "" }) {
    - side-effect only
 ====================================================== */
 
-/* ======================================================
-   CANONICAL: SHOP HEADER (APP CHROME)
-   - PURE RENDER (V5)
-   - ❌ No DOM access
-   - ❌ No side-effect
-====================================================== */
-
 Render.shopHeader = function (title = "", subtitle = "") {
-  return `
+  const headerEl = document.getElementById("appHeader");
+  if (!headerEl) return;
+
+  // 🔒 reset previous header completely
+  headerEl.textContent = "";
+
+  headerEl.innerHTML = `
     <div class="shop-header-row">
       <div class="shop-header">
         <div class="shop-title">${title}</div>
@@ -108,6 +105,23 @@ Render.empty = function (message = "ไม่มีข้อมูล") {
   return `
     <div class="empty-state">
       ${message}
+    </div>
+  `;
+};
+
+/* ======================================================
+   CANONICAL: SEARCH BAR (SUB HEADER)
+====================================================== */
+
+Render.searchBar = function () {
+  return `
+    <div class="search-bar">
+      <input
+        type="search"
+        placeholder="ค้นหาจากชื่อสินค้า หรือรหัสสินค้า"
+        class="search-input"
+        autocomplete="off"
+      />
     </div>
   `;
 };
