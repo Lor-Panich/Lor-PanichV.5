@@ -113,23 +113,6 @@ Render.empty = function (message = "ไม่มีข้อมูล") {
 };
 
 /* ======================================================
-   CANONICAL: SEARCH BAR (SUB HEADER)
-====================================================== */
-
-Render.searchBar = function () {
-  return `
-    <div class="search-bar">
-      <input
-        type="search"
-        placeholder="ค้นหาจากชื่อสินค้า หรือรหัสสินค้า"
-        class="search-input"
-        autocomplete="off"
-      />
-    </div>
-  `;
-};
-
-/* ======================================================
    CANONICAL: LOADING PLACEHOLDER
 ====================================================== */
 
