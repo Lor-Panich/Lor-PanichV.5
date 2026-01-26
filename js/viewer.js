@@ -187,6 +187,7 @@ Viewer._mount = function (html) {
   }
 
   Render.afterRender();
+  Viewer.bindHeaderSearch(); // 🔴 ADD
 };
 
 /* ======================================================
@@ -213,7 +214,6 @@ Viewer._renderLoading = function () {
     })
   );
 
-  UI.bindHeaderSearch();
 };
 
 /* ======================================================
@@ -229,7 +229,6 @@ Viewer._renderEmpty = function () {
     })
   );
 
-  UI.bindHeaderSearch();
 };
 
 /* ======================================================
@@ -250,7 +249,6 @@ Viewer._renderError = function (message) {
     })
   );
 
-  UI.bindHeaderSearch();
 };
 
 /* ======================================================
@@ -314,5 +312,22 @@ if (isSearchOpen) {
   }
 }
 
-UI.bindHeaderSearch();
+};
+
+/* ======================================================
+   HEADER SEARCH BIND (VIEWER OWNS THIS)
+====================================================== */
+
+Viewer.bindHeaderSearch = function () {
+  const btn = document.getElementById("searchToggleBtn");
+  if (!btn) return;
+
+  btn.onclick = function (e) {
+    e.stopPropagation(); // ป้องกัน auto-close
+    if (Viewer._searchOpen) {
+      Viewer.closeSearch();
+    } else {
+      Viewer.openSearch();
+    }
+  };
 };
