@@ -19,25 +19,8 @@ Viewer.init = async function () {
    VIEWER ENTER
 ====================================================== */
 
-Viewer._mountSearchBar = function () {
-  const slot = document.getElementById("searchBarSlot");
-  if (!slot || slot._mounted) return;
-
-  slot.innerHTML = Render.searchBar();
-  slot._mounted = true;
-
-  const input = slot.querySelector(".search-input");
-  if (input) {
-    input.oninput = e =>
-      Viewer._onSearchInput(e.target.value);
-  }
-};
-
 Viewer.enter = async function () {
   Core.state.mode = "viewer";
-
-  Viewer._shopHeader();
-  Viewer._mountSearchBar(); // ✅ สำคัญมาก
 
   Viewer._renderLoading();
   await Viewer.loadProducts();
@@ -83,26 +66,23 @@ Viewer.loadProducts = async function () {
 
 // 🔍 Search State
 Viewer._searchOpen = false;
+Viewer._searchKeyword = "";
 Viewer._searchDebounceTimer = null;
-Viewer._isTypingSearch = false;
 
 /**
  * handle search input change (debounced)
  * 🔧 STEP 8 — reduce re-render
- * 🔒 DO NOT re-render search bar while typing
  */
 Viewer._onSearchInput = function (value) {
-  Viewer._isTypingSearch = true;
-  Core.state.viewer.search = value || "";
+  Viewer._searchKeyword = value || "";
 
+  // clear previous debounce
   if (Viewer._searchDebounceTimer) {
     clearTimeout(Viewer._searchDebounceTimer);
   }
 
+  // debounce render
   Viewer._searchDebounceTimer = setTimeout(() => {
-    Viewer._isTypingSearch = false;
-
-    // 🔒 แค่ render list ใหม่ (search-bar ไม่โดนแตะ)
     Viewer._renderList();
   }, 180);
 };
@@ -114,21 +94,20 @@ Viewer._onSearchInput = function (value) {
 Viewer.openSearch = function () {
   if (Viewer._searchOpen) return;
 
-  // 🔒 state only
   Viewer._searchOpen = true;
   document.body.classList.add("search-open");
 
-  // ❌ ห้ามเรียก _renderList ที่นี่อีก
-  // เพราะ search-bar ไม่ได้อยู่ใน Render.page แล้ว
+  // re-render เพื่อแสดง search bar
+  Viewer._renderList();
 
-  // 🎯 focus input ที่มีอยู่จริงใน DOM
-  const input = document.querySelector("#searchBarSlot .search-input");
-  if (input) {
-    input.focus();
-  }
-
-  // 🔒 bind auto-close แค่ครั้งเดียว
+    // 🔵 STEP 7 — bind auto close
   Viewer._bindSearchAutoClose();
+   
+  // auto focus หลัง render
+  setTimeout(() => {
+    const input = document.querySelector(".search-input");
+    if (input) input.focus();
+  }, 0);
 };
 
 /**
@@ -138,32 +117,34 @@ Viewer.closeSearch = function () {
   if (!Viewer._searchOpen) return;
 
   Viewer._searchOpen = false;
-  Viewer._isTypingSearch = false; // ✅ reset typing state
+  Viewer._searchKeyword = "";
+
   document.body.classList.remove("search-open");
 
-  Core.state.viewer.search = ""; // reset keyword
+  // 🔵 STEP 7 — cleanup
+  Viewer._unbindSearchAutoClose(); 
 
-  // ❌ ไม่ต้อง render list ที่นี่
-  // list จะ render จาก flow ปกติเอง
-
-  Viewer._unbindSearchAutoClose();
+  Viewer._renderList();
 };
 
 /* ======================================================
-   🔧 SEARCH AUTO CLOSE (STABLE)
+   🔧 STEP B — SEARCH AUTO CLOSE (SAFE TAP ONLY)
+   - ❌ no scroll close
+   - ✅ close only when tap header background
 ====================================================== */
 
 Viewer._bindSearchAutoClose = function () {
   const header = document.getElementById("appHeader");
   if (!header) return;
 
-  if (Viewer._onSearchTapHeader) return; // guard ซ้ำ
-
   Viewer._onSearchTapHeader = function (e) {
-    if (Viewer._isTypingSearch) return;
+    // ❌ ไม่ปิด ถ้ากดที่ search input
     if (e.target.closest(".search-input")) return;
+
+    // ❌ ไม่ปิด ถ้ากดปุ่มแว่นขยาย
     if (e.target.closest("#searchToggleBtn")) return;
 
+    // ✅ ปิดเฉพาะตอน search เปิดอยู่
     if (Viewer._searchOpen) {
       Viewer.closeSearch();
     }
@@ -183,15 +164,14 @@ Viewer._unbindSearchAutoClose = function () {
     "pointerdown",
     Viewer._onSearchTapHeader
   );
+
   Viewer._onSearchTapHeader = null;
 };
 
-/* ======================================================
-   MOUNT PAGE (VIEWER)
-   🔒 search-open class is controlled ONLY by
-   openSearch / closeSearch
-====================================================== */
-
+/**
+ * mount html to app root
+ * 🔧 STEP 4 — show search bar only when searchOpen = true
+ */
 Viewer._mount = function (html) {
   const app = document.getElementById("app");
   if (!app) return;
@@ -199,91 +179,80 @@ Viewer._mount = function (html) {
   // mount page
   app.innerHTML = html;
 
-  // ❌ DO NOT touch search-open class here
-  // search-open is controlled by openSearch / closeSearch ONLY
+  // 🔍 Toggle search-open class (Viewer controls)
+  if (Viewer._searchOpen) {
+    document.body.classList.add("search-open");
+  } else {
+    document.body.classList.remove("search-open");
+  }
 
   Render.afterRender();
-  Viewer.bindHeaderSearch();
+  Viewer.bindHeaderSearch(); // 🔴 ADD
 };
 
 /* ======================================================
-   APP HEADER (VIEWER OWNS MOUNT)
+   APP HEADER (SIDE-EFFECT ONLY)
 ====================================================== */
 
 Viewer._shopHeader = function () {
-  const headerEl = document.getElementById("appHeader");
-  if (!headerEl) return;
-
-  headerEl.innerHTML = Render.shopHeader(
+  Render.shopHeader(
     "ร้านค้า Lor-Panich",
     "สินค้าทั้งหมด • พร้อมขาย"
   );
 };
 
 /* ======================================================
-   LOADING STATE (VIEWER)
+   LOADING
 ====================================================== */
 
 Viewer._renderLoading = function () {
-  // mount app header (global chrome)
   Viewer._shopHeader();
 
-  // mount page content (no subHeader in loading)
   Viewer._mount(
     Render.page({
-      subHeader: "",
       content: Render.loading("กำลังเตรียมข้อมูล...")
     })
   );
+
 };
 
 /* ======================================================
-   EMPTY STATE (VIEWER)
+   EMPTY
 ====================================================== */
 
 Viewer._renderEmpty = function () {
-  // mount app header (global chrome)
   Viewer._shopHeader();
 
-  // mount page content (no subHeader in empty state)
   Viewer._mount(
     Render.page({
-      subHeader: "",
       content: Render.empty("ยังไม่มีสินค้าในระบบ")
     })
   );
+
 };
 
 /* ======================================================
-   ERROR STATE (VIEWER)
+   ERROR
 ====================================================== */
 
 Viewer._renderError = function (message) {
-  // show error feedback
   UI.showToast(message, "error");
 
-  // mount app header (error context)
-  const headerEl = document.getElementById("appHeader");
-  if (headerEl) {
-    headerEl.innerHTML = Render.shopHeader(
-      "เกิดข้อผิดพลาด",
-      "ไม่สามารถโหลดข้อมูลได้"
-    );
-  }
+  Render.shopHeader(
+    "เกิดข้อผิดพลาด",
+    "ไม่สามารถโหลดข้อมูลได้"
+  );
 
-  // mount page content (no subHeader in error state)
   Viewer._mount(
     Render.page({
-      subHeader: "",
       content: Render.empty("ไม่สามารถโหลดข้อมูลได้")
     })
   );
+
 };
 
 /* ======================================================
-   PRODUCT LIST + SEARCH (VIEWER) — FIXED V5
-   - ❌ No search-bar render here
-   - ❌ No input binding here
+   PRODUCT LIST + SEARCH
 ====================================================== */
 
 Viewer._renderList = function (products) {
@@ -291,23 +260,11 @@ Viewer._renderList = function (products) {
     ? products
     : Core.state.viewer.products;
 
-  // mount app header (global chrome)
-  Viewer._shopHeader();
-
-  // EMPTY STATE handled here
   if (!Array.isArray(allProducts) || allProducts.length === 0) {
-    Viewer._mount(
-      Render.page({
-        subHeader: "", // 🔒 search-bar NOT rendered here
-        content: Render.empty("ยังไม่มีสินค้าในระบบ")
-      })
-    );
-    return;
+    return Viewer._renderEmpty();
   }
 
-  const keyword = (Core.state.viewer.search || "")
-    .trim()
-    .toLowerCase();
+  const keyword = Viewer._searchKeyword.trim().toLowerCase();
 
   const filteredProducts = keyword
     ? allProducts.filter(p => {
@@ -317,9 +274,18 @@ Viewer._renderList = function (products) {
       })
     : allProducts;
 
+  const isSearchOpen =
+    document.body.classList.contains("search-open");
+
+  Viewer._shopHeader();
+
   Viewer._mount(
     Render.page({
-      subHeader: "", // 🔒 search-bar NOT rendered here
+      // 🔽 Search bar แสดงเฉพาะตอน search-open
+      header: isSearchOpen
+        ? Render.searchBar(Viewer._searchKeyword)
+        : "",
+
       content: filteredProducts.length
         ? Render.list(
             filteredProducts
@@ -329,6 +295,23 @@ Viewer._renderList = function (products) {
         : Render.empty("ไม่พบสินค้าที่ค้นหา")
     })
   );
+
+// bind input
+if (isSearchOpen) {
+  const input = document.querySelector(".search-input");
+  if (input) {
+    // 🔧 FIX 2 — sync ค่าเพียงครั้งเดียว (ไม่เขียนทับตอนพิมพ์)
+    if (input.value !== Viewer._searchKeyword) {
+      input.value = Viewer._searchKeyword;
+    }
+
+    input.oninput = e =>
+      Viewer._onSearchInput(e.target.value);
+
+    input.focus();
+  }
+}
+
 };
 
 /* ======================================================
