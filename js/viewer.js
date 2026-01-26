@@ -68,6 +68,7 @@ Viewer.loadProducts = async function () {
 Viewer._searchOpen = false;
 Viewer._searchKeyword = "";
 Viewer._searchDebounceTimer = null;
+Viewer._isTypingSearch = false;
 
 /**
  * handle search input change (debounced)
@@ -75,6 +76,9 @@ Viewer._searchDebounceTimer = null;
  * 🔒 DO NOT re-render search bar while typing
  */
 Viewer._onSearchInput = function (value) {
+  // 🔒 mark typing state (IMPORTANT)
+  Viewer._isTypingSearch = true;
+
   // 🔑 single source of truth
   Core.state.viewer.search = value || "";
 
@@ -85,6 +89,9 @@ Viewer._onSearchInput = function (value) {
 
   // debounce list update only
   Viewer._searchDebounceTimer = setTimeout(() => {
+    // typing finished
+    Viewer._isTypingSearch = false;
+
     // 🔒 update list without touching subHeader
     Viewer._renderList(null, { skipSubHeader: true });
   }, 180);
@@ -131,9 +138,9 @@ Viewer.closeSearch = function () {
 };
 
 /* ======================================================
-   🔧 STEP B — SEARCH AUTO CLOSE (SAFE TAP ONLY)
-   - ❌ no scroll close
-   - ✅ close only when tap header background
+   🔧 STEP 3 — SEARCH AUTO CLOSE (FIXED)
+   - Close only when user INTENDS to tap header
+   - ❌ Do not auto-close while typing
 ====================================================== */
 
 Viewer._bindSearchAutoClose = function () {
@@ -141,6 +148,9 @@ Viewer._bindSearchAutoClose = function () {
   if (!header) return;
 
   Viewer._onSearchTapHeader = function (e) {
+    // 🔒 GUARD: do not auto-close while typing
+    if (Viewer._isTypingSearch) return;
+
     // ❌ ไม่ปิด ถ้ากดที่ search input
     if (e.target.closest(".search-input")) return;
 
