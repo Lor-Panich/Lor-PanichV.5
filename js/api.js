@@ -8,41 +8,69 @@
 window.API = {};
 
 /* ======================================================
-   CONFIG
-   🔍 keyword: API.CONFIG
-====================================================== */
-
-// 🔒 ใช้ URL เดิมของคุณ (จาก V4)
-API.URL = "https://script.google.com/macros/s/AKfycbywvlsj-_1IbT0iuCUgWM0pgIJ49bed8tGeuezGqPykeiZaDCxB1ktz-OIAO6TFouqwjQ/exec";
-
-/* ======================================================
    INTERNAL: GAS SAFE POST
    🔍 keyword: API._post
 ====================================================== */
 
 API._post = async function (params = {}) {
-  const formData = new FormData();
+  try {
+    const formData = new FormData();
 
-  Object.keys(params).forEach(key => {
-    if (params[key] !== undefined && params[key] !== null) {
-      formData.append(key, params[key]);
+    Object.keys(params).forEach(key => {
+      if (params[key] !== undefined && params[key] !== null) {
+        formData.append(key, params[key]);
+      }
+    });
+
+    const res = await fetch(Core.config.apiUrl, {
+      method: "POST",
+      body: formData
+    });
+
+    // ❗ network-level guard
+    if (!res.ok) {
+      const err = new Error(`Network error (${res.status})`);
+      err.status = res.status;
+      throw err;
     }
-  });
 
-  const res = await fetch(API.URL, {
-    method: "POST",
-    body: formData
-  });
+    let json;
+    try {
+      json = await res.json();
+    } catch (parseErr) {
+      const err = new Error("Invalid JSON response");
+      err.raw = parseErr;
+      throw err;
+    }
 
-  const json = await res.json();
+    // ❗ backend-level error normalize
+    if (!json || json.success !== true) {
+      const message =
+        json?.error ||
+        json?.message ||
+        "API error";
 
-  if (!json || json.success !== true) {
-    throw new Error(json?.error || json?.message || "API error");
+      const err = new Error(message);
+      err.raw = json;        // 🔑 สำคัญที่สุด
+      throw err;
+    }
+
+    return json.data;
+
+  } catch (err) {
+  // 🔍 debug support (V5 way)
+  if (Core?.config?.debug) {
+    console.error("[API._post]", {
+      params,
+      message: err.message,
+      status: err.status,
+      raw: err.raw,
+      error: err
+    });
   }
-
-  return json.data;
+  throw err; // ❌ อย่ากลืน error
+}
 };
-
 /* ======================================================
    PUBLIC API (VIEWER)
    🔍 keyword: PUBLIC API
