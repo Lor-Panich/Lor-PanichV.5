@@ -35,10 +35,11 @@ UI.showToast = function (message = "", type = "info", timeout = 2500) {
   }
 
   setTimeout(() => {
-  if (toast && toast.parentNode) {
-    toast.remove();
-  }
-}, timeout);
+    if (toast && toast.parentNode) {
+      toast.remove();
+    }
+  }, timeout);
+}; // ✅ ปิดฟังก์ชันให้ครบ
 
 /* ======================================================
    LOADING OVERLAY
@@ -135,10 +136,9 @@ UI._syncBackdrop = function () {
 
   if (Core.state.ui.overlays.length > 0) {
     backdrop.classList.remove("hidden");
-    backdrop.onclick = () => UI.closeTopOverlay();
+    backdrop.onclick = UI.closeTopOverlay;
   } else {
     backdrop.classList.add("hidden");
     backdrop.onclick = null;
   }
 };
-
