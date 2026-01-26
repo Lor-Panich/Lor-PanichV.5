@@ -35,9 +35,10 @@ UI.showToast = function (message = "", type = "info", timeout = 2500) {
   }
 
   setTimeout(() => {
+  if (toast && toast.parentNode) {
     toast.remove();
-  }, timeout);
-};
+  }
+}, timeout);
 
 /* ======================================================
    LOADING OVERLAY
@@ -78,9 +79,15 @@ UI.openOverlay = function (overlayId) {
   const el = document.getElementById(overlayId);
   if (!el) return;
 
-  if (!Core.state.ui.overlays.includes(overlayId)) {
-    Core.state.ui.overlays.push(overlayId);
+  // 🔒 guard: ถ้า overlay นี้เปิดอยู่แล้ว ไม่ต้องทำซ้ำ
+  if (Core.state.ui.overlays.includes(overlayId)) return;
+
+  // 🎯 blur input ที่กำลัง focus (กัน keyboard / search เด้ง)
+  if (document.activeElement instanceof HTMLElement) {
+    document.activeElement.blur();
   }
+
+  Core.state.ui.overlays.push(overlayId);
 
   el.classList.add("show");
   el.classList.remove("hidden");
@@ -128,7 +135,7 @@ UI._syncBackdrop = function () {
 
   if (Core.state.ui.overlays.length > 0) {
     backdrop.classList.remove("hidden");
-    backdrop.onclick = UI.closeTopOverlay;
+    backdrop.onclick = () => UI.closeTopOverlay();
   } else {
     backdrop.classList.add("hidden");
     backdrop.onclick = null;
