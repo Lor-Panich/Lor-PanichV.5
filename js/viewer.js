@@ -72,18 +72,21 @@ Viewer._searchDebounceTimer = null;
 /**
  * handle search input change (debounced)
  * 🔧 STEP 8 — reduce re-render
+ * 🔒 DO NOT re-render search bar while typing
  */
 Viewer._onSearchInput = function (value) {
-  Viewer._searchKeyword = value || "";
+  // 🔑 single source of truth
+  Core.state.viewer.search = value || "";
 
   // clear previous debounce
   if (Viewer._searchDebounceTimer) {
     clearTimeout(Viewer._searchDebounceTimer);
   }
 
-  // debounce render
+  // debounce list update only
   Viewer._searchDebounceTimer = setTimeout(() => {
-    Viewer._renderList();
+    // 🔒 update list without touching subHeader
+    Viewer._renderList(null, { skipSubHeader: true });
   }, 180);
 };
 
@@ -268,7 +271,9 @@ Viewer._renderError = function (message) {
    PRODUCT LIST + SEARCH (VIEWER)
 ====================================================== */
 
-Viewer._renderList = function (products) {
+Viewer._renderList = function (products, options = {}) {
+  const { skipSubHeader = false } = options;
+
   const allProducts = Array.isArray(products)
     ? products
     : Core.state.viewer.products;
@@ -297,10 +302,11 @@ Viewer._renderList = function (products) {
 
   Viewer._mount(
     Render.page({
-      // 🔽 Sub header: search bar only when search-open
-      subHeader: isSearchOpen
-        ? Render.searchBar()
-        : "",
+      // 🔒 render search bar เฉพาะตอน "เปิดครั้งแรก"
+      subHeader:
+        !skipSubHeader && isSearchOpen
+          ? Render.searchBar()
+          : "",
 
       content: filteredProducts.length
         ? Render.list(
@@ -312,22 +318,18 @@ Viewer._renderList = function (products) {
     })
   );
 
-  // 🔍 bind search input (after render)
-  if (isSearchOpen) {
+  // 🔍 bind input เฉพาะตอน render search bar
+  if (!skipSubHeader && isSearchOpen) {
     const input = document.querySelector(".search-input");
     if (input) {
-      // sync value once (do not override while typing)
-      if (input.value !== Core.state.viewer.search) {
-        input.value = Core.state.viewer.search;
-      }
-
+      input.value = Core.state.viewer.search || "";
       input.oninput = e =>
         Viewer._onSearchInput(e.target.value);
-
       input.focus();
     }
   }
 };
+
 /* ======================================================
    HEADER SEARCH BIND (VIEWER OWNS THIS)
 ====================================================== */
