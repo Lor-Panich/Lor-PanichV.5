@@ -52,14 +52,15 @@ Render.page = function ({ header = "", content = "" }) {
    - side-effect only
 ====================================================== */
 
+/* ======================================================
+   CANONICAL: SHOP HEADER (APP CHROME)
+   - PURE RENDER (V5)
+   - ❌ No DOM access
+   - ❌ No side-effect
+====================================================== */
+
 Render.shopHeader = function (title = "", subtitle = "") {
-  const headerEl = document.getElementById("appHeader");
-  if (!headerEl) return;
-
-  // 🔒 reset previous header completely
-  headerEl.textContent = "";
-
-  headerEl.innerHTML = `
+  return `
     <div class="shop-header-row">
       <div class="shop-header">
         <div class="shop-title">${title}</div>
