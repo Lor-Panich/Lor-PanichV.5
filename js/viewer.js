@@ -222,42 +222,50 @@ Viewer._renderLoading = function () {
 };
 
 /* ======================================================
-   EMPTY
+   EMPTY STATE (VIEWER)
 ====================================================== */
 
 Viewer._renderEmpty = function () {
+  // mount app header (global chrome)
   Viewer._shopHeader();
 
+  // mount page content (no subHeader in empty state)
   Viewer._mount(
     Render.page({
+      subHeader: "",
       content: Render.empty("ยังไม่มีสินค้าในระบบ")
     })
   );
-
 };
 
 /* ======================================================
-   ERROR
+   ERROR STATE (VIEWER)
 ====================================================== */
 
 Viewer._renderError = function (message) {
+  // show error feedback
   UI.showToast(message, "error");
 
-  Render.shopHeader(
-    "เกิดข้อผิดพลาด",
-    "ไม่สามารถโหลดข้อมูลได้"
-  );
+  // mount app header (error context)
+  const headerEl = document.getElementById("appHeader");
+  if (headerEl) {
+    headerEl.innerHTML = Render.shopHeader(
+      "เกิดข้อผิดพลาด",
+      "ไม่สามารถโหลดข้อมูลได้"
+    );
+  }
 
+  // mount page content (no subHeader in error state)
   Viewer._mount(
     Render.page({
+      subHeader: "",
       content: Render.empty("ไม่สามารถโหลดข้อมูลได้")
     })
   );
-
 };
 
 /* ======================================================
-   PRODUCT LIST + SEARCH
+   PRODUCT LIST + SEARCH (VIEWER)
 ====================================================== */
 
 Viewer._renderList = function (products) {
@@ -269,7 +277,9 @@ Viewer._renderList = function (products) {
     return Viewer._renderEmpty();
   }
 
-  const keyword = Viewer._searchKeyword.trim().toLowerCase();
+  const keyword = (Core.state.viewer.search || "")
+    .trim()
+    .toLowerCase();
 
   const filteredProducts = keyword
     ? allProducts.filter(p => {
@@ -282,13 +292,14 @@ Viewer._renderList = function (products) {
   const isSearchOpen =
     document.body.classList.contains("search-open");
 
+  // mount app header (global chrome)
   Viewer._shopHeader();
 
   Viewer._mount(
     Render.page({
-      // 🔽 Search bar แสดงเฉพาะตอน search-open
-      header: isSearchOpen
-        ? Render.searchBar(Viewer._searchKeyword)
+      // 🔽 Sub header: search bar only when search-open
+      subHeader: isSearchOpen
+        ? Render.searchBar()
         : "",
 
       content: filteredProducts.length
@@ -301,24 +312,22 @@ Viewer._renderList = function (products) {
     })
   );
 
-// bind input
-if (isSearchOpen) {
-  const input = document.querySelector(".search-input");
-  if (input) {
-    // 🔧 FIX 2 — sync ค่าเพียงครั้งเดียว (ไม่เขียนทับตอนพิมพ์)
-    if (input.value !== Viewer._searchKeyword) {
-      input.value = Viewer._searchKeyword;
+  // 🔍 bind search input (after render)
+  if (isSearchOpen) {
+    const input = document.querySelector(".search-input");
+    if (input) {
+      // sync value once (do not override while typing)
+      if (input.value !== Core.state.viewer.search) {
+        input.value = Core.state.viewer.search;
+      }
+
+      input.oninput = e =>
+        Viewer._onSearchInput(e.target.value);
+
+      input.focus();
     }
-
-    input.oninput = e =>
-      Viewer._onSearchInput(e.target.value);
-
-    input.focus();
   }
-}
-
 };
-
 /* ======================================================
    HEADER SEARCH BIND (VIEWER OWNS THIS)
 ====================================================== */
