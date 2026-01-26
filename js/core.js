@@ -21,7 +21,11 @@ Core.config = Object.freeze({
   defaultMode: "viewer",
 
   // ใช้สำหรับ debug / log
-  debug: true
+  debug: true,
+
+  // 🔌 Google Apps Script Web App (V4 backend)
+  // 🔒 ใช้เป็น source เดียว ห้าม hardcode ใน api.js
+  apiUrl: "https://script.google.com/macros/s/AKfycbywvlsj-_1IbT0iuCUgWM0pgIJ49bed8tGeuezGqPykeiZaDCxB1ktz-OIAO6TFouqwjQ/exec"
 });
 
 /* ======================================================
