@@ -287,8 +287,21 @@ Viewer._renderList = function (products, options = {}) {
     ? products
     : Core.state.viewer.products;
 
+  // 🔒 single source of truth
+  const isSearchOpen = Viewer._searchOpen;
+
+  // mount app header (global chrome)
+  Viewer._shopHeader();
+
+  // ✅ EMPTY STATE handled here (NO delegate)
   if (!Array.isArray(allProducts) || allProducts.length === 0) {
-    return Viewer._renderEmpty();
+    Viewer._mount(
+      Render.page({
+        subHeader: "",
+        content: Render.empty("ยังไม่มีสินค้าในระบบ")
+      })
+    );
+    return;
   }
 
   const keyword = (Core.state.viewer.search || "")
@@ -303,15 +316,9 @@ Viewer._renderList = function (products, options = {}) {
       })
     : allProducts;
 
-  // 🔒 single source of truth
-  const isSearchOpen = Viewer._searchOpen;
-
-  // mount app header (global chrome)
-  Viewer._shopHeader();
-
   Viewer._mount(
     Render.page({
-      // 🔒 render search bar เฉพาะตอน "เปิดครั้งแรก"
+      // 🔒 render search bar เฉพาะตอนเปิด search ครั้งแรก
       subHeader:
         !skipSubHeader && isSearchOpen
           ? Render.searchBar()
