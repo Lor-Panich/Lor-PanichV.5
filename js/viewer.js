@@ -66,7 +66,6 @@ Viewer.loadProducts = async function () {
 
 // 🔍 Search State
 Viewer._searchOpen = false;
-Viewer._searchKeyword = "";
 Viewer._searchDebounceTimer = null;
 Viewer._isTypingSearch = false;
 
