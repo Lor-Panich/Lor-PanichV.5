@@ -172,7 +172,6 @@ Render.productCard = function (product) {
   const {
     productId,
     name,
-    code,
     price,
     stock,
     image
@@ -191,8 +190,7 @@ Render.productCard = function (product) {
 
       <div class="product-info">
         <div class="product-name">${name}</div>
-        <div class="product-code">รหัส: ${code}</div>
-
+        <div class="product-code">รหัส: ${productId}</div>
         <div class="product-price">฿${Number(price).toLocaleString()}</div>
 
         <div class="product-stock">
