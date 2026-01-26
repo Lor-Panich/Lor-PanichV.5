@@ -162,41 +162,46 @@ Render.card = function (content = "") {
   `;
 };
 
-/* ======================================================
-   CANONICAL: PRODUCT CARD (VIEWER)
-====================================================== */
+// ======================================================
+// PRODUCT CARD (V5)
+// Read-only / Clickable / No business logic
+// ======================================================
+Render.productCard = function (product) {
+  if (!product) return "";
 
-Render.productCard = function (p = {}) {
+  const {
+    productId,
+    name,
+    code,
+    price,
+    stock,
+    image
+  } = product;
+
+  const inStock = stock > 0;
+
   return `
-    <div class="product-card">
-      <img
-        class="product-thumb"
-        src="${p.image || ""}"
-        alt="${p.name || ""}"
-        loading="lazy"
-      />
+    <div class="product-card ${!inStock ? "is-out" : ""}"
+         data-action="open-product"
+         data-product-id="${productId}">
+
+      <div class="product-thumb">
+        <img src="${image}" alt="${name}" loading="lazy" />
+      </div>
 
       <div class="product-info">
-        <div class="product-name">
-          ${p.name || "-"}
-        </div>
+        <div class="product-name">${name}</div>
+        <div class="product-code">รหัส: ${code}</div>
 
-        <div class="product-sku">
-          รหัส: ${p.productId || "-"}
-        </div>
+        <div class="product-price">฿${Number(price).toLocaleString()}</div>
 
-        <div class="product-price">
-          ฿${p.price ?? 0}
-        </div>
-
-        <div class="product-meta">
-          <div class="product-stock">
-            คงเหลือ ${p.stock ?? 0}
-          </div>
-
-          <div class="badge-ready">
-            พร้อมขาย
-          </div>
+        <div class="product-stock">
+          คงเหลือ ${stock}
+          ${
+            inStock
+              ? `<span class="stock-badge ready">พร้อมขาย</span>`
+              : `<span class="stock-badge out">หมด</span>`
+          }
         </div>
       </div>
     </div>
