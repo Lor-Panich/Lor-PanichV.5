@@ -58,7 +58,7 @@ API._post = async function (params = {}) {
     return json.data;
 
   } catch (err) {
-  // 🔍 debug support (V5 way)
+    // 🔍 debug support (V5 way)
   if (Core?.config?.debug) {
     console.error("[API._post]", {
       params,
