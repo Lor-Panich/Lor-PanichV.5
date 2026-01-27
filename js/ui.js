@@ -71,21 +71,47 @@ UI.hideLoading = function () {
 };
 
 /* ======================================================
-   OVERLAY STACK SYSTEM
+   OVERLAY STACK SYSTEM (V5 COMPLIANT)
+   - UI owns overlay state
+   - ❌ No Core.state mutation
 ====================================================== */
 
+// 🔒 private stack (UI only)
+UI._overlayStack = [];
+
+// 🔹 Open overlay
 UI.openOverlay = function (overlayId) {
   const el = document.getElementById(overlayId);
   if (!el) return;
 
-  if (!Core.state.ui.overlays.includes(overlayId)) {
-    Core.state.ui.overlays.push(overlayId);
+  if (!UI._overlayStack.includes(overlayId)) {
+    UI._overlayStack.push(overlayId);
   }
 
   el.classList.add("show");
   el.classList.remove("hidden");
 
   UI._syncBackdrop();
+};
+
+// 🔹 Close overlay
+UI.closeOverlay = function (overlayId) {
+  const el = document.getElementById(overlayId);
+  if (!el) return;
+
+  UI._overlayStack = UI._overlayStack.filter(id => id !== overlayId);
+
+  el.classList.remove("show");
+
+  UI._syncBackdrop();
+};
+
+// 🔹 Close top overlay (LIFO)
+UI.closeTopOverlay = function () {
+  if (!UI._overlayStack.length) return;
+
+  const topId = UI._overlayStack[UI._overlayStack.length - 1];
+  UI.closeOverlay(topId);
 };
 
 /* ======================================================
@@ -134,4 +160,57 @@ UI._syncBackdrop = function () {
     backdrop.onclick = null;
   }
 };
+
+/* ======================================================
+   STEP 7.3 — CART UI WIRING
+   - UI only
+   - No state
+   - No business logic
+====================================================== */
+
+// 🔹 Open Cart Sheet
+UI.openCart = function (html) {
+  const container = document.getElementById("overlayRoot");
+  if (!container) return;
+
+  // inject HTML
+  container.insertAdjacentHTML("beforeend", html);
+
+  // open overlay
+  UI.openOverlay("cartSheet");
+};
+
+// 🔹 Close Cart Sheet
+UI.closeCart = function () {
+  UI.closeOverlay("cartSheet");
+
+  const sheet = document.getElementById("cartSheet");
+  if (sheet) {
+    sheet.remove();
+  }
+};
+
+// 🔹 Bind Cart Sheet UI events
+UI.bindCartEvents = function (handlers = {}) {
+  const sheet = document.getElementById("cartSheet");
+  if (!sheet) return;
+
+  // Close button / backdrop
+  const closeBtn = sheet.querySelector("[data-action='close-cart']");
+  if (closeBtn) {
+    closeBtn.addEventListener("click", () => {
+      handlers.onClose && handlers.onClose();
+    });
+  }
+
+  // Submit order
+  const submitBtn = sheet.querySelector(".cart-submit-btn");
+  if (submitBtn) {
+    submitBtn.addEventListener("click", () => {
+      handlers.onSubmit && handlers.onSubmit();
+    });
+  }
+};
+
+
 
