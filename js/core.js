@@ -67,8 +67,8 @@ Core.state = {
 
   /* ================= UI ================= */
   ui: {
-    overlays: [],        // stack ของ overlay ids
-    loading: false
+    // UI infra (overlay / loading) is owned by ui.js
+    // keep this object for future cross-flow UI flags if needed
   }
 };
 
@@ -108,8 +108,8 @@ Core.resetAll = function () {
   Core.resetOrder();    // 🔴 ADDED
   Core.resetAdminState();
 
-  Core.state.ui.overlays = [];
-  Core.state.ui.loading = false;
+// UI state is owned by ui.js
+// nothing to reset here
 };
 
 /* ======================================================
