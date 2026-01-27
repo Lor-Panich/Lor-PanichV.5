@@ -205,3 +205,66 @@ Render.productCard = function (product) {
     </div>
   `;
 };
+
+/* ======================================================
+   STEP 7.2 — CART SHEET (RENDER ONLY)
+   - HTML only
+   - No state mutation
+   - No event binding
+====================================================== */
+
+Render.cartSheet = function (items = [], total = 0) {
+  return `
+    <div class="sheet cart-sheet" id="cartSheet">
+      <div class="sheet-header">
+        <div class="sheet-title">ตะกร้าสินค้า</div>
+      </div>
+
+      <div class="sheet-content">
+        ${
+          items.length
+            ? items.map(it => Render.cartItem(it)).join("")
+            : Render.empty("ยังไม่มีสินค้าในตะกร้า")
+        }
+      </div>
+
+      ${Render.cartFooter(total)}
+    </div>
+  `;
+};
+
+Render.cartItem = function (item) {
+  return `
+    <div class="cart-item" data-product-id="${item.productId}">
+      <div class="cart-item-info">
+        <div class="cart-item-name">${item.name}</div>
+        <div class="cart-item-price">
+          ${item.price.toLocaleString()} × ${item.qty}
+        </div>
+      </div>
+
+      <div class="cart-item-total">
+        ${(item.price * item.qty).toLocaleString()}
+      </div>
+    </div>
+  `;
+};
+
+Render.cartFooter = function (total = 0) {
+  return `
+    <div class="sheet-footer cart-footer">
+      <div class="cart-summary">
+        <span>ยอดรวม</span>
+        <strong>${total.toLocaleString()} บาท</strong>
+      </div>
+
+      <button
+        class="primary-btn cart-submit-btn"
+        type="button"
+        disabled
+      >
+        สร้างใบสั่งซื้อ
+      </button>
+    </div>
+  `;
+};
