@@ -72,14 +72,10 @@ UI.hideLoading = function () {
 
 /* ======================================================
    OVERLAY STACK SYSTEM (V5 COMPLIANT)
-   - UI owns overlay state
-   - ❌ No Core.state mutation
 ====================================================== */
 
-// 🔒 private stack (UI only)
 UI._overlayStack = [];
 
-// 🔹 Open overlay
 UI.openOverlay = function (overlayId) {
   const el = document.getElementById(overlayId);
   if (!el) return;
@@ -94,7 +90,6 @@ UI.openOverlay = function (overlayId) {
   UI._syncBackdrop();
 };
 
-// 🔹 Close overlay
 UI.closeOverlay = function (overlayId) {
   const el = document.getElementById(overlayId);
   if (!el) return;
@@ -106,53 +101,16 @@ UI.closeOverlay = function (overlayId) {
   UI._syncBackdrop();
 };
 
-// 🔹 Close top overlay (LIFO)
 UI.closeTopOverlay = function () {
   if (!UI._overlayStack.length) return;
-
-  const topId = UI._overlayStack[UI._overlayStack.length - 1];
-  UI.closeOverlay(topId);
+  UI.closeOverlay(UI._overlayStack[UI._overlayStack.length - 1]);
 };
-
-/* ======================================================
-   CLOSE OVERLAY (SAFE / STACK-AWARE)
-====================================================== */
-
-UI.closeOverlay = function (overlayId) {
-  const stack = Core.state.ui.overlays;
-
-  // 🔒 Guard: overlay ต้องอยู่ใน stack เท่านั้น
-  if (!stack.includes(overlayId)) return;
-
-  const el = document.getElementById(overlayId);
-  if (!el) return;
-
-  el.classList.remove("show");
-  el.classList.add("hidden");
-
-  // 🔒 remove เฉพาะตัวที่มีอยู่จริง
-  Core.state.ui.overlays = stack.filter(id => id !== overlayId);
-
-  UI._syncBackdrop();
-};
-
-UI.closeTopOverlay = function () {
-  const stack = Core.state.ui.overlays;
-  if (!stack.length) return;
-
-  const topId = stack[stack.length - 1];
-  UI.closeOverlay(topId);
-};
-
-/* ======================================================
-   BACKDROP SYNC
-====================================================== */
 
 UI._syncBackdrop = function () {
   const backdrop = document.getElementById("globalBackdrop");
   if (!backdrop) return;
 
-  if (Core.state.ui.overlays.length > 0) {
+  if (UI._overlayStack.length > 0) {
     backdrop.classList.remove("hidden");
     backdrop.onclick = UI.closeTopOverlay;
   } else {
