@@ -187,7 +187,65 @@ Viewer._mount = function (html) {
   }
 
   Render.afterRender();
+  Viewer._bindProductCardClick(); // 🔴 ADD
   Viewer.bindHeaderSearch(); // 🔴 ADD
+};
+
+/* ======================================================
+   PRODUCT CARD INTERACTION
+   - central dispatcher
+====================================================== */
+
+Viewer._bindProductCardClick = function () {
+  const app = document.getElementById("app");
+  if (!app) return;
+
+  // 🔒 guard กัน bind ซ้ำ
+  if (app._productCardBound) return;
+  app._productCardBound = true;
+
+  app.addEventListener("click", function (e) {
+
+    // 🔒 GUARD: block interaction when overlay is open
+    if (Viewer._isOverlayOpen()) return;
+
+    const card = e.target.closest(".product-card");
+    if (!card) return;
+
+    const productId = card.dataset.productId;
+    if (!productId) return;
+
+    const product = Core.state.viewer.products.find(
+      p => p.productId === productId
+    );
+    if (!product) return;
+
+    Viewer.openProduct(product);
+  });
+ };
+
+/* ======================================================
+   OVERLAY GUARD
+   - prevent click-through when overlay is open
+====================================================== */
+
+Viewer._isOverlayOpen = function () {
+  return (
+    Array.isArray(Core.state.ui.overlays) &&
+    Core.state.ui.overlays.length > 0
+  );
+};
+
+/* ======================================================
+   PRODUCT DETAIL ENTRY
+====================================================== */
+
+Viewer.openProduct = function (product) {
+  if (!product) return;
+
+  Core.state.viewer.activeProduct = product;
+
+  UI.openOverlay("product-detail"); // overlay id ที่คุณจะใช้
 };
 
 /* ======================================================
