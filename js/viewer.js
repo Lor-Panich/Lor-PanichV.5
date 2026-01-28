@@ -259,6 +259,26 @@ Viewer.openProduct = function (product) {
   UI.bindQtySelector(qty => {
     Viewer._selectedQty = qty;
   });
+
+  // 🔴 STEP 9.3 — bind Add to Cart
+  UI.bindAddToCart(() => {
+    const activeProduct = Core.state.viewer.activeProduct;
+    const qty = Viewer._selectedQty || 1;
+
+    if (!activeProduct) return;
+
+    // เพิ่มลงตะกร้า (Frontend only)
+    Viewer.addToCart(activeProduct, qty);
+
+    // Feedback ผู้ใช้
+    UI.showToast(
+      `เพิ่ม ${activeProduct.name} × ${qty} ลงตะกร้าแล้ว`,
+      "success"
+    );
+
+    // ปิด Product Detail Sheet
+    Viewer.closeProductDetail();
+  });
 };
 
 /* ======================================================
