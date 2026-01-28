@@ -441,28 +441,26 @@ body.search-open .search-input {
 }
 
 /* ======================================================
-   STEP 9.3.x — Product Detail Image (1:1 + Left Offset)
+   STEP 9.3.x — Product Detail Image (1:1 Centered)
    SAFE / NO LAYOUT BREAK
 ====================================================== */
 
 .product-detail-sheet .product-image-wrap {
   width: 100%;
-  aspect-ratio: 1 / 1;      /* ✅ กลับเป็น 1:1 */
-  max-height: 220px;        /* ✅ ความสูงที่คุณบอกว่าโอเค */
+  aspect-ratio: 1 / 1;     /* 1:1 */
+  max-height: 220px;
 
   overflow: hidden;
   border-radius: var(--radius-lg);
-
   background: rgba(0,0,0,0.04);
 }
 
 .product-detail-sheet .product-image-wrap img {
-width: 100%;
-height: 100%;
-object-fit: cover;
+  width: 100%;
+  height: 100%;
 
-/* ✅ อยู่กลางจริง */
-object-position: center center;
+  object-fit: cover;
+  object-position: center; /* ✅ กลางจริง (ทั้งแนวนอน/แนวตั้ง) */
 }
 
 .product-detail .product-info {
