@@ -204,24 +204,28 @@ UI.bindAdminOrderActions = function (handlers = {}) {
 };
 
 /* ======================================================
-   STEP 9.1 — PRODUCT DETAIL UI
+   STEP 9.1 — PRODUCT DETAIL UI (FIXED)
 ====================================================== */
 
 UI.openProductDetail = function (html) {
-  const container = document.getElementById("overlayRoot");
-  if (!container) return;
+  const overlay = document.getElementById("productSheet");
+  if (!overlay) return;
 
-  container.insertAdjacentHTML("beforeend", html);
-  UI.openOverlay("productDetailSheet");
+  // inject sheet HTML เข้า overlay
+  overlay.innerHTML = html;
+
+  // เปิด overlay
+  UI.openOverlay("productSheet");
 };
 
 UI.closeProductDetail = function () {
-  UI.closeOverlay("productDetailSheet");
+  const overlay = document.getElementById("productSheet");
+  if (!overlay) return;
 
-  const sheet = document.getElementById("productDetailSheet");
-  if (sheet) {
-    sheet.remove();
-  }
+  UI.closeOverlay("productSheet");
+
+  // cleanup
+  overlay.innerHTML = "";
 };
 
 /* ======================================================
