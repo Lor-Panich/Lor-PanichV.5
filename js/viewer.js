@@ -237,15 +237,19 @@ Viewer._isOverlayOpen = function () {
 };
 
 /* ======================================================
-   PRODUCT DETAIL ENTRY
+   PRODUCT DETAIL ENTRY (STEP 9.1)
 ====================================================== */
 
 Viewer.openProduct = function (product) {
   if (!product) return;
 
+  // เก็บ product ที่เปิดอยู่
   Core.state.viewer.activeProduct = product;
 
-  UI.openOverlay("product-detail"); // overlay id ที่คุณจะใช้
+  // เปิด Product Detail Sheet (Bottom Sheet)
+  UI.openProductDetail(
+    Render.productDetailSheet(product)
+  );
 };
 
 /* ======================================================
