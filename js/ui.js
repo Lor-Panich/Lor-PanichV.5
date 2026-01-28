@@ -170,5 +170,37 @@ UI.bindCartEvents = function (handlers = {}) {
   }
 };
 
+/* ======================================================
+   STEP 8.4 — ADMIN UI WIRING
+   - UI only
+   - No API
+   - No state mutation
+====================================================== */
+
+UI.bindAdminOrderActions = function (handlers = {}) {
+  const root = document.querySelector(".admin-order-list");
+  if (!root) return;
+
+  // 🔒 Optional guard: กัน bind ซ้ำ
+  if (root.dataset.bound === "1") return;
+  root.dataset.bound = "1";
+
+  root.addEventListener("click", function (e) {
+    const btn = e.target.closest("[data-action]");
+    if (!btn) return;
+
+    const action = btn.dataset.action;
+    const orderId = btn.dataset.orderId;
+    if (!orderId) return;
+
+    if (action === "approve-order") {
+      handlers.onApprove && handlers.onApprove(orderId);
+    }
+
+    if (action === "reject-order") {
+      handlers.onReject && handlers.onReject(orderId);
+    }
+  });
+};
 
 
