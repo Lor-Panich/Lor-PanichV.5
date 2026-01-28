@@ -203,4 +203,24 @@ UI.bindAdminOrderActions = function (handlers = {}) {
   });
 };
 
+/* ======================================================
+   STEP 9.1 — PRODUCT DETAIL UI
+====================================================== */
+
+UI.openProductDetail = function (html) {
+  const container = document.getElementById("overlayRoot");
+  if (!container) return;
+
+  container.insertAdjacentHTML("beforeend", html);
+  UI.openOverlay("productDetailSheet");
+};
+
+UI.closeProductDetail = function () {
+  UI.closeOverlay("productDetailSheet");
+
+  const sheet = document.getElementById("productDetailSheet");
+  if (sheet) {
+    sheet.remove();
+  }
+};
 
