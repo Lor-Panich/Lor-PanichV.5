@@ -330,6 +330,17 @@ Render.productDetailSheet = function (product) {
           }
         </div>
       </div>
+
+      <!-- 🔴 STEP 9.3: ADD TO CART FOOTER -->
+      <div class="sheet-footer product-detail-footer">
+        <button
+          class="primary-btn add-to-cart-btn"
+          data-action="add-to-cart"
+          type="button"
+        >
+          เพิ่มลงตะกร้า
+        </button>
+      </div>
     </div>
   `;
 };
