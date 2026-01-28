@@ -224,3 +224,43 @@ UI.closeProductDetail = function () {
   }
 };
 
+/* ======================================================
+   STEP 9.2 — QTY SELECTOR UI
+====================================================== */
+
+UI.bindQtySelector = function (onChange) {
+  const sheet = document.getElementById("productDetailSheet");
+  if (!sheet) return;
+
+  let qty = 1;
+  const max = Number(
+    sheet.querySelector(".qty-selector")?.dataset.max
+  ) || 1;
+
+  sheet.addEventListener("click", function (e) {
+    const btn = e.target.closest("[data-action]");
+    if (!btn) return;
+
+    if (btn.dataset.action === "qty-decrease" && qty > 1) {
+      qty--;
+    }
+
+    if (btn.dataset.action === "qty-increase" && qty < max) {
+      qty++;
+    }
+
+    const valueEl = sheet.querySelector(".qty-value");
+    if (valueEl) valueEl.textContent = qty;
+
+    // update disabled state
+    sheet
+      .querySelector("[data-action='qty-decrease']")
+      .toggleAttribute("disabled", qty <= 1);
+
+    sheet
+      .querySelector("[data-action='qty-increase']")
+      .toggleAttribute("disabled", qty >= max);
+
+    typeof onChange === "function" && onChange(qty);
+  });
+};
