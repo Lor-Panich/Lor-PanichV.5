@@ -394,6 +394,54 @@ Viewer.bindHeaderSearch = function () {
   };
 };
 
+/* ======================================================
+   STEP 7.4 — CREATE ORDER (VIEWER ONLY)
+   - API → State → Reset
+   - Order = PENDING
+   - No stock cut
+====================================================== */
 
+Viewer.createOrder = async function () {
+  // 🔒 Guard: กันยิงซ้ำ
+  if (Core.state.order.isSubmitting) return;
+
+  const items = Core.state.cart.items;
+  if (!Array.isArray(items) || items.length === 0) {
+    UI.showToast("ตะกร้ายังไม่มีสินค้า", "warning");
+    return;
+  }
+
+  Core.state.order.isSubmitting = true;
+  UI.showLoading("กำลังสร้างใบสั่งซื้อ...");
+
+  try {
+    // 🔹 ส่งไป Backend (PENDING)
+    const order = await API.createOrder(items);
+
+    // 🔹 เก็บ order ล่าสุด
+    Core.state.order.lastCreated = order;
+
+    // 🔹 reset cart
+    Core.resetCart();
+
+    // 🔹 ปิด cart sheet
+    UI.closeCart();
+
+    // 🔹 feedback
+    UI.showToast("สร้างใบสั่งซื้อเรียบร้อยแล้ว", "success");
+
+  } catch (err) {
+    console.error("[Viewer.createOrder]", err);
+
+    UI.showToast(
+      err.message || "ไม่สามารถสร้างใบสั่งซื้อได้",
+      "error"
+    );
+
+  } finally {
+    Core.state.order.isSubmitting = false;
+    UI.hideLoading();
+  }
+};
 
 
