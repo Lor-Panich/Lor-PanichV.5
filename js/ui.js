@@ -226,23 +226,31 @@ UI.openProductDetail = function (html) {
   overlay.innerHTML = html;
   UI.openOverlay("productSheet");
 
+  // ✅ ล็อก body ไม่ให้ scroll
+  document.body.style.overflow = "hidden";
+
   UI._bindProductSwipeDismiss();
-  
 };
 
 UI.closeProductDetail = function () {
   const overlay = document.getElementById("productSheet");
   if (!overlay) return;
 
+  // ปิด overlay ผ่าน stack system
   UI.closeOverlay("productSheet");
 
-  // reset bind flags
+  // ✅ ปลดล็อก body scroll (สำคัญมาก)
+  document.body.style.overflow = "";
+
+  // รีเซ็ต swipe state
   const sheet = overlay.querySelector(".product-detail-sheet");
-  if (sheet) sheet._swipeBound = false;
+  if (sheet) {
+    sheet.style.transform = "translate(-50%, 0)";
+    sheet.style.transition = "";
+    sheet._swipeBound = false;
+  }
 
-  const backdrop = document.getElementById("globalBackdrop");
-  if (backdrop) backdrop._productBound = false;
-
+  // cleanup DOM
   overlay.innerHTML = "";
 };
 
@@ -326,14 +334,19 @@ UI._bindProductSwipeDismiss = function () {
     sheet.style.transition = "none";
   });
 
-  sheet.addEventListener("touchmove", e => {
-    if (!dragging) return;
-    currentY = e.touches[0].clientY;
-    const delta = currentY - startY;
-    if (delta > 0) {
-      sheet.style.transform = `translate(-50%, ${delta}px)`;
-    }
-  });
+sheet.addEventListener("touchmove", e => {
+  if (!dragging) return;
+
+  // ❗ กันไม่ให้ page หลัก scroll
+  e.preventDefault();
+
+  currentY = e.touches[0].clientY;
+  const delta = currentY - startY;
+
+  if (delta > 0) {
+    sheet.style.transform = `translate(-50%, ${delta}px)`;
+  }
+}, { passive: false });
 
   sheet.addEventListener("touchend", () => {
     if (!dragging) return;
