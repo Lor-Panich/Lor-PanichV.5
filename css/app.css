@@ -441,59 +441,64 @@ body.search-open .search-input {
 }
 
 /* ======================================================
-   STEP 9.3.x — Product Detail Image & Content (FINAL)
-   TRUE 1:1 • iOS Balanced • SAFE
+   STEP 9.3.x — Product Detail Image (1:1 • Centered • Smaller)
+   iOS CORRECT / SAFE
 ====================================================== */
 
+/* จำกัดขนาด Sheet ให้ดูเล็กลง */
+.product-detail-sheet {
+  max-width: 88%;
+  max-height: 86dvh;
+}
+
+/* กล่องรูป */
 .product-detail-sheet .product-image-wrap {
   width: 100%;
-  aspect-ratio: 1 / 1;      /* ✅ 1:1 จริง */
+  max-width: 260px;          /* 🔑 ตัวนี้คือหัวใจ */
+  aspect-ratio: 1 / 1;       /* 1:1 จริง */
+
+  margin: 14px auto 0;       /* 🔑 จัดกลางด้วยสายตา */
 
   overflow: hidden;
   border-radius: var(--radius-lg);
   background: rgba(0,0,0,0.04);
-
-  /* เว้นขอบ + เว้นด้านบนให้หายใจ */
-  margin: 16px 20px 0;
 }
 
+/* รูป */
 .product-detail-sheet .product-image-wrap img {
   width: 100%;
   height: 100%;
-
   object-fit: cover;
-  object-position: center center; /* ✅ กลางจริง */
+  object-position: center center;
 }
 
 /* ======================================================
-   PRODUCT DETAIL CONTENT BALANCE
+   PRODUCT DETAIL CONTENT — BALANCED
 ====================================================== */
 
 .product-detail {
-  padding: 18px 22px 14px;  /* ⬅️ iOS-like spacing */
+  padding: 16px 20px 12px;
+  text-align: left;
 }
 
 .product-detail .product-info {
   display: flex;
   flex-direction: column;
-  gap: 12px;               /* ⬅️ ไม่แน่น ไม่โล่ง */
+  gap: 10px;
 }
 
 .product-detail .product-name {
-  font-size: 22px;
-  font-weight: 700;
+  font-size: 21px;
   line-height: 1.25;
-  letter-spacing: -0.3px;
 }
 
 .product-detail .product-price {
-  font-size: 24px;
-  margin-top: 2px;
+  font-size: 23px;
 }
 
 .product-detail .product-stock {
-  font-size: 14px;
-  opacity: 0.85;
+  font-size: 13px;
+  opacity: 0.8;
 }
 
 /* ======================================================
