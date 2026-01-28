@@ -268,3 +268,21 @@ UI.bindQtySelector = function (onChange) {
     typeof onChange === "function" && onChange(qty);
   });
 };
+
+/* ======================================================
+   STEP 9.3 — ADD TO CART UI
+====================================================== */
+
+UI.bindAddToCart = function (onAdd) {
+  const sheet = document.getElementById("productDetailSheet");
+  if (!sheet) return;
+
+  const btn = sheet.querySelector("[data-action='add-to-cart']");
+  if (!btn || btn._bound) return;
+
+  btn._bound = true;
+
+  btn.addEventListener("click", function () {
+    typeof onAdd === "function" && onAdd();
+  });
+};
