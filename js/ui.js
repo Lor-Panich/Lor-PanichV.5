@@ -210,11 +210,11 @@ UI.openProductDetail = function (html) {
   const overlay = document.getElementById("productSheet");
   if (!overlay) return;
 
-  // inject sheet HTML เข้า overlay
   overlay.innerHTML = html;
-
-  // เปิด overlay
   UI.openOverlay("productSheet");
+
+  UI._bindProductSwipeDismiss();
+  UI._bindProductBackdropDismiss();
 };
 
 UI.closeProductDetail = function () {
@@ -223,7 +223,13 @@ UI.closeProductDetail = function () {
 
   UI.closeOverlay("productSheet");
 
-  // cleanup
+  // reset bind flags
+  const sheet = overlay.querySelector(".product-detail-sheet");
+  if (sheet) sheet._swipeBound = false;
+
+  const backdrop = document.getElementById("globalBackdrop");
+  if (backdrop) backdrop._productBound = false;
+
   overlay.innerHTML = "";
 };
 
@@ -287,5 +293,64 @@ UI.bindAddToCart = function (onAdd) {
 
   btn.addEventListener("click", function () {
     typeof onAdd === "function" && onAdd();
+  });
+};
+
+UI._bindProductBackdropDismiss = function () {
+  const backdrop = document.getElementById("globalBackdrop");
+  if (!backdrop || backdrop._productBound) return;
+
+  backdrop._productBound = true;
+
+  backdrop.addEventListener(
+    "click",
+    () => {
+      // ปิดเฉพาะกรณีที่ productSheet อยู่บนสุดของ overlay stack
+      if (UI._overlayStack.at(-1) === "productSheet") {
+        UI.closeProductDetail();
+      }
+    },
+    { once: false } // 🔍 explicit: listener นี้อยู่ตลอดอายุ backdrop
+  );
+};
+
+UI._bindProductSwipeDismiss = function () {
+  const sheet = document.querySelector(".product-detail-sheet");
+  if (!sheet || sheet._swipeBound) return;
+  sheet._swipeBound = true;
+
+  let startY = 0;
+  let currentY = 0;
+  let dragging = false;
+  const THRESHOLD = 120;
+
+  sheet.addEventListener("touchstart", e => {
+    if (sheet.scrollTop > 0) return;
+    startY = e.touches[0].clientY;
+    dragging = true;
+    sheet.style.transition = "none";
+  });
+
+  sheet.addEventListener("touchmove", e => {
+    if (!dragging) return;
+    currentY = e.touches[0].clientY;
+    const delta = currentY - startY;
+    if (delta > 0) {
+      sheet.style.transform = `translate(-50%, ${delta}px)`;
+    }
+  });
+
+  sheet.addEventListener("touchend", () => {
+    if (!dragging) return;
+    dragging = false;
+
+    const delta = currentY - startY;
+    sheet.style.transition = "transform 280ms cubic-bezier(.2,.8,.2,1)";
+
+    if (delta > THRESHOLD) {
+      UI.closeProductDetail();
+    } else {
+      sheet.style.transform = "translate(-50%, 0)";
+    }
   });
 };
