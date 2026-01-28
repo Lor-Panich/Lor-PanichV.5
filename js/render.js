@@ -286,3 +286,47 @@ Render.cartFooter = function (total = 0) {
     </div>
   `;
 };
+
+/* ======================================================
+   STEP 9.1 — PRODUCT DETAIL SHEET (RENDER ONLY)
+====================================================== */
+
+Render.productDetailSheet = function (product) {
+  if (!product) return "";
+
+  return `
+    <div class="sheet product-detail-sheet" id="productDetailSheet">
+      <div class="sheet-header">
+        <div class="sheet-handle"></div>
+      </div>
+
+      <div class="sheet-content product-detail">
+        <div class="product-image-wrap">
+          <img
+            src="${product.image || ""}"
+            alt="${product.name || ""}"
+            loading="lazy"
+          />
+        </div>
+
+        <div class="product-info">
+          <h2 class="product-name">${product.name}</h2>
+
+          <div class="product-price">
+            ${Number(product.price).toLocaleString()} บาท
+          </div>
+
+          <div class="product-stock">
+            คงเหลือ ${product.stock} ชิ้น
+          </div>
+
+          ${
+            product.description
+              ? `<div class="product-desc">${product.description}</div>`
+              : ""
+          }
+        </div>
+      </div>
+    </div>
+  `;
+};
