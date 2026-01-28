@@ -68,6 +68,7 @@ Viewer.loadProducts = async function () {
 Viewer._searchOpen = false;
 Viewer._searchKeyword = "";
 Viewer._searchDebounceTimer = null;
+Viewer._selectedQty = 1;
 
 /**
  * handle search input change (debounced)
@@ -243,6 +244,9 @@ Viewer._isOverlayOpen = function () {
 Viewer.openProduct = function (product) {
   if (!product) return;
 
+  // 🔴 STEP 9.2 — reset qty ทุกครั้งที่เปิดสินค้า
+  Viewer._selectedQty = 1;
+
   // เก็บ product ที่เปิดอยู่
   Core.state.viewer.activeProduct = product;
 
@@ -250,6 +254,11 @@ Viewer.openProduct = function (product) {
   UI.openProductDetail(
     Render.productDetailSheet(product)
   );
+
+  // 🔴 STEP 9.2 — bind qty selector หลัง DOM ถูก render แล้ว
+  UI.bindQtySelector(qty => {
+    Viewer._selectedQty = qty;
+  });
 };
 
 /* ======================================================
@@ -448,4 +457,12 @@ Viewer.createOrder = async function () {
   }
 };
 
+/* ======================================================
+   STEP 9.2 — CLOSE PRODUCT DETAIL
+====================================================== */
 
+Viewer.closeProduct = function () {
+  Viewer._selectedQty = 1;
+  Core.state.viewer.activeProduct = null;
+  UI.closeProductDetail();
+};
