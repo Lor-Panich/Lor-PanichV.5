@@ -558,3 +558,36 @@ body.search-open .search-input {
   font-size: 20px;
   font-weight: 600;
 }
+
+/* ======================================================
+   STEP 9.3 — ADD TO CART BUTTON (Liquid Glass)
+   🔒 Add only — no override
+====================================================== */
+
+.product-detail-footer {
+  position: sticky;
+  bottom: 0;
+
+  padding: 16px 16px
+    calc(16px + env(safe-area-inset-bottom));
+
+  background: linear-gradient(
+    to top,
+    rgba(255,255,255,0.92),
+    rgba(255,255,255,0.65)
+  );
+
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+
+  border-top: 1px solid rgba(0,0,0,0.05);
+}
+
+.add-to-cart-btn {
+  width: 100%;
+  height: 52px;
+
+  font-size: 17px;
+  font-weight: 600;
+  border-radius: 16px;
+}
