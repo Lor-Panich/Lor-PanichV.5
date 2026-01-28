@@ -119,33 +119,32 @@ UI._syncBackdrop = function () {
   }
 };
 
-/* ======================================================
-   STEP 7.3 — CART UI WIRING
-   - UI only
-   - No state
-   - No business logic
-====================================================== */
+// ======================================================
+// FIX — CART OVERLAY (V5 COMPLIANT)
+// ======================================================
 
 // 🔹 Open Cart Sheet
 UI.openCart = function (html) {
-  const container = document.getElementById("overlayRoot");
-  if (!container) return;
+  const overlay = document.getElementById("cartSheet");
+  if (!overlay) return;
 
-  // inject HTML
-  container.insertAdjacentHTML("beforeend", html);
+  // inject cart sheet HTML
+  overlay.innerHTML = html;
 
-  // open overlay
+  // open overlay via stack system
   UI.openOverlay("cartSheet");
 };
 
 // 🔹 Close Cart Sheet
 UI.closeCart = function () {
+  const overlay = document.getElementById("cartSheet");
+  if (!overlay) return;
+
+  // close overlay via stack system
   UI.closeOverlay("cartSheet");
 
-  const sheet = document.getElementById("cartSheet");
-  if (sheet) {
-    sheet.remove();
-  }
+  // cleanup content (❗ do NOT remove overlay element)
+  overlay.innerHTML = "";
 };
 
 // 🔹 Bind Cart Sheet UI events
