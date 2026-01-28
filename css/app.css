@@ -441,19 +441,20 @@ body.search-open .search-input {
 }
 
 /* ======================================================
-   STEP 9.3.x — Product Detail Image (TRUE 1:1 + Balanced)
+   STEP 9.3.x — Product Detail Image & Content (FINAL)
+   TRUE 1:1 • iOS Balanced • SAFE
 ====================================================== */
 
 .product-detail-sheet .product-image-wrap {
   width: 100%;
   aspect-ratio: 1 / 1;      /* ✅ 1:1 จริง */
-  
+
   overflow: hidden;
   border-radius: var(--radius-lg);
   background: rgba(0,0,0,0.04);
 
-  /* เว้นขอบให้หายใจ */
-  margin: 12px 16px 0;
+  /* เว้นขอบ + เว้นด้านบนให้หายใจ */
+  margin: 16px 20px 0;
 }
 
 .product-detail-sheet .product-image-wrap img {
@@ -464,25 +465,35 @@ body.search-open .search-input {
   object-position: center center; /* ✅ กลางจริง */
 }
 
+/* ======================================================
+   PRODUCT DETAIL CONTENT BALANCE
+====================================================== */
+
+.product-detail {
+  padding: 18px 22px 14px;  /* ⬅️ iOS-like spacing */
+}
+
 .product-detail .product-info {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding-top: 16px;
+  gap: 12px;               /* ⬅️ ไม่แน่น ไม่โล่ง */
 }
 
 .product-detail .product-name {
   font-size: 22px;
   font-weight: 700;
+  line-height: 1.25;
   letter-spacing: -0.3px;
 }
 
 .product-detail .product-price {
   font-size: 24px;
+  margin-top: 2px;
 }
 
 .product-detail .product-stock {
   font-size: 14px;
+  opacity: 0.85;
 }
 
 /* ======================================================
