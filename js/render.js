@@ -166,16 +166,18 @@ Render.card = function (content = "") {
 // PRODUCT CARD (V5)
 // Read-only / Clickable / No business logic
 // ======================================================
-Render.productCard = function (product) {
+
+Render.productCard = function (product = {}) {
   if (!product) return "";
 
-  const {
-    productId,
-    name,
-    price,
-    stock,
-    image
-  } = product;
+  const productId = product.productId || "";
+  const name = product.name || "-";
+  const price = Number(product.price) || 0;
+  const stock = Number(product.stock) || 0;
+  const image =
+    product.image && typeof product.image === "string"
+      ? product.image
+      : "assets/placeholder.png";
 
   const inStock = stock > 0;
 
@@ -185,13 +187,17 @@ Render.productCard = function (product) {
          data-product-id="${productId}">
 
       <div class="product-thumb">
-        <img src="${image}" alt="${name}" loading="lazy" />
+        <img
+          src="${image}"
+          alt="${name || "product image"}"
+          loading="lazy"
+        />
       </div>
 
       <div class="product-info">
         <div class="product-name">${name}</div>
         <div class="product-code">รหัส: ${productId}</div>
-        <div class="product-price">฿${Number(price).toLocaleString()}</div>
+        <div class="product-price">฿${price.toLocaleString()}</div>
 
         <div class="product-stock">
           คงเหลือ ${stock}
@@ -214,6 +220,13 @@ Render.productCard = function (product) {
 ====================================================== */
 
 Render.cartSheet = function (items = [], total = 0) {
+  // 🔒 HARDEN: ensure items is array
+  if (!Array.isArray(items)) {
+    items = [];
+  }
+
+  const safeTotal = Number(total) || 0;
+
   return `
     <div class="sheet cart-sheet" id="cartSheet">
       <div class="sheet-header">
@@ -222,29 +235,34 @@ Render.cartSheet = function (items = [], total = 0) {
 
       <div class="sheet-content">
         ${
-          items.length
+          items.length > 0
             ? items.map(it => Render.cartItem(it)).join("")
             : Render.empty("ยังไม่มีสินค้าในตะกร้า")
         }
       </div>
 
-      ${Render.cartFooter(total)}
+      ${Render.cartFooter(safeTotal)}
     </div>
   `;
 };
 
-Render.cartItem = function (item) {
+Render.cartItem = function (item = {}) {
+  const productId = item.productId || "";
+  const name = item.name || "-";
+  const price = Number(item.price) || 0;
+  const qty = Number(item.qty) || 0;
+
   return `
-    <div class="cart-item" data-product-id="${item.productId}">
+    <div class="cart-item" data-product-id="${productId}">
       <div class="cart-item-info">
-        <div class="cart-item-name">${item.name}</div>
+        <div class="cart-item-name">${name}</div>
         <div class="cart-item-price">
-          ${item.price.toLocaleString()} × ${item.qty}
+          ${price.toLocaleString()} × ${qty}
         </div>
       </div>
 
       <div class="cart-item-total">
-        ${(item.price * item.qty).toLocaleString()}
+        ${(price * qty).toLocaleString()}
       </div>
     </div>
   `;
