@@ -320,6 +320,9 @@ Render.productDetailSheet = function (product) {
             คงเหลือ ${product.stock} ชิ้น
           </div>
 
+          <!-- 🔴 STEP 9.2: QTY SELECTOR -->
+          ${Render.qtySelector(1, product.stock)}
+
           ${
             product.description
               ? `<div class="product-desc">${product.description}</div>`
