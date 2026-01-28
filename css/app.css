@@ -440,23 +440,30 @@ body.search-open .search-input {
   }
 }
 
-.product-image-wrap {
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  overflow: hidden;
+/* ======================================================
+   STEP 9.3.x — Product Detail Image (Scoped + Smaller)
+   SAFE TO OVERRIDE
+====================================================== */
 
+.product-detail-sheet .product-image-wrap {
+  width: 100%;
+  aspect-ratio: 4 / 5;   /* เตี้ยลงจาก 1:1 */
+  max-height: 220px;
+
+  overflow: hidden;
   border-radius: var(--radius-lg);
+
   background: rgba(0,0,0,0.04);
 }
 
-.product-image-wrap img {
+.product-detail-sheet .product-image-wrap img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
 .product-detail {
-  padding: 16px;
+padding: 14px 16px 12px;
 }
 
 .product-detail .product-info {
@@ -569,7 +576,7 @@ body.search-open .search-input {
 
   width: 100%;
   max-width: 92%;
-  max-height: 92dvh;
+  max-height: 88dvh;
 
   display: flex;
   flex-direction: column;
