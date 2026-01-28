@@ -102,8 +102,19 @@ UI.closeOverlay = function (overlayId) {
 };
 
 UI.closeTopOverlay = function () {
-  if (!UI._overlayStack.length) return;
-  UI.closeOverlay(UI._overlayStack[UI._overlayStack.length - 1]);
+if (!UI._overlayStack.length) return;
+
+const topOverlayId =
+UI._overlayStack[UI._overlayStack.length - 1];
+
+// 🔴 productSheet ต้องใช้ closeProductDetail เท่านั้น
+if (topOverlayId === "productSheet") {
+UI.closeProductDetail();
+return;
+}
+
+// overlay อื่น ปิดตามปกติ
+UI.closeOverlay(topOverlayId);
 };
 
 UI._syncBackdrop = function () {
@@ -112,6 +123,8 @@ UI._syncBackdrop = function () {
 
   if (UI._overlayStack.length > 0) {
     backdrop.classList.remove("hidden");
+
+    // ✅ backdrop ทำหน้าที่เดียว: ปิด overlay บนสุด
     backdrop.onclick = UI.closeTopOverlay;
   } else {
     backdrop.classList.add("hidden");
@@ -214,7 +227,7 @@ UI.openProductDetail = function (html) {
   UI.openOverlay("productSheet");
 
   UI._bindProductSwipeDismiss();
-  UI._bindProductBackdropDismiss();
+  
 };
 
 UI.closeProductDetail = function () {
@@ -294,24 +307,6 @@ UI.bindAddToCart = function (onAdd) {
   btn.addEventListener("click", function () {
     typeof onAdd === "function" && onAdd();
   });
-};
-
-UI._bindProductBackdropDismiss = function () {
-  const backdrop = document.getElementById("globalBackdrop");
-  if (!backdrop || backdrop._productBound) return;
-
-  backdrop._productBound = true;
-
-  backdrop.addEventListener(
-    "click",
-    () => {
-      // ปิดเฉพาะกรณีที่ productSheet อยู่บนสุดของ overlay stack
-      if (UI._overlayStack.at(-1) === "productSheet") {
-        UI.closeProductDetail();
-      }
-    },
-    { once: false } // 🔍 explicit: listener นี้อยู่ตลอดอายุ backdrop
-  );
 };
 
 UI._bindProductSwipeDismiss = function () {
