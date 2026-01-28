@@ -330,3 +330,28 @@ Render.productDetailSheet = function (product) {
     </div>
   `;
 };
+
+/* ======================================================
+   STEP 9.2 — QTY SELECTOR (RENDER ONLY)
+====================================================== */
+
+Render.qtySelector = function (qty = 1, max = 1) {
+  return `
+    <div class="qty-selector"
+         data-max="${max}">
+      <button
+        class="qty-btn"
+        data-action="qty-decrease"
+        ${qty <= 1 ? "disabled" : ""}
+      >−</button>
+
+      <div class="qty-value">${qty}</div>
+
+      <button
+        class="qty-btn"
+        data-action="qty-increase"
+        ${qty >= max ? "disabled" : ""}
+      >+</button>
+    </div>
+  `;
+};
