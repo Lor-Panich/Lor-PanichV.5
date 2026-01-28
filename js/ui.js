@@ -232,6 +232,10 @@ UI.bindQtySelector = function (onChange) {
   const sheet = document.getElementById("productDetailSheet");
   if (!sheet) return;
 
+    // 🔒 guard: bind ได้ครั้งเดียวต่อ sheet
+  if (sheet._qtyBound) return;
+  sheet._qtyBound = true;
+   
   let qty = 1;
   const max = Number(
     sheet.querySelector(".qty-selector")?.dataset.max
