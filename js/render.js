@@ -320,8 +320,10 @@ Render.productDetailSheet = function (product) {
             คงเหลือ ${product.stock} ชิ้น
           </div>
 
-          <!-- 🔴 STEP 9.2: QTY SELECTOR -->
-          ${Render.qtySelector(1, product.stock)}
+          <!-- STEP 9.2 SLOT: QTY SELECTOR (lazy render) -->
+          <div class="qty-step-slot"
+               data-max="${product.stock}">
+          </div>
 
           ${
             product.description
@@ -346,33 +348,11 @@ Render.productDetailSheet = function (product) {
 };
 
 /* ======================================================
-   STEP 9.2 — QTY SELECTOR (RENDER ONLY)
+   STEP 9.2 — QTY SELECTOR (LAZY / SLOT READY)
+   - initial render: EMPTY
+   - injected later by ui.js
 ====================================================== */
 
-Render.qtySelector = function (qty = 1, max = 1) {
-  return `
-    <div class="qty-selector"
-         data-max="${max}">
-      <button
-        class="qty-btn"
-        data-action="qty-decrease"
-        ${qty <= 1 ? "disabled" : ""}
-      >−</button>
-
-      <input
-        class="qty-value"
-        type="number"
-        inputmode="numeric"
-        min="1"
-        max="${max}"
-        value="${qty}"
-      />
-
-      <button
-        class="qty-btn"
-        data-action="qty-increase"
-        ${qty >= max ? "disabled" : ""}
-      >+</button>
-    </div>
-  `;
+Render.qtySelector = function () {
+  return "";
 };
