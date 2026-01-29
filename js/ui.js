@@ -264,8 +264,52 @@ UI.closeProductDetail = function () {
    - no side effects
 ====================================================== */
 
-UI.bindQtySelector = function () {
-  // intentionally left blank
+UI.bindQtySelector = function (handlers = {}) {
+  const slot = document.querySelector(".qty-step-slot");
+  if (!slot) return;
+
+  if (slot._qtyBound) return;
+  slot._qtyBound = true;
+
+  let qty = 1;
+
+  const inputEl = slot.querySelector("[data-role='qty-value']");
+  const btnDec = slot.querySelector("[data-action='qty-decrease']");
+  const btnInc = slot.querySelector("[data-action='qty-increase']");
+  const btnConfirm = slot.querySelector("[data-action='qty-confirm']");
+
+  const normalizeQty = (value) => {
+    const n = parseInt(value, 10);
+    return isNaN(n) || n < 1 ? 1 : n;
+  };
+
+  const renderQty = (value) => {
+    qty = normalizeQty(value);
+    inputEl.value = qty;
+    handlers.onChange && handlers.onChange(qty);
+  };
+
+  // – button
+  btnDec && (btnDec.onclick = () => {
+    renderQty(qty - 1);
+  });
+
+  // + button
+  btnInc && (btnInc.onclick = () => {
+    renderQty(qty + 1);
+  });
+
+  // manual input
+  inputEl && inputEl.addEventListener("input", () => {
+    renderQty(inputEl.value);
+  });
+
+  // confirm
+  btnConfirm && (btnConfirm.onclick = () => {
+    handlers.onConfirm && handlers.onConfirm();
+  });
+
+  renderQty(1);
 };
 
 /* ======================================================
