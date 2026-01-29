@@ -259,29 +259,28 @@ Viewer.openProduct = function (product) {
 }; // ✅ ปิดตรงนี้
 
 /* ======================================================
-   STEP 9.2 — ENTER QTY STEP
+   STEP 9.2 — ENTER QTY STEP (MODAL VERSION)
 ====================================================== */
 Viewer.enterQtyStep = function () {
   const product = Core.state.viewer.activeProduct;
   if (!product) return;
 
-  // ❌ 4. guard: สินค้าหมด ไม่ให้เข้า qty step
+  // ❌ guard: สินค้าหมด
   if (product.stock <= 0) {
     UI.showToast("สินค้าหมด", "warning");
     return;
   }
 
-  // guard: ไม่เข้า step ซ้ำ
+  // ❌ guard: ไม่เข้า step ซ้ำ
   if (Viewer._productStep === "qty") return;
 
   Viewer._productStep = "qty";
   Viewer._selectedQty = 1;
 
-  // render qty selector ลง slot
-  const slot = document.querySelector(".qty-step-slot");
-  if (!slot) return;
-
-  slot.innerHTML = Render.qtySelector();
+  // 🔥 เปิด Qty Modal (แทนการ render ลงหน้า)
+  UI.openQtyModal(
+    Render.qtyModal(product)
+  );
 
   // bind qty interaction (UI only)
   UI.bindQtySelector({
@@ -290,6 +289,11 @@ Viewer.enterQtyStep = function () {
     },
     onConfirm() {
       Viewer.confirmQty();
+      UI.closeQtyModal();      // ✅ ปิด modal หลังยืนยัน
+    },
+    onCancel() {
+      Viewer._productStep = "idle";
+      UI.closeQtyModal();      // ✅ ยกเลิก
     }
   });
 };
