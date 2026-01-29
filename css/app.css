@@ -554,16 +554,19 @@ body.search-open .search-input {
 
 /* quantity value (iOS style, not web input) */
 .qty-value {
-  width: 44px;              /* 🔑 แคบลง */
+  width: 44px;              /* ขนาด iOS safe */
   min-width: 44px;
   height: 40px;
 
-  padding: 0;               /* 🔑 ตัด padding เพื่อ centering */
+  display: flex;            /* 🔑 เปลี่ยนจาก text → layout */
+  align-items: center;      /* 🔑 กลางแนวตั้ง */
+  justify-content: center;  /* 🔑 กลางแนวนอน */
+
+  padding: 0;
   text-align: center;
 
   font-size: 20px;
   font-weight: 600;
-  line-height: 40px;        /* 🔑 ตัวเลขอยู่กลางแนวตั้ง */
 
   color: var(--text-primary);
 
@@ -710,9 +713,15 @@ body.search-open .search-input {
 
 /* helper text (เลือกจำนวนสินค้า) */
 .qty-sheet .sheet-subtitle {
+  text-align: center;        /* 🔑 จัดกลางชัดเจน */
   font-size: 13px;
+  font-weight: 500;
+  letter-spacing: -0.1px;
+
   color: var(--text-secondary);
-  margin-bottom: 14px;      /* 🔑 ไม่ชน QTY */
+
+  margin-top: 6px;           /* 🔑 ไม่ติดชื่อ/ราคา */
+  margin-bottom: 18px;       /* 🔑 แยกจาก QTY ชัด */
 }
 
 /* backdrop polish (D) */
