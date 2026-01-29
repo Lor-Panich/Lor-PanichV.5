@@ -477,7 +477,7 @@ body.search-open .search-input {
 ====================================================== */
 
 .product-detail {
-  padding: 16px 20px 12px;
+  padding: 16px 20px 96px; /* 🔑 ดัน content หนี footer */
   text-align: left;
 }
 
@@ -538,17 +538,18 @@ body.search-open .search-input {
 }
 
 .qty-value {
-  width: 56px;          /* 🔑 แก้หลัก */
+  width: 56px;
   min-width: 56px;
-
-  padding: 6px 4px;     /* 🔑 อ่านง่ายขึ้น */
+  padding: 8px 6px;
 
   text-align: center;
-  font-size: 20px;
-  font-weight: 600;
+  font-size: 22px;          /* 🔑 ดันสายตา */
+  font-weight: 700;
 
-  border: none;
-  background: transparent;
+  color: var(--text-primary);
+
+  border-radius: 12px;
+  background: rgba(255,255,255,0.08); /* 🔑 ให้มีฐานสายตา */
 
   appearance: none;
   -webkit-appearance: none;
