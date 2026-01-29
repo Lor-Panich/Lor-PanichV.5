@@ -274,7 +274,7 @@ Viewer.enterQtyStep = function () {
   // ❌ guard: ไม่เข้า step ซ้ำ
   if (Viewer._productStep === "qty") return;
 
-  // 🔑 set step
+  // 🔑 set step + reset state
   Viewer._productStep = "qty";
   Viewer._selectedQty = 1;
 
@@ -287,8 +287,12 @@ Viewer.enterQtyStep = function () {
   const qtyRoot = document.getElementById("qtySheet");
   if (!qtyRoot) return;
 
-  // ✅ FIX: ensure clean bind ทุกครั้งที่เปิด
+  // ✅ FIX 1: clear bind guard ทุกครั้งที่เปิด
   delete qtyRoot._qtyBound;
+
+  // ✅ FIX 2: reset DOM qty value กัน state ค้าง
+  const valueEl = qtyRoot.querySelector("[data-role='qty-value']");
+  if (valueEl) valueEl.textContent = "1";
 
   UI.bindQtySelector(
     {
