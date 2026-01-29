@@ -304,11 +304,14 @@ UI.bindQtySelector = function (handlers = {}, rootEl) {
 
   let qty = 1;
 
-  const inputEl   = slot.querySelector("[data-role='qty-value']");
+  // 🔑 ตอนนี้ไม่ใช่ input แล้ว
+  const valueEl   = slot.querySelector("[data-role='qty-value']");
   const btnDec    = slot.querySelector("[data-action='qty-decrease']");
   const btnInc    = slot.querySelector("[data-action='qty-increase']");
   const btnConfirm= slot.querySelector("[data-action='qty-confirm']");
   const btnCancel = slot.querySelector("[data-action='qty-cancel']");
+
+  if (!valueEl) return;
 
   const normalizeQty = (value) => {
     const n = parseInt(value, 10);
@@ -317,11 +320,11 @@ UI.bindQtySelector = function (handlers = {}, rootEl) {
 
   const renderQty = (value) => {
     qty = normalizeQty(value);
-    if (inputEl) inputEl.value = qty;
+    valueEl.textContent = qty;          // ✅ ใช้ textContent
     handlers.onChange && handlers.onChange(qty);
   };
 
-  // – button
+  // − button
   btnDec && (btnDec.onclick = () => {
     renderQty(qty - 1);
   });
@@ -331,17 +334,12 @@ UI.bindQtySelector = function (handlers = {}, rootEl) {
     renderQty(qty + 1);
   });
 
-  // manual input
-  inputEl && inputEl.addEventListener("input", () => {
-    renderQty(inputEl.value);
-  });
-
   // confirm
   btnConfirm && (btnConfirm.onclick = () => {
-    handlers.onConfirm && handlers.onConfirm();
+    handlers.onConfirm && handlers.onConfirm(qty);
   });
 
-  // cancel (for modal / sheet)
+  // cancel
   btnCancel && (btnCancel.onclick = () => {
     handlers.onCancel && handlers.onCancel();
   });
