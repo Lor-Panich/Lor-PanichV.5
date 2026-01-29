@@ -226,15 +226,13 @@ Viewer._bindProductCardClick = function () {
  };
 
 /* ======================================================
-   OVERLAY GUARD
-   - prevent click-through when overlay is open
+   OVERLAY GUARD (TEMP DISABLED)
+   - overlay state will be handled later
+   - prevent tight coupling with UI layer
 ====================================================== */
 
 Viewer._isOverlayOpen = function () {
-  return (
-    Array.isArray(Core.state.ui.overlays) &&
-    Core.state.ui.overlays.length > 0
-  );
+  return false;
 };
 
 /* ======================================================
@@ -255,11 +253,6 @@ Viewer.openProduct = function (product) {
     Render.productDetailSheet(product)
   );
 
-  // 🔴 STEP 9.2 — bind qty selector หลัง DOM ถูก render แล้ว
-  UI.bindQtySelector(qty => {
-    Viewer._selectedQty = qty;
-  });
-
   // 🔴 STEP 9.3 — bind Add to Cart
   UI.bindAddToCart(() => {
     const activeProduct = Core.state.viewer.activeProduct;
@@ -277,7 +270,7 @@ Viewer.openProduct = function (product) {
     );
 
     // ปิด Product Detail Sheet
-    Viewer.closeProductDetail();
+    Viewer.closeProduct();
   });
 };
 
