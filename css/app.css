@@ -502,54 +502,77 @@ body.search-open .search-input {
 }
 
 /* ======================================================
-   STEP 9.2 — QTY SELECTOR (iOS Style)
+   STEP 9.3 — QTY SELECTOR (iOS POLISH)
+   Replace old version
 ====================================================== */
 
 .qty-selector {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 16px;
-  margin-top: 20px;
+
+  gap: 14px;                /* 🔑 กระชับขึ้นนิด */
+  margin: 22px 0 26px;      /* 🔑 ไม่ชิดขอบ */
 }
 
+/* − / + buttons (iOS pill) */
 .qty-btn {
-  width: 44px;
-  height: 44px;
+  width: 40px;              /* 🔑 เล็กลง */
+  height: 40px;
 
   border-radius: 50%;
   border: 1px solid var(--glass-border);
+
   background: var(--glass-bg);
   backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
 
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 600;
   color: var(--text-primary);
 
-  transition: transform 120ms ease, opacity 120ms ease;
+  box-shadow:
+    0 6px 16px rgba(0,0,0,.18),
+    inset 0 1px 0 rgba(255,255,255,.6);
+
+  transition:
+    transform 120ms ease,
+    box-shadow 120ms ease,
+    opacity 120ms ease;
 }
 
 .qty-btn:active {
-  transform: scale(0.92);
+  transform: scale(0.9);
+  box-shadow:
+    0 4px 10px rgba(0,0,0,.16),
+    inset 0 1px 0 rgba(255,255,255,.5);
 }
 
 .qty-btn:disabled {
   opacity: 0.35;
 }
 
+/* quantity value (iOS style, not web input) */
 .qty-value {
-  width: 56px;
-  min-width: 56px;
-  padding: 8px 6px;
+  width: 44px;              /* 🔑 แคบลง */
+  min-width: 44px;
+  height: 40px;
 
+  padding: 0;               /* 🔑 ตัด padding เพื่อ centering */
   text-align: center;
-  font-size: 22px;          /* 🔑 ดันสายตา */
-  font-weight: 700;
+
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 40px;        /* 🔑 ตัวเลขอยู่กลางแนวตั้ง */
 
   color: var(--text-primary);
 
-  border-radius: 12px;
-  background: rgba(255,255,255,0.08); /* 🔑 ให้มีฐานสายตา */
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.35);
+
+  background: rgba(255,255,255,0.16);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 
   appearance: none;
   -webkit-appearance: none;
@@ -627,7 +650,8 @@ body.search-open .search-input {
 }
 
 /* ======================================================
-   STEP 9.3 — QTY SHEET (Bottom Sheet Polish)
+   STEP 9.3 — QTY SHEET (iOS POLISH)
+   Replace old version
 ====================================================== */
 
 #qtySheet {
@@ -636,6 +660,7 @@ body.search-open .search-input {
   justify-content: center;
 }
 
+/* bottom sheet */
 .qty-sheet {
   width: 100%;
   max-width: 92%;
@@ -661,23 +686,37 @@ body.search-open .search-input {
   transform: translateY(0);
 }
 
+/* content spacing (A) */
 .qty-sheet .sheet-content {
-  padding: 20px;
+  padding: 24px 22px 28px;   /* 🔑 โล่งขึ้น ไม่ชิดขอบ */
   text-align: center;
 }
 
+/* title */
 .qty-sheet .product-name {
   font-size: 18px;
   font-weight: 600;
   margin-bottom: 6px;
+  letter-spacing: -0.2px;
 }
 
+/* price */
 .qty-sheet .product-price {
   font-size: 20px;
   font-weight: 700;
   color: var(--accent);
+  margin-bottom: 6px;
 }
 
+/* helper text (เลือกจำนวนสินค้า) */
+.qty-sheet .sheet-subtitle {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 14px;      /* 🔑 ไม่ชน QTY */
+}
+
+/* backdrop polish (D) */
 #globalBackdrop {
+  background: rgba(0,0,0,.32);
   backdrop-filter: blur(4px);
 }
