@@ -132,6 +132,36 @@ UI._syncBackdrop = function () {
   }
 };
 
+/* ======================================================
+   STEP 9.2 — QTY SHEET CONTROLLER
+   - use overlay stack
+   - no business logic
+====================================================== */
+
+UI.openQtyModal = function (html) {
+  const overlay = document.getElementById("qtySheet");
+  if (!overlay) return;
+
+  overlay.innerHTML = html;
+
+  // ใช้ระบบ overlay stack เดิม
+  UI.openOverlay("qtySheet");
+
+  // lock scroll
+  document.body.style.overflow = "hidden";
+};
+
+UI.closeQtyModal = function () {
+  const overlay = document.getElementById("qtySheet");
+  if (!overlay) return;
+
+  UI.closeOverlay("qtySheet");
+
+  document.body.style.overflow = "";
+
+  overlay.innerHTML = "";
+};
+
 // ======================================================
 // FIX — CART OVERLAY (V5 COMPLIANT)
 // ======================================================
@@ -258,25 +288,27 @@ UI.closeProductDetail = function () {
 };
 
 /* ======================================================
-   STEP 9.2 — QTY SELECTOR UI (LAZY / EMPTY)
-   - bound later by controller
-   - no DOM query
-   - no side effects
+   STEP 9.2 — QTY SELECTOR UI (MODAL / REUSABLE)
+   - UI only
+   - no business logic
 ====================================================== */
 
-UI.bindQtySelector = function (handlers = {}) {
-  const slot = document.querySelector(".qty-step-slot");
+UI.bindQtySelector = function (handlers = {}, rootEl) {
+  const root = rootEl || document;
+  const slot = root.querySelector(".qty-step-slot");
   if (!slot) return;
 
+  // 🔒 guard: กัน bind ซ้ำ
   if (slot._qtyBound) return;
   slot._qtyBound = true;
 
   let qty = 1;
 
-  const inputEl = slot.querySelector("[data-role='qty-value']");
-  const btnDec = slot.querySelector("[data-action='qty-decrease']");
-  const btnInc = slot.querySelector("[data-action='qty-increase']");
-  const btnConfirm = slot.querySelector("[data-action='qty-confirm']");
+  const inputEl   = slot.querySelector("[data-role='qty-value']");
+  const btnDec    = slot.querySelector("[data-action='qty-decrease']");
+  const btnInc    = slot.querySelector("[data-action='qty-increase']");
+  const btnConfirm= slot.querySelector("[data-action='qty-confirm']");
+  const btnCancel = slot.querySelector("[data-action='qty-cancel']");
 
   const normalizeQty = (value) => {
     const n = parseInt(value, 10);
@@ -285,7 +317,7 @@ UI.bindQtySelector = function (handlers = {}) {
 
   const renderQty = (value) => {
     qty = normalizeQty(value);
-    inputEl.value = qty;
+    if (inputEl) inputEl.value = qty;
     handlers.onChange && handlers.onChange(qty);
   };
 
@@ -309,6 +341,12 @@ UI.bindQtySelector = function (handlers = {}) {
     handlers.onConfirm && handlers.onConfirm();
   });
 
+  // cancel (for modal / sheet)
+  btnCancel && (btnCancel.onclick = () => {
+    handlers.onCancel && handlers.onCancel();
+  });
+
+  // init
   renderQty(1);
 };
 
