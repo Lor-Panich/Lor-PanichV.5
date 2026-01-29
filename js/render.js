@@ -359,7 +359,14 @@ Render.qtySelector = function (qty = 1, max = 1) {
         ${qty <= 1 ? "disabled" : ""}
       >−</button>
 
-      <div class="qty-value">${qty}</div>
+      <input
+        class="qty-value"
+        type="number"
+        inputmode="numeric"
+        min="1"
+        max="${max}"
+        value="${qty}"
+      />
 
       <button
         class="qty-btn"
