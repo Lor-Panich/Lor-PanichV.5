@@ -362,14 +362,11 @@ Render.qtySelector = function () {
         type="button"
       >−</button>
 
-      <input
+      <div
         class="qty-value"
         data-role="qty-value"
-        type="number"
-        inputmode="numeric"
-        min="1"
-        value="1"
-      />
+        aria-live="polite"
+      >1</div>
 
       <button
         class="qty-btn"
@@ -395,28 +392,40 @@ Render.qtySelector = function () {
 Render.qtyModal = function (product = {}) {
   return `
     <div class="sheet qty-sheet">
-      <div class="sheet-header">
-        <div class="sheet-title">เลือกจำนวนสินค้า</div>
-      </div>
-
       <div class="sheet-content">
-        <div class="qty-step-slot">
-          <div class="product-name">${product.name || ""}</div>
-          <div class="product-price">
-            ${Number(product.price || 0).toLocaleString()} บาท
-          </div>
 
-          <div class="qty-control">
-            <button data-action="qty-decrease">−</button>
-            <input
-              type="number"
-              data-role="qty-value"
-              value="1"
-              min="1"
-            />
-            <button data-action="qty-increase">+</button>
-          </div>
+        <!-- subtitle -->
+        <div class="sheet-subtitle">เลือกจำนวนสินค้า</div>
 
+        <!-- product info -->
+        <div class="product-name">${product.name || ""}</div>
+        <div class="product-price">
+          ${Number(product.price || 0).toLocaleString()} บาท
+        </div>
+
+        <!-- qty selector (USE SAME STRUCTURE AS Render.qtySelector) -->
+        <div class="qty-selector">
+          <button
+            class="qty-btn"
+            data-action="qty-decrease"
+            type="button"
+          >−</button>
+
+          <div
+            class="qty-value"
+            data-role="qty-value"
+            aria-live="polite"
+          >1</div>
+
+          <button
+            class="qty-btn"
+            data-action="qty-increase"
+            type="button"
+          >+</button>
+        </div>
+
+        <!-- actions -->
+        <div class="qty-actions">
           <button
             class="primary-btn"
             data-action="qty-confirm"
@@ -433,6 +442,7 @@ Render.qtyModal = function (product = {}) {
             ยกเลิก
           </button>
         </div>
+
       </div>
     </div>
   `;
