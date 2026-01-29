@@ -277,25 +277,30 @@ Viewer.enterQtyStep = function () {
   Viewer._productStep = "qty";
   Viewer._selectedQty = 1;
 
-  // 🔥 เปิด Qty Modal (แทนการ render ลงหน้า)
+  // 🔥 เปิด Qty Sheet / Modal
   UI.openQtyModal(
     Render.qtyModal(product)
   );
 
-  // bind qty interaction (UI only)
-  UI.bindQtySelector({
-    onChange(qty) {
-      Viewer._selectedQty = qty;
+  // 🔑 bind qty interaction กับ modal root โดยตรง
+  const qtyRoot = document.getElementById("qtySheet");
+
+  UI.bindQtySelector(
+    {
+      onChange(qty) {
+        Viewer._selectedQty = qty;
+      },
+      onConfirm() {
+        Viewer.confirmQty();
+        UI.closeQtyModal();   // ✅ ปิด modal หลังยืนยัน
+      },
+      onCancel() {
+        Viewer._productStep = "idle";
+        UI.closeQtyModal();   // ✅ ยกเลิก
+      }
     },
-    onConfirm() {
-      Viewer.confirmQty();
-      UI.closeQtyModal();      // ✅ ปิด modal หลังยืนยัน
-    },
-    onCancel() {
-      Viewer._productStep = "idle";
-      UI.closeQtyModal();      // ✅ ยกเลิก
-    }
-  });
+    qtyRoot
+  );
 };
 
   Viewer.confirmQty = function () {
