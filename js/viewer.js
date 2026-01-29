@@ -231,8 +231,8 @@ Viewer._bindProductCardClick = function () {
 ====================================================== */
 
 Viewer._isOverlayOpen = function () {
-  return Array.isArray(UI._overlayStack)
-    && UI._overlayStack.length > 0;
+  return UI._overlayStack.includes("productSheet")
+      || UI._overlayStack.includes("qtySheet");
 };
 
 /* ======================================================
