@@ -625,3 +625,59 @@ body.search-open .search-input {
 .overlay.show .product-detail-sheet {
   transform: translate(-50%, 0);
 }
+
+/* ======================================================
+   STEP 9.3 — QTY SHEET (Bottom Sheet Polish)
+====================================================== */
+
+#qtySheet {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.qty-sheet {
+  width: 100%;
+  max-width: 92%;
+  max-height: 70dvh;
+
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+
+  transform: translateY(100%);
+  transition: transform 360ms var(--ease-out);
+
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* when open */
+#qtySheet.show .qty-sheet {
+  transform: translateY(0);
+}
+
+.qty-sheet .sheet-content {
+  padding: 20px;
+  text-align: center;
+}
+
+.qty-sheet .product-name {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.qty-sheet .product-price {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+#globalBackdrop {
+  backdrop-filter: blur(4px);
+}
