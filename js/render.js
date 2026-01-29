@@ -388,3 +388,52 @@ Render.qtySelector = function () {
     </button>
   `;
 };
+
+/* ======================================================
+   STEP 9.2 — QTY MODAL (RENDER ONLY)
+====================================================== */
+Render.qtyModal = function (product = {}) {
+  return `
+    <div class="sheet qty-sheet">
+      <div class="sheet-header">
+        <div class="sheet-title">เลือกจำนวนสินค้า</div>
+      </div>
+
+      <div class="sheet-content">
+        <div class="qty-step-slot">
+          <div class="product-name">${product.name || ""}</div>
+          <div class="product-price">
+            ${Number(product.price || 0).toLocaleString()} บาท
+          </div>
+
+          <div class="qty-control">
+            <button data-action="qty-decrease">−</button>
+            <input
+              type="number"
+              data-role="qty-value"
+              value="1"
+              min="1"
+            />
+            <button data-action="qty-increase">+</button>
+          </div>
+
+          <button
+            class="primary-btn"
+            data-action="qty-confirm"
+            type="button"
+          >
+            ยืนยันเพิ่มลงตะกร้า
+          </button>
+
+          <button
+            class="secondary-btn"
+            data-action="qty-cancel"
+            type="button"
+          >
+            ยกเลิก
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+};
