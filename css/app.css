@@ -684,10 +684,7 @@ body.search-open .search-input {
   -webkit-overflow-scrolling: touch;
 
   display: flex;
-  align-items: flex-end;
-  justify-content: center;
-
-  z-index: 1000;  
+  flex-direction: column;   /* ✅ content flow ถูกต้อง */
 }
 
 /* when open */
