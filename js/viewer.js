@@ -261,6 +261,7 @@ Viewer.openProduct = function (product) {
 /* ======================================================
    STEP 9.2 — ENTER QTY STEP (MODAL VERSION)
 ====================================================== */
+
 Viewer.enterQtyStep = function () {
   const product = Core.state.viewer.activeProduct;
   if (!product) return;
@@ -274,6 +275,7 @@ Viewer.enterQtyStep = function () {
   // ❌ guard: ไม่เข้า step ซ้ำ
   if (Viewer._productStep === "qty") return;
 
+  // 🔑 set step
   Viewer._productStep = "qty";
   Viewer._selectedQty = 1;
 
@@ -290,13 +292,19 @@ Viewer.enterQtyStep = function () {
       onChange(qty) {
         Viewer._selectedQty = qty;
       },
+
       onConfirm() {
-        Viewer.confirmQty();
-        UI.closeQtyModal();   // ✅ ปิด modal หลังยืนยัน
-      },
-      onCancel() {
+        // ✅ RESET step ทันที (สำคัญมาก)
         Viewer._productStep = "idle";
-        UI.closeQtyModal();   // ✅ ยกเลิก
+
+        Viewer.confirmQty();
+        UI.closeQtyModal();
+      },
+
+      onCancel() {
+        // ✅ RESET step
+        Viewer._productStep = "idle";
+        UI.closeQtyModal();
       }
     },
     qtyRoot
