@@ -360,18 +360,22 @@ Render.qtySelector = function () {
         class="qty-btn"
         data-action="qty-decrease"
         type="button"
+        aria-label="ลดจำนวนสินค้า"
       >−</button>
 
       <div
         class="qty-value"
         data-role="qty-value"
+        role="status"
         aria-live="polite"
+        aria-atomic="true"
       >1</div>
 
       <button
         class="qty-btn"
         data-action="qty-increase"
         type="button"
+        aria-label="เพิ่มจำนวนสินค้า"
       >+</button>
     </div>
 
@@ -395,32 +399,41 @@ Render.qtyModal = function (product = {}) {
       <div class="sheet-content">
 
         <!-- subtitle -->
-        <div class="sheet-subtitle">เลือกจำนวนสินค้า</div>
+        <div class="sheet-subtitle">
+          เลือกจำนวนสินค้า
+        </div>
 
         <!-- product info -->
-        <div class="product-name">${product.name || ""}</div>
+        <div class="product-name">
+          ${product.name || ""}
+        </div>
+
         <div class="product-price">
           ${Number(product.price || 0).toLocaleString()} บาท
         </div>
 
-        <!-- qty selector (USE SAME STRUCTURE AS Render.qtySelector) -->
+        <!-- qty selector (SAME STRUCTURE AS Render.qtySelector) -->
         <div class="qty-selector">
           <button
             class="qty-btn"
             data-action="qty-decrease"
             type="button"
+            aria-label="ลดจำนวนสินค้า"
           >−</button>
 
           <div
             class="qty-value"
             data-role="qty-value"
+            role="status"
             aria-live="polite"
+            aria-atomic="true"
           >1</div>
 
           <button
             class="qty-btn"
             data-action="qty-increase"
             type="button"
+            aria-label="เพิ่มจำนวนสินค้า"
           >+</button>
         </div>
 
