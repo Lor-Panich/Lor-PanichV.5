@@ -311,28 +311,26 @@ Viewer.enterQtyStep = function () {
   );
 };
 
-  Viewer.confirmQty = function () {
-    const product = Core.state.viewer.activeProduct;
-    const qty = Viewer._selectedQty;
+Viewer.confirmQty = function () {
+  const product = Core.state.viewer.activeProduct;
+  const qty = Viewer._selectedQty;
 
-    if (!product) return;
+  if (!product) return;
 
-    // ❌ ไม่ผ่าน
-    if (qty <= 0 || qty > product.stock) {
-      UI.showToast("จำนวนสินค้าไม่ถูกต้อง", "warning");
-      return;
-    }
+  if (qty <= 0 || qty > product.stock) {
+    UI.showToast("จำนวนสินค้าไม่ถูกต้อง", "warning");
+    return;
+  }
 
-  // ✅ ผ่าน → add to cart
   Viewer.addToCart(product, qty);
 
-    UI.showToast(
-      `เพิ่ม ${product.name} × ${qty} ลงตะกร้าแล้ว`,
-      "success"
-    );
+  UI.showToast(
+    `เพิ่ม ${product.name} × ${qty} ลงตะกร้าแล้ว`,
+    "success"
+  );
 
-    Viewer.closeProduct();
-  };
+  Viewer.closeProduct();
+};
 
 /* ======================================================
    APP HEADER (SIDE-EFFECT ONLY)
