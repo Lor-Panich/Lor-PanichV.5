@@ -661,6 +661,8 @@ body.search-open .search-input {
   display: flex;
   align-items: flex-end;
   justify-content: center;
+
+  z-index: 1000;   /* 🔑 ต้องมี */
 }
 
 /* bottom sheet */
