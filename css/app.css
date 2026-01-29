@@ -724,8 +724,13 @@ body.search-open .search-input {
   margin-bottom: 18px;       /* 🔑 แยกจาก QTY ชัด */
 }
 
-/* backdrop polish (D) */
+/* backdrop polish (D) *//* backdrop ต้องอยู่ "ใต้" sheet */
 #globalBackdrop {
+  position: fixed;
+  inset: 0;
+
   background: rgba(0,0,0,.32);
   backdrop-filter: blur(4px);
+
+  z-index: 900;            /* 🔑 ต่ำกว่า sheet */
 }
