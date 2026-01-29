@@ -295,23 +295,21 @@ UI.closeProductDetail = function () {
 
 UI.bindQtySelector = function (handlers = {}, rootEl) {
   const root = rootEl || document;
-  const slot = root.querySelector(".qty-step-slot");
-  if (!slot) return;
 
-  // 🔒 guard: กัน bind ซ้ำ
-  if (slot._qtyBound) return;
-  slot._qtyBound = true;
-
-  let qty = 1;
-
-  // 🔑 ตอนนี้ไม่ใช่ input แล้ว
-  const valueEl   = slot.querySelector("[data-role='qty-value']");
-  const btnDec    = slot.querySelector("[data-action='qty-decrease']");
-  const btnInc    = slot.querySelector("[data-action='qty-increase']");
-  const btnConfirm= slot.querySelector("[data-action='qty-confirm']");
-  const btnCancel = slot.querySelector("[data-action='qty-cancel']");
+  // 🔑 bind จาก root โดยตรง
+  const valueEl    = root.querySelector("[data-role='qty-value']");
+  const btnDec     = root.querySelector("[data-action='qty-decrease']");
+  const btnInc     = root.querySelector("[data-action='qty-increase']");
+  const btnConfirm = root.querySelector("[data-action='qty-confirm']");
+  const btnCancel  = root.querySelector("[data-action='qty-cancel']");
 
   if (!valueEl) return;
+
+  // 🔒 guard กัน bind ซ้ำ (ผูกกับ root)
+  if (root._qtyBound) return;
+  root._qtyBound = true;
+
+  let qty = 1;
 
   const normalizeQty = (value) => {
     const n = parseInt(value, 10);
@@ -320,29 +318,37 @@ UI.bindQtySelector = function (handlers = {}, rootEl) {
 
   const renderQty = (value) => {
     qty = normalizeQty(value);
-    valueEl.textContent = qty;          // ✅ ใช้ textContent
+    valueEl.textContent = qty;   // ✅ center ได้สมบูรณ์
     handlers.onChange && handlers.onChange(qty);
   };
 
   // − button
-  btnDec && (btnDec.onclick = () => {
-    renderQty(qty - 1);
-  });
+  if (btnDec) {
+    btnDec.onclick = () => {
+      renderQty(qty - 1);
+    };
+  }
 
   // + button
-  btnInc && (btnInc.onclick = () => {
-    renderQty(qty + 1);
-  });
+  if (btnInc) {
+    btnInc.onclick = () => {
+      renderQty(qty + 1);
+    };
+  }
 
   // confirm
-  btnConfirm && (btnConfirm.onclick = () => {
-    handlers.onConfirm && handlers.onConfirm(qty);
-  });
+  if (btnConfirm) {
+    btnConfirm.onclick = () => {
+      handlers.onConfirm && handlers.onConfirm(qty);
+    };
+  }
 
   // cancel
-  btnCancel && (btnCancel.onclick = () => {
-    handlers.onCancel && handlers.onCancel();
-  });
+  if (btnCancel) {
+    btnCancel.onclick = () => {
+      handlers.onCancel && handlers.onCancel();
+    };
+  }
 
   // init
   renderQty(1);
