@@ -285,6 +285,10 @@ Viewer.enterQtyStep = function () {
 
   // 🔑 bind qty interaction กับ modal root โดยตรง
   const qtyRoot = document.getElementById("qtySheet");
+  if (!qtyRoot) return;
+
+  // ✅ FIX: ensure clean bind ทุกครั้งที่เปิด
+  delete qtyRoot._qtyBound;
 
   UI.bindQtySelector(
     {
