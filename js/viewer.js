@@ -231,7 +231,8 @@ Viewer._bindProductCardClick = function () {
 ====================================================== */
 
 Viewer._isOverlayOpen = function () {
-  return false;
+  return Array.isArray(UI._overlayStack)
+    && UI._overlayStack.length > 0;
 };
 
 /* ======================================================
