@@ -250,53 +250,22 @@ UI.closeProductDetail = function () {
     sheet._swipeBound = false;
   }
 
+  // reset qty binding state
+  delete sheet._qtyBound; 
+
   // cleanup DOM
   overlay.innerHTML = "";
 };
 
 /* ======================================================
-   STEP 9.2 — QTY SELECTOR UI
+   STEP 9.2 — QTY SELECTOR UI (LAZY / EMPTY)
+   - bound later by controller
+   - no DOM query
+   - no side effects
 ====================================================== */
 
-UI.bindQtySelector = function (onChange) {
-  const sheet = document.getElementById("productDetailSheet");
-  if (!sheet) return;
-
-    // 🔒 guard: bind ได้ครั้งเดียวต่อ sheet
-  if (sheet._qtyBound) return;
-  sheet._qtyBound = true;
-   
-  let qty = 1;
-  const max = Number(
-    sheet.querySelector(".qty-selector")?.dataset.max
-  ) || 1;
-
-  sheet.addEventListener("click", function (e) {
-    const btn = e.target.closest("[data-action]");
-    if (!btn) return;
-
-    if (btn.dataset.action === "qty-decrease" && qty > 1) {
-      qty--;
-    }
-
-    if (btn.dataset.action === "qty-increase" && qty < max) {
-      qty++;
-    }
-
-    const valueEl = sheet.querySelector(".qty-value");
-    if (valueEl) valueEl.textContent = qty;
-
-    // update disabled state
-    sheet
-      .querySelector("[data-action='qty-decrease']")
-      .toggleAttribute("disabled", qty <= 1);
-
-    sheet
-      .querySelector("[data-action='qty-increase']")
-      .toggleAttribute("disabled", qty >= max);
-
-    typeof onChange === "function" && onChange(qty);
-  });
+UI.bindQtySelector = function () {
+  // intentionally left blank
 };
 
 /* ======================================================
