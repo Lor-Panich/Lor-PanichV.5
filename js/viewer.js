@@ -202,7 +202,11 @@ Viewer._bindProductCardClick = function () {
   const app = document.getElementById("app");
   if (!app) return;
 
-  app.onclick = function (e) {
+  // 🔒 guard กัน bind ซ้ำ
+  if (app._productCardBound) return;
+  app._productCardBound = true;
+
+  app.addEventListener("click", function (e) {
     if (Viewer._isOverlayOpen()) return;
 
     const card = e.target.closest(".product-card");
@@ -217,7 +221,7 @@ Viewer._bindProductCardClick = function () {
     if (!product) return;
 
     Viewer.openProduct(product);
-  };
+  });
 };
 
 /* ======================================================
