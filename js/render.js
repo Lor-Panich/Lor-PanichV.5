@@ -354,5 +354,37 @@ Render.productDetailSheet = function (product) {
 ====================================================== */
 
 Render.qtySelector = function () {
-  return "";
+  return `
+    <div class="qty-selector">
+      <button
+        class="qty-btn"
+        data-action="qty-decrease"
+        type="button"
+      >−</button>
+
+      <input
+        class="qty-value"
+        data-role="qty-value"
+        type="number"
+        inputmode="numeric"
+        min="1"
+        value="1"
+      />
+
+      <button
+        class="qty-btn"
+        data-action="qty-increase"
+        type="button"
+      >+</button>
+    </div>
+
+    <button
+      class="primary-btn qty-confirm-btn"
+      data-action="qty-confirm"
+      type="button"
+      style="margin-top:16px;width:100%;"
+    >
+      ยืนยันจำนวน
+    </button>
+  `;
 };
