@@ -682,6 +682,12 @@ body.search-open .search-input {
 
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+
+  z-index: 1000;  
 }
 
 /* when open */
