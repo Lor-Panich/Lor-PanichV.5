@@ -155,6 +155,9 @@ UI.closeQtyModal = function () {
   const overlay = document.getElementById("qtySheet");
   if (!overlay) return;
 
+  // 🔑 FIX สำคัญมาก: reset binding state
+  delete overlay._qtyBound;
+
   UI.closeOverlay("qtySheet");
 
   document.body.style.overflow = "";
