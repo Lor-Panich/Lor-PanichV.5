@@ -254,7 +254,7 @@ Viewer.openProduct = function (product) {
 
   // 🔴 STEP 9.3 — bind Add to Cart (ENTER QTY STEP ONLY)
   UI.bindAddToCart(() => {
-    UI.openQtyModal(Core.state.viewer.activeProduct);
+    Viewer.enterQtyStep();
   });
 }; // ✅ ปิดตรงนี้
 
