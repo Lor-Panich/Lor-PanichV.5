@@ -332,6 +332,39 @@ Viewer.confirmQty = function () {
 };
 
 /* ======================================================
+   STEP 9.4 — ADD TO CART (REAL IMPLEMENTATION)
+   - mutate Core.state.cart ONLY
+   - no UI here
+====================================================== */
+
+Viewer.addToCart = function (product, qty) {
+  if (!product || qty <= 0) return;
+
+  const cart = Core.state.cart;
+  if (!cart || !Array.isArray(cart.items)) return;
+
+  const productId = product.productId;
+
+  // 🔍 หา item เดิมใน cart
+  const existing = cart.items.find(
+    it => it.productId === productId
+  );
+
+  if (existing) {
+    // ✅ มีอยู่แล้ว → บวกจำนวน
+    existing.qty += qty;
+  } else {
+    // ✅ ยังไม่มี → เพิ่มใหม่
+    cart.items.push({
+      productId: product.productId,
+      name: product.name,
+      price: product.price,
+      qty: qty
+    });
+  }
+};
+
+/* ======================================================
    APP HEADER (SIDE-EFFECT ONLY)
 ====================================================== */
 
