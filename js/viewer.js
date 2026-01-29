@@ -69,6 +69,7 @@ Viewer._searchOpen = false;
 Viewer._searchKeyword = "";
 Viewer._searchDebounceTimer = null;
 Viewer._selectedQty = 1;
+Viewer._productStep = "idle"; 
 
 /**
  * handle search input change (debounced)
@@ -242,37 +243,79 @@ Viewer._isOverlayOpen = function () {
 Viewer.openProduct = function (product) {
   if (!product) return;
 
-  // 🔴 STEP 9.2 — reset qty ทุกครั้งที่เปิดสินค้า
   Viewer._selectedQty = 1;
+  Viewer._productStep = "idle";
 
-  // เก็บ product ที่เปิดอยู่
   Core.state.viewer.activeProduct = product;
 
-  // เปิด Product Detail Sheet (Bottom Sheet)
   UI.openProductDetail(
     Render.productDetailSheet(product)
   );
 
-  // 🔴 STEP 9.3 — bind Add to Cart
+  // 🔴 STEP 9.3 — bind Add to Cart (ENTER QTY STEP ONLY)
   UI.bindAddToCart(() => {
-    const activeProduct = Core.state.viewer.activeProduct;
-    const qty = Viewer._selectedQty || 1;
+    Viewer.enterQtyStep();
+  });
+}; // ✅ ปิดตรงนี้
 
-    if (!activeProduct) return;
+/* ======================================================
+   STEP 9.2 — ENTER QTY STEP
+====================================================== */
+Viewer.enterQtyStep = function () {
+  const product = Core.state.viewer.activeProduct;
+  if (!product) return;
 
-    // เพิ่มลงตะกร้า (Frontend only)
-    Viewer.addToCart(activeProduct, qty);
+  // ❌ 4. guard: สินค้าหมด ไม่ให้เข้า qty step
+  if (product.stock <= 0) {
+    UI.showToast("สินค้าหมด", "warning");
+    return;
+  }
 
-    // Feedback ผู้ใช้
+  // guard: ไม่เข้า step ซ้ำ
+  if (Viewer._productStep === "qty") return;
+
+  Viewer._productStep = "qty";
+  Viewer._selectedQty = 1;
+
+  // render qty selector ลง slot
+  const slot = document.querySelector(".qty-step-slot");
+  if (!slot) return;
+
+  slot.innerHTML = Render.qtySelector();
+
+  // bind qty interaction (UI only)
+  UI.bindQtySelector({
+    onChange(qty) {
+      Viewer._selectedQty = qty;
+    },
+    onConfirm() {
+      Viewer.confirmQty();
+    }
+  });
+};
+
+  Viewer.confirmQty = function () {
+    const product = Core.state.viewer.activeProduct;
+    const qty = Viewer._selectedQty;
+
+    if (!product) return;
+
+    // ❌ ไม่ผ่าน
+    if (qty <= 0 || qty > product.stock) {
+      UI.showToast("จำนวนสินค้าไม่ถูกต้อง", "warning");
+      return;
+    }
+
+  // ✅ ผ่าน → add to cart
+  Viewer.addToCart(product, qty);
+
     UI.showToast(
-      `เพิ่ม ${activeProduct.name} × ${qty} ลงตะกร้าแล้ว`,
+      `เพิ่ม ${product.name} × ${qty} ลงตะกร้าแล้ว`,
       "success"
     );
 
-    // ปิด Product Detail Sheet
     Viewer.closeProduct();
-  });
-};
+  };
 
 /* ======================================================
    APP HEADER (SIDE-EFFECT ONLY)
@@ -476,6 +519,8 @@ Viewer.createOrder = async function () {
 
 Viewer.closeProduct = function () {
   Viewer._selectedQty = 1;
+  Viewer._productStep = "idle";
   Core.state.viewer.activeProduct = null;
   UI.closeProductDetail();
 };
+
