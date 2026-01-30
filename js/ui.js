@@ -207,8 +207,9 @@ UI.bindCartEvents = function (handlers = {}) {
     if (!btn) return;
 
     const action = btn.dataset.action;
+    const itemEl = btn.closest(".cart-item");
 
-    // ✅ close cart (ใช้ได้ทั้ง Empty / Header / Future CTA)
+    // ✅ close cart (Empty / Header / CTA)
     if (action === "close-cart") {
       handlers.onClose && handlers.onClose();
       return;
@@ -217,6 +218,28 @@ UI.bindCartEvents = function (handlers = {}) {
     // ✅ submit order
     if (action === "submit-order") {
       handlers.onSubmit && handlers.onSubmit();
+      return;
+    }
+
+    // ==================================================
+    // 🔥 STEP 2.6 — Cart Item Interactions (UI only)
+    // ==================================================
+
+    // ➕ increase qty
+    if (action === "inc") {
+      handlers.onIncrease && handlers.onIncrease(itemEl);
+      return;
+    }
+
+    // ➖ decrease qty
+    if (action === "dec") {
+      handlers.onDecrease && handlers.onDecrease(itemEl);
+      return;
+    }
+
+    // ❌ remove item
+    if (action === "remove") {
+      handlers.onRemove && handlers.onRemove(itemEl);
       return;
     }
   });
