@@ -70,17 +70,29 @@ Render.shopHeader = function (title = "", subtitle = "") {
         }
       </div>
 
-      <button
-        class="header-icon-btn"
-        id="searchToggleBtn"
-        type="button"
-        aria-label="ค้นหา"
-      >
-        🔍
-      </button>
+      <div class="shop-header-actions">
+        <button
+          class="header-icon-btn"
+          id="searchToggleBtn"
+          type="button"
+          aria-label="ค้นหา"
+        >
+          🔍
+        </button>
+
+        <button
+          class="header-icon-btn"
+          id="cartToggleBtn"
+          type="button"
+          aria-label="ตะกร้าสินค้า"
+        >
+          🛒
+        </button>
+      </div>
     </div>
   `;
 };
+
 
 /* ======================================================
    CANONICAL: ADMIN HEADER
