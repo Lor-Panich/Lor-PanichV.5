@@ -986,3 +986,294 @@ body.search-open .search-input {
     -webkit-backdrop-filter: blur(14px) saturate(1.08);
   }
 }
+
+/* ======================================================
+   CART SHEET — iOS 26 / Liquid Glass
+====================================================== */
+
+.cart-sheet {
+  width: 100%;
+  max-width: 92%;
+  max-height: 82dvh;
+
+  margin: 0 auto;
+
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  border: 1px solid var(--glass-border);
+
+  box-shadow: var(--glass-shadow);
+
+  display: flex;
+  flex-direction: column;
+}
+
+/* ======================================================
+   CART HEADER
+====================================================== */
+
+.cart-sheet .sheet-header {
+  padding: 18px 20px 10px;
+}
+
+.cart-sheet .sheet-title {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+}
+
+.cart-sheet .sheet-subtitle {
+  margin-top: 4px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+/* ======================================================
+   CART CONTENT
+====================================================== */
+
+.cart-sheet .sheet-content {
+  padding: 8px 16px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ======================================================
+   CART ITEM — Card Style (เหมือนตัวอย่าง)
+====================================================== */
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  padding: 14px 14px;
+
+  background: #fff;
+  border-radius: 18px;
+
+  box-shadow:
+    0 10px 24px rgba(0,0,0,.08),
+    inset 0 1px 0 rgba(255,255,255,.9);
+
+  position: relative;
+}
+
+/* dark mode */
+@media (prefers-color-scheme: dark) {
+  .cart-item {
+    background: rgba(28,28,30,.9);
+    box-shadow:
+      0 14px 28px rgba(0,0,0,.45),
+      inset 0 1px 0 rgba(255,255,255,.08);
+  }
+}
+
+/* ======================================================
+   CART ITEM THUMB
+====================================================== */
+
+.cart-thumb {
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+
+  border-radius: 14px;
+  object-fit: cover;
+
+  background:
+    linear-gradient(
+      120deg,
+      rgba(255,255,255,.2),
+      rgba(255,255,255,.08)
+    );
+}
+
+/* ======================================================
+   CART ITEM INFO
+====================================================== */
+
+.cart-item-info {
+  flex: 1;
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cart-item-name {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.cart-item-price {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+/* ======================================================
+   CART QTY (iOS Pill)
+====================================================== */
+
+.cart-qty {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 6px 12px;
+  border-radius: 14px;
+
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(255,255,255,.7),
+      rgba(255,255,255,.4)
+    );
+
+  border: 1px solid rgba(0,0,0,.05);
+}
+
+.cart-qty-value {
+  min-width: 20px;
+  text-align: center;
+
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* ======================================================
+   CART REMOVE BUTTON
+====================================================== */
+
+.cart-remove {
+  width: 32px;
+  height: 32px;
+
+  border-radius: 50%;
+  border: none;
+
+  background: rgba(255,59,48,.15);
+  color: var(--danger);
+
+  font-size: 16px;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition:
+    transform 120ms ease,
+    background 120ms ease;
+}
+
+.cart-remove:active {
+  transform: scale(0.9);
+  background: rgba(255,59,48,.25);
+}
+
+/* ======================================================
+   CART FOOTER
+====================================================== */
+
+.cart-footer {
+  margin-top: auto;
+
+  padding:
+    16px 18px
+    calc(18px + env(safe-area-inset-bottom));
+
+  background:
+    linear-gradient(
+      to top,
+      rgba(255,255,255,.96),
+      rgba(255,255,255,.75)
+    );
+
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  border-top: 1px solid rgba(0,0,0,.06);
+}
+
+/* dark mode */
+@media (prefers-color-scheme: dark) {
+  .cart-footer {
+    background:
+      linear-gradient(
+        to top,
+        rgba(28,28,30,.96),
+        rgba(28,28,30,.75)
+      );
+  }
+}
+
+/* ======================================================
+   CART SUMMARY
+====================================================== */
+
+.cart-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  font-size: 16px;
+  margin-bottom: 14px;
+}
+
+.cart-summary strong {
+  font-size: 18px;
+}
+
+/* ======================================================
+   CART SUBMIT BUTTON
+====================================================== */
+
+.cart-submit-btn {
+  width: 100%;
+  height: 54px;
+
+  border-radius: 18px;
+  border: none;
+
+  font-size: 17px;
+  font-weight: 600;
+
+  color: #fff;
+
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(0,122,255,.95),
+      rgba(0,122,255,.85)
+    );
+
+  box-shadow:
+    0 14px 30px rgba(0,122,255,.45),
+    inset 0 1px 0 rgba(255,255,255,.35);
+
+  transition:
+    transform 120ms var(--ease-out),
+    box-shadow 180ms var(--ease-out),
+    filter 120ms ease;
+}
+
+.cart-submit-btn:active {
+  transform: scale(0.97);
+  box-shadow:
+    0 6px 16px rgba(0,122,255,.35),
+    inset 0 1px 0 rgba(255,255,255,.25);
+}
+
+.cart-submit-btn:disabled {
+  opacity: 0.45;
+  box-shadow: none;
+}
+
+
