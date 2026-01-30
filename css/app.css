@@ -1146,6 +1146,14 @@ body.search-open .search-input {
   }
 }
 
+/* ======================================================
+   CART EMPTY STATE — REMOVE SCROLL FADE
+====================================================== */
+
+.cart-sheet .sheet-content:has(.cart-empty-state)::before,
+.cart-sheet .sheet-content:has(.cart-empty-state)::after {
+  display: none;
+}
 
 /* ======================================================
    CART ITEM — Card Style (เหมือนตัวอย่าง)
