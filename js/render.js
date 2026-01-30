@@ -504,3 +504,47 @@ Render.qtyModal = function (product = {}) {
     </div>
   `;
 };
+
+/* ======================================================
+   STEP 10.1 — ORDER SUCCESS SHEET (RENDER ONLY)
+====================================================== */
+
+Render.orderSuccessSheet = function (order = {}) {
+  const orderId = order.orderId || "-";
+  const total   = Number(order.total || 0);
+
+  return `
+    <div class="sheet success-sheet" id="orderSuccessSheet">
+      <div class="sheet-content success-content">
+
+        <div class="success-icon">✅</div>
+
+        <h2 class="success-title">
+          สร้างใบสั่งซื้อสำเร็จ
+        </h2>
+
+        <div class="success-info">
+          <div class="success-row">
+            <span>เลขที่ใบสั่งซื้อ</span>
+            <strong>${orderId}</strong>
+          </div>
+
+          <div class="success-row">
+            <span>ยอดรวม</span>
+            <strong>${total.toLocaleString()} บาท</strong>
+          </div>
+        </div>
+
+        <button
+          class="primary-btn success-close-btn"
+          type="button"
+          data-action="close-success"
+        >
+          กลับไปเลือกสินค้า
+        </button>
+
+      </div>
+    </div>
+  `;
+};
+
