@@ -76,6 +76,7 @@ Viewer._productStep = "idle";
  * 🔧 STEP 8 — reduce re-render
  */
 Viewer._onSearchInput = function (value) {
+  if (!Viewer._searchOpen) return; 
   Viewer._searchKeyword = value || "";
 
   // clear previous debounce
@@ -327,7 +328,7 @@ Viewer.confirmQty = function () {
   if (!product) return;
 
   if (qty <= 0 || qty > product.stock) {
-    UI.showToast("จำนวนสินค้าไม่ถูกต้อง", "warning");
+    UI.showToast(`คงเหลือ ${product.stock} ชิ้น`, "warning");
     return;
   }
 
@@ -585,8 +586,9 @@ Viewer.setCartQty = function (productId, qty) {
   const maxStock = product ? product.stock : Infinity;
 
   if (qty <= 0) {
-    UI.showToast("จำนวนต้องมากกว่า 0", "warning");
-    Viewer.openCart(); 
+    UI.showToast("กรุณากรอกจำนวนตั้งแต่ 1 ขึ้นไป", "warning");
+    item.qty = 1;
+    Viewer.openCart();
     return;
   }
 
