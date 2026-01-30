@@ -186,11 +186,10 @@ UI.closeCart = function () {
   const overlay = document.getElementById("cartSheet");
   if (!overlay) return;
 
+  delete overlay._bound;   // ⭐ เพิ่มบรรทัดนี้
+
   UI.closeOverlay("cartSheet");
-
-  // 🔓 UNLOCK background scroll
   document.body.style.overflow = "";
-
   overlay.innerHTML = "";
 };
 
