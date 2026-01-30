@@ -1179,6 +1179,51 @@ body.search-open .search-input {
 }
 
 /* ======================================================
+   CART EMPTY — BACK TO SHOP BUTTON
+   iOS Liquid Glass Secondary Action
+====================================================== */
+
+.cart-back-btn {
+  margin-top: 16px;
+
+  height: 44px;                 /* 🔑 iOS tap target */
+  padding: 0 18px;
+
+  border-radius: 14px;
+  border: 1px solid var(--glass-border);
+
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+
+  color: var(--text-primary);
+
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+
+  box-shadow:
+    0 6px 18px rgba(0,0,0,.16),
+    inset 0 1px 0 rgba(255,255,255,.6);
+
+  cursor: pointer;
+
+  transition:
+    transform 120ms ease,
+    box-shadow 160ms ease,
+    background 160ms ease,
+    opacity 120ms ease;
+}
+
+.cart-back-btn:active {
+  transform: scale(0.96);
+  box-shadow:
+    0 3px 10px rgba(0,0,0,.14),
+    inset 0 1px 0 rgba(255,255,255,.45);
+  opacity: 0.9;
+}
+
+/* ======================================================
    CART ITEM THUMB
 ====================================================== */
 
