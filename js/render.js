@@ -307,8 +307,7 @@ Render.cartItem = function (item = {}) {
         </div>
       </div>
 
-      <!-- qty control -->
-      <div class="cart-qty cart-qty-editable">
+<!-- qty control -->
 <div class="cart-qty cart-qty-editable">
   <input
     class="cart-qty-input"
