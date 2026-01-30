@@ -773,7 +773,7 @@ Viewer.createOrder = async function () {
     UI.closeCart();
 
     // 🔹 feedback
-    UI.showToast("สร้างใบสั่งซื้อเรียบร้อยแล้ว", "success");
+    Viewer._renderSuccess();
 
   } catch (err) {
     console.error("[Viewer.createOrder]", err);
