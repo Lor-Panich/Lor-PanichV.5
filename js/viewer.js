@@ -677,6 +677,36 @@ Viewer.createOrder = async function () {
     return;
   }
 
+  // ==================================================
+  // 🔥 VALIDATE STOCK BEFORE CREATE ORDER (สำคัญมาก)
+  // ==================================================
+  const products = Core.state.viewer.products || [];
+
+  const invalidItem = items.find(item => {
+    const product = products.find(
+      p => p.productId === item.productId
+    );
+
+    if (!product) return true; // safety guard
+
+    return item.qty > product.stock;
+  });
+
+  if (invalidItem) {
+    const product = products.find(
+      p => p.productId === invalidItem.productId
+    );
+
+    UI.showToast(
+      `สินค้า "${product?.name || invalidItem.name}" คงเหลือ ${product?.stock ?? 0} ชิ้น`,
+      "warning"
+    );
+    return; // ❗ หยุดทันที ห้ามยิง API
+  }
+
+  // ==================================================
+  // 🚀 COMMIT ORDER
+  // ==================================================
   Core.state.order.isSubmitting = true;
   UI.showLoading("กำลังสร้างใบสั่งซื้อ...");
 
