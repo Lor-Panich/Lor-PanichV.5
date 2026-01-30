@@ -308,11 +308,20 @@ Render.cartItem = function (item = {}) {
       </div>
 
       <!-- qty control -->
-      <div class="cart-qty">
-        <button data-action="dec" type="button">−</button>
-        <span class="cart-qty-value">${qty}</span>
-        <button data-action="inc" type="button">+</button>
-      </div>
+      <div class="cart-qty cart-qty-editable">
+<div class="cart-qty cart-qty-editable">
+  <input
+    class="cart-qty-input"
+    type="number"
+    min="1"
+    step="1"
+    value="${qty}"
+    inputmode="numeric"
+    pattern="[0-9]*"
+    data-action="qty-input"
+    aria-label="จำนวนสินค้า"
+  />
+</div>
 
       <!-- remove -->
       <button
