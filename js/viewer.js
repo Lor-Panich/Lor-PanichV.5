@@ -735,6 +735,9 @@ Viewer.createOrder = async function () {
     // 🔹 reset cart
     Core.resetCart();
 
+    // 🧹 STEP 4 — clear persisted cart
+    Core.clearSavedCart(); 
+
     // 🛍 อัปเดต badge จำนวน "รายการ" หลัง reset cart
     Viewer.updateCartBadge();
 
