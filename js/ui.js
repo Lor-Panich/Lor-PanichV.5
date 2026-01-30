@@ -234,14 +234,12 @@ UI.openOrderSuccess = function (html) {
   UI.openOverlay("orderSuccessSheet");
 };
 
-// 🔹 Close Success Sheet
 UI.closeOrderSuccess = function () {
   const overlay = document.getElementById("orderSuccessSheet");
   if (!overlay) return;
 
+  delete overlay._bound;   // ⭐ สำคัญ
   UI.closeOverlay("orderSuccessSheet");
-
-  // cleanup DOM
   overlay.innerHTML = "";
 };
 
