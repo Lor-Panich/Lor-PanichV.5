@@ -326,18 +326,25 @@ Render.cartItem = function (item = {}) {
   `;
 };
 
-Render.cartFooter = function (total = 0) {
+Render.cartFooter = function (total = 0, itemCount = 0) {
+  // 🔒 Empty cart → no footer at all
+  if (!itemCount || itemCount <= 0) {
+    return "";
+  }
+
+  const safeTotal = Number(total) || 0;
+
   return `
     <div class="sheet-footer cart-footer">
       <div class="cart-summary">
         <span>ยอดรวม</span>
-        <strong>${total.toLocaleString()} บาท</strong>
+        <strong>${safeTotal.toLocaleString()} บาท</strong>
       </div>
 
       <button
         class="primary-btn cart-submit-btn"
         type="button"
-        disabled
+        data-action="submit-order"
       >
         สร้างใบสั่งซื้อ
       </button>
