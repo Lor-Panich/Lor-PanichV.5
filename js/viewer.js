@@ -545,35 +545,28 @@ Viewer.openCart = function () {
   );
 
   UI.bindCartEvents({
-    onClose() {
-      UI.closeCart();
-    },
+  onClose() {
+    UI.closeCart();
+  },
 
-    onSubmit() {
-      Viewer.createOrder();
-    },
+  onSubmit() {
+    Viewer.createOrder();
+  },
 
-    // ➕ เพิ่มจำนวน
-    onIncrease(itemEl) {
-      const productId = itemEl?.dataset.productId;
-      if (!productId) return;
-      Viewer.updateCartQty(productId, +1);
-    },
+  onQtyInput(itemEl, qty) {
+    const productId = itemEl?.dataset.productId;
+    if (!productId) return;
 
-    // ➖ ลดจำนวน
-    onDecrease(itemEl) {
-      const productId = itemEl?.dataset.productId;
-      if (!productId) return;
-      Viewer.updateCartQty(productId, -1);
-    },
+    Viewer.setCartQty(productId, qty);
+  },
 
-    // ❌ ลบสินค้า
-    onRemove(itemEl) {
-      const productId = itemEl?.dataset.productId;
-      if (!productId) return;
-      Viewer.removeFromCart(productId);
-    }
-  });
+  onRemove(itemEl) {
+    const productId = itemEl?.dataset.productId;
+    if (!productId) return;
+
+    Viewer.removeFromCart(productId);
+  }
+});
 
   Viewer._updateCartSubmitState();
   Viewer.updateCartBadge();
@@ -611,6 +604,35 @@ Viewer.updateCartQty = function (productId, delta) {
   // ✅ ปลอดภัย → อัปเดต
   item.qty = nextQty;
 
+  Viewer.openCart(); // re-render
+};
+
+Viewer.setCartQty = function (productId, qty) {
+  const item = Core.state.cart.items.find(
+    it => it.productId === productId
+  );
+  if (!item) return;
+
+  const product = Core.state.viewer.products.find(
+    p => p.productId === productId
+  );
+
+  const maxStock = product ? product.stock : Infinity;
+
+  if (qty <= 0) {
+    Viewer.removeFromCart(productId);
+    return;
+  }
+
+  if (qty > maxStock) {
+    UI.showToast(
+      `สินค้า "${item.name}" คงเหลือ ${maxStock} ชิ้น`,
+      "warning"
+    );
+    return;
+  }
+
+  item.qty = qty;
   Viewer.openCart(); // re-render
 };
 
