@@ -221,6 +221,40 @@ UI.bindCartEvents = function (handlers = {}) {
       return;
     }
 
+       // ==================================================
+  // 🔥 NEW — Editable QTY Input (UI only)
+  // ==================================================
+
+  sheet.addEventListener("change", function (e) {
+    const input = e.target;
+
+    // ฟังเฉพาะ qty input
+    if (input.dataset.action !== "qty-input") return;
+
+    const itemEl = input.closest(".cart-item");
+    if (!itemEl) return;
+
+    let qty = parseInt(input.value, 10);
+
+    // 🔒 normalize
+    if (isNaN(qty) || qty < 1) {
+      qty = 1;
+    }
+
+    // (optional) max stock
+    const max = parseInt(input.getAttribute("max"), 10);
+    if (!isNaN(max) && qty > max) {
+      qty = max;
+    }
+
+    // 🔑 sync UI
+    input.value = qty;
+
+    // 🚀 ส่งค่าให้ controller (viewer / app layer)
+    handlers.onQtyInput &&
+      handlers.onQtyInput(itemEl, qty);
+  });
+
     // ==================================================
     // 🔥 STEP 2.6 — Cart Item Interactions (UI only)
     // ==================================================
