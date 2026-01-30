@@ -1357,6 +1357,7 @@ body.search-open .search-input {
 .cart-qty-input:focus {
   background: rgba(255,255,255,.12);
   border-radius: 8px;
+  transform: scale(1.05);
 }
 
 
