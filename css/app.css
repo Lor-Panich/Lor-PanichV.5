@@ -940,6 +940,38 @@ body.search-open .search-input {
 }
 
 /* ======================================================
+   QTY SHEET — ACTION BUTTONS LAYOUT
+   iOS Balanced Primary / Secondary
+====================================================== */
+
+.qty-sheet-actions {
+  display: flex;        /* 🔑 ทำให้ปุ่มเรียงในแถวเดียว */
+  gap: 12px;            /* 🔑 ระยะห่างแบบ iOS */
+  margin-top: 24px;     /* 🔑 แยกจาก qty selector */
+}
+
+.qty-sheet-actions button {
+  flex: 1;                 /* 🔑 กว้างเท่ากัน 50/50 */
+  height: 48px;            /* 🔑 iOS tap target */
+  border-radius: 14px;     /* 🔑 iOS action radius */
+
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+}
+
+.qty-confirm-btn {
+  box-shadow:
+    0 10px 24px rgba(0,122,255,.45),
+    inset 0 1px 0 rgba(255,255,255,.35);
+}
+
+.qty-cancel-btn {
+  opacity: 0.9;     /* 🔑 เบาลงนิดเดียว ไม่หาย */
+}
+
+
+/* ======================================================
    GLOBAL BACKDROP — iOS Liquid Depth
    Replace old web-ish backdrop
 ====================================================== */
