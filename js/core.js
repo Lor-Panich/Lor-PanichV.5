@@ -125,3 +125,50 @@ Core.resetAll = function () {
    - viewer.js
    - admin.js
 */
+
+/* ======================================================
+   CART PERSISTENCE (localStorage)
+   - remember cart across page refresh
+   - owned by Core ONLY
+====================================================== */
+
+Core._cartStorageKey = "stockbuilder_cart_v5";
+
+Core.saveCart = function () {
+  try {
+    localStorage.setItem(
+      Core._cartStorageKey,
+      JSON.stringify(Core.state.cart.items)
+    );
+  } catch (err) {
+    if (Core.config.debug) {
+      console.warn("[Core.saveCart]", err);
+    }
+  }
+};
+
+Core.loadCart = function () {
+  try {
+    const raw = localStorage.getItem(Core._cartStorageKey);
+    if (!raw) return;
+
+    const items = JSON.parse(raw);
+    if (!Array.isArray(items)) return;
+
+    Core.state.cart.items = items;
+  } catch (err) {
+    if (Core.config.debug) {
+      console.warn("[Core.loadCart]", err);
+    }
+  }
+};
+
+Core.clearSavedCart = function () {
+  try {
+    localStorage.removeItem(Core._cartStorageKey);
+  } catch (err) {
+    if (Core.config.debug) {
+      console.warn("[Core.clearSavedCart]", err);
+    }
+  }
+};
