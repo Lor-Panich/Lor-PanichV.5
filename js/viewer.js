@@ -456,19 +456,12 @@ Viewer._renderSuccess = function () {
   const order = Core.state.order.lastCreated;
   if (!order) return;
 
-  // 1) render HTML ของ success ลง page
-  Viewer._mount(
-    Render.page({
-      content: Render.orderSuccessSheet(order)
-    })
-  );
-
-  // 2) เปิด success sheet ผ่าน UI layer
+  // 1) เปิด success sheet ด้วย HTML จาก Render โดยตรง
   UI.openOrderSuccess(
-    document.getElementById("app").innerHTML
+    Render.orderSuccessSheet(order)
   );
 
-  // 3) bind action ของ success screen
+  // 2) bind action ของ success screen
   UI.bindOrderSuccess({
     onClose() {
       UI.closeOrderSuccess();
