@@ -503,23 +503,23 @@ Render.qtyModal = function (product = {}) {
         </div>
 
         <!-- actions -->
-        <div class="qty-actions">
-          <button
-            class="primary-btn"
-            data-action="qty-confirm"
-            type="button"
-          >
-            ยืนยันเพิ่มลงตะกร้า
-          </button>
+<div class="qty-actions qty-sheet-actions">
+  <button
+    class="secondary-btn qty-cancel-btn"
+    data-action="qty-cancel"
+    type="button"
+  >
+    ยกเลิก
+  </button>
 
-          <button
-            class="secondary-btn"
-            data-action="qty-cancel"
-            type="button"
-          >
-            ยกเลิก
-          </button>
-        </div>
+  <button
+    class="primary-btn qty-confirm-btn"
+    data-action="qty-confirm"
+    type="button"
+  >
+    ยืนยันเพิ่มลงตะกร้า
+  </button>
+</div>
 
       </div>
     </div>
