@@ -71,24 +71,21 @@ Render.shopHeader = function (title = "", subtitle = "") {
       </div>
 
       <div class="shop-header-actions">
-        <button
-          class="header-icon-btn"
-          id="searchToggleBtn"
-          type="button"
-          aria-label="ค้นหา"
-        >
-          🔍
-        </button>
+  <button
+    class="header-icon-btn"
+    id="searchToggleBtn"
+    type="button"
+    aria-label="ค้นหา"
+  >🔍</button>
 
-        <button
-          class="header-icon-btn"
-          id="cartToggleBtn"
-          type="button"
-          aria-label="ตะกร้าสินค้า"
-        >
-          🛒
-        </button>
-      </div>
+  <button
+    class="header-icon-btn"
+    id="cartToggleBtn"
+    type="button"
+    aria-label="ตะกร้าสินค้า"
+  >🛒</button>
+</div>
+
     </div>
   `;
 };
@@ -280,12 +277,10 @@ Render.cartItem = function (item = {}) {
     <div class="cart-item" data-product-id="${productId}">
       
       <!-- thumbnail -->
-      <img
-        class="cart-thumb"
-        src="${image}"
-        alt="${name}"
-        loading="lazy"
-      />
+      <img class="cart-thumb"
+           src="${image}"
+           alt="${name}"
+           loading="lazy" />
 
       <!-- info -->
       <div class="cart-item-info">
@@ -295,30 +290,18 @@ Render.cartItem = function (item = {}) {
         </div>
       </div>
 
-      <!-- qty control -->
+      <!-- qty -->
       <div class="cart-qty">
-        <button
-          type="button"
-          class="cart-qty-btn"
-          data-action="dec"
-          aria-label="ลดจำนวน"
-        >−</button>
-
+        <button data-action="dec" type="button">−</button>
         <span class="cart-qty-value">${qty}</span>
-
-        <button
-          type="button"
-          class="cart-qty-btn"
-          data-action="inc"
-          aria-label="เพิ่มจำนวน"
-        >+</button>
+        <button data-action="inc" type="button">+</button>
       </div>
 
       <!-- remove -->
       <button
-        type="button"
         class="cart-remove"
         data-action="remove"
+        type="button"
         aria-label="ลบสินค้า"
       >✕</button>
 
