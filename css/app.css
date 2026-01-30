@@ -1062,6 +1062,58 @@ body.search-open .search-input {
   overscroll-behavior: contain;
 }
 
+.cart-sheet .sheet-content {
+  position: relative;
+}
+
+/* top fade */
+.cart-sheet .sheet-content::before {
+  content: "";
+  position: sticky;
+  top: 0;
+  height: 14px;
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.95),
+    rgba(255,255,255,0)
+  );
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* bottom fade */
+.cart-sheet .sheet-content::after {
+  content: "";
+  position: sticky;
+  bottom: 0;
+  height: 14px;
+  background: linear-gradient(
+    to top,
+    rgba(255,255,255,0.95),
+    rgba(255,255,255,0)
+  );
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* dark mode */
+@media (prefers-color-scheme: dark) {
+  .cart-sheet .sheet-content::before {
+    background: linear-gradient(
+      to bottom,
+      rgba(28,28,30,0.95),
+      rgba(28,28,30,0)
+    );
+  }
+  .cart-sheet .sheet-content::after {
+    background: linear-gradient(
+      to top,
+      rgba(28,28,30,0.95),
+      rgba(28,28,30,0)
+    );
+  }
+}
+
 
 /* ======================================================
    CART ITEM — Card Style (เหมือนตัวอย่าง)
