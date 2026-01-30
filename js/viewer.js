@@ -328,14 +328,14 @@ Viewer.confirmQty = function () {
   if (!product) return;
 
   if (qty <= 0 || qty > product.stock) {
-    UI.showToast(`คงเหลือ ${product.stock} ชิ้น`, "warning");
+    UI.showToast(`สินค้า "${product.name}" คงเหลือ ${product.stock} ชิ้น`, "warning");
     return;
   }
 
   Viewer.addToCart(product, qty);
 
   UI.showToast(
-    `เพิ่ม ${product.name} × ${qty} ลงตะกร้าแล้ว`,
+    `เพิ่ม "${product.name}" จำนวน ${qty} ชิ้น`,
     "success"
   );
 
