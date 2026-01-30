@@ -1306,6 +1306,61 @@ body.search-open .search-input {
 }
 
 /* ======================================================
+   CART — Editable Quantity Input
+====================================================== */
+
+.cart-qty-editable {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 44px;                 /* iOS tap target */
+  padding: 0 10px;
+
+  border-radius: 14px;
+
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+
+  border: 1px solid var(--glass-border);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.35),
+    0 6px 16px rgba(0,0,0,.18);
+}
+
+.cart-qty-input {
+  width: 36px;              /* 🔑 ความกว้างพอดี */
+  max-width: 40px;
+
+  text-align: center;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  color: var(--text-primary);
+
+  border: none;
+  background: transparent;
+  outline: none;
+
+  appearance: textfield;    /* remove native look */
+}
+
+.cart-qty-input::-webkit-inner-spin-button,
+.cart-qty-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.cart-qty-input:focus {
+  background: rgba(255,255,255,.12);
+  border-radius: 8px;
+}
+
+
+/* ======================================================
    CART REMOVE BUTTON
 ====================================================== */
 
