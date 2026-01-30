@@ -597,6 +597,9 @@ Viewer.setCartQty = function (productId, qty) {
       `สินค้า "${item.name}" คงเหลือ ${maxStock} ชิ้น`,
       "warning"
     );
+
+    item.qty = maxStock; 
+    Viewer.openCart(); // sync UI กลับ 
     return;
   }
 
