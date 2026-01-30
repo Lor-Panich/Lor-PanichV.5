@@ -253,7 +253,21 @@ Render.cartSheet = function (items = [], total = 0) {
         ${
           items.length > 0
             ? items.map(it => Render.cartItem(it)).join("")
-            : Render.empty("ยังไม่มีสินค้าในตะกร้า")
+            : `
+              <div class="cart-empty-state">
+                <div class="cart-empty-text">
+                  ยังไม่มีสินค้าในตะกร้า
+                </div>
+
+                <button
+                  class="secondary-btn cart-back-btn"
+                  type="button"
+                  data-action="close-cart"
+                >
+                  ← กลับไปเลือกสินค้า
+                </button>
+              </div>
+            `
         }
       </div>
 
