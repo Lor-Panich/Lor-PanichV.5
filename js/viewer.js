@@ -191,6 +191,7 @@ Viewer._mount = function (html) {
   Render.afterRender();
   Viewer._bindProductCardClick(); // 🔴 ADD
   Viewer.bindHeaderSearch(); // 🔴 ADD
+  Viewer.bindHeaderCart(); 
 };
 
 /* ======================================================
@@ -518,6 +519,110 @@ Viewer.bindHeaderSearch = function () {
   };
 };
 
+Viewer.bindHeaderCart = function () {
+  const btn = document.getElementById("cartToggleBtn");
+  if (!btn || btn._cartBound) return;
+  btn._cartBound = true;
+
+  btn.onclick = function () {
+    Viewer.openCart();
+  };
+};
+
+Viewer.openCart = function () {
+  const items = Core.state.cart.items || [];
+
+  UI.openCart(
+    Render.cartSheet(
+      items,
+      Viewer._calcCartTotal()
+    )
+  );
+
+  UI.bindCartEvents({
+    onClose() {
+      UI.closeCart();
+    },
+    onSubmit() {
+      Viewer.createOrder();
+    }
+  });
+
+  Viewer.bindCartItemActions();
+  Viewer._updateCartSubmitState();
+};
+
+Viewer.bindCartItemActions = function () {
+  const sheet = document.getElementById("cartSheet");
+  if (!sheet || sheet._bound) return;
+  sheet._bound = true;
+
+  sheet.addEventListener("click", e => {
+    const itemEl = e.target.closest(".cart-item");
+    if (!itemEl) return;
+
+    const productId = itemEl.dataset.productId;
+    const action = e.target.dataset.action;
+
+    if (action === "inc") Viewer.updateCartQty(productId, +1);
+    if (action === "dec") Viewer.updateCartQty(productId, -1);
+    if (action === "remove") Viewer.removeFromCart(productId);
+  });
+};
+
+Viewer.updateCartQty = function (productId, delta) {
+  const item = Core.state.cart.items.find(
+    it => it.productId === productId
+  );
+  if (!item) return;
+
+  // 🔍 หา stock จาก product master
+  const product = Core.state.viewer.products.find(
+    p => p.productId === productId
+  );
+
+  const maxStock = product ? product.stock : Infinity;
+  const nextQty = item.qty + delta;
+
+  // ❌ น้อยกว่า 1 → ลบ
+  if (nextQty <= 0) {
+    Viewer.removeFromCart(productId);
+    return;
+  }
+
+  // ❌ เกิน stock → เตือน
+  if (nextQty > maxStock) {
+    UI.showToast(
+      `สินค้า "${item.name}" คงเหลือ ${maxStock} ชิ้น`,
+      "warning"
+    );
+    return;
+  }
+
+  // ✅ ปลอดภัย → อัปเดต
+  item.qty = nextQty;
+
+  Viewer.openCart(); // re-render
+};
+
+
+Viewer._calcCartTotal = function () {
+  return Core.state.cart.items.reduce(
+    (sum, it) => sum + it.price * it.qty,
+    0
+  );
+};
+
+Viewer._updateCartSubmitState = function () {
+  const btn = document.querySelector(".cart-submit-btn");
+  if (!btn) return;
+
+  btn.disabled =
+    Core.state.cart.items.length === 0 ||
+    Core.state.order.isSubmitting;
+};
+
+
 /* ======================================================
    STEP 7.4 — CREATE ORDER (VIEWER ONLY)
    - API → State → Reset
@@ -578,4 +683,5 @@ Viewer.closeProduct = function () {
   Core.state.viewer.activeProduct = null;
   UI.closeProductDetail();
 };
+
 
