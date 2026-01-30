@@ -192,6 +192,7 @@ Viewer._mount = function (html) {
   Viewer._bindProductCardClick(); // 🔴 ADD
   Viewer.bindHeaderSearch(); // 🔴 ADD
   Viewer.bindHeaderCart(); 
+  Viewer.updateCartBadge(); 
 };
 
 /* ======================================================
@@ -372,8 +373,10 @@ Viewer.addToCart = function (product, qty) {
       image: product.image   // ⭐ สำคัญ: ทำให้รูปแสดงใน cart
     });
   }
-};
 
+  // 🛍 อัปเดต badge จำนวน "รายการ"
+  Viewer.updateCartBadge();
+};
 
 /* ======================================================
    APP HEADER (SIDE-EFFECT ONLY)
@@ -607,6 +610,17 @@ Viewer.updateCartQty = function (productId, delta) {
   Viewer.openCart(); // re-render
 };
 
+Viewer.removeFromCart = function (productId) {
+  const cart = Core.state.cart;
+  if (!cart || !Array.isArray(cart.items)) return;
+
+  cart.items = cart.items.filter(
+    it => it.productId !== productId
+  );
+
+  Viewer.updateCartBadge(); // ✅ สำคัญ
+  Viewer.openCart();        // re-render cart
+};
 
 Viewer._calcCartTotal = function () {
   return Core.state.cart.items.reduce(
@@ -624,6 +638,28 @@ Viewer._updateCartSubmitState = function () {
     Core.state.order.isSubmitting;
 };
 
+Viewer.updateCartBadge = function () {
+  const badge = document.querySelector(".cart-badge");
+
+  // 🔒 guard: DOM หรือ state ยังไม่พร้อม
+  if (
+    !badge ||
+    !Core.state ||
+    !Core.state.cart ||
+    !Array.isArray(Core.state.cart.items)
+  ) {
+    return;
+  }
+
+  const count = Core.state.cart.items.length;
+
+  if (count > 0) {
+    badge.textContent = count; // ✅ จำนวน "รายการ"
+    badge.hidden = false;
+  } else {
+    badge.hidden = true;
+  }
+};
 
 /* ======================================================
    STEP 7.4 — CREATE ORDER (VIEWER ONLY)
@@ -654,6 +690,9 @@ Viewer.createOrder = async function () {
 
     // 🔹 reset cart
     Core.resetCart();
+
+    // 🛍 อัปเดต badge จำนวน "รายการ" หลัง reset cart
+    Viewer.updateCartBadge();
 
     // 🔹 ปิด cart sheet
     UI.closeCart();
