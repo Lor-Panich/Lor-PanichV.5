@@ -1048,10 +1048,20 @@ body.search-open .search-input {
 
 .cart-sheet .sheet-content {
   padding: 8px 16px 0;
+
   display: flex;
   flex-direction: column;
   gap: 12px;
+
+  /* ✅ PATCH 2 — scroll เฉพาะ content */
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+
+  /* 🧠 กัน scroll ทะลุไป body */
+  overscroll-behavior: contain;
 }
+
 
 /* ======================================================
    CART ITEM — Card Style (เหมือนตัวอย่าง)
