@@ -272,7 +272,7 @@ Render.cartSheet = function (items = [], total = 0) {
       </div>
 
       <!-- footer -->
-      ${Render.cartFooter(safeTotal)}
+${Render.cartFooter(safeTotal, items.length)}
 
     </div>
   `;
