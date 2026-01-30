@@ -363,15 +363,17 @@ Viewer.addToCart = function (product, qty) {
     // ✅ มีอยู่แล้ว → บวกจำนวน
     existing.qty += qty;
   } else {
-    // ✅ ยังไม่มี → เพิ่มใหม่
+    // ✅ ยังไม่มี → เพิ่มใหม่ (เก็บ image มาด้วย)
     cart.items.push({
       productId: product.productId,
       name: product.name,
       price: product.price,
-      qty: qty
+      qty: qty,
+      image: product.image   // ⭐ สำคัญ: ทำให้รูปแสดงใน cart
     });
   }
 };
+
 
 /* ======================================================
    APP HEADER (SIDE-EFFECT ONLY)
