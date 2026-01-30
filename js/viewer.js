@@ -555,6 +555,8 @@ Viewer.openCart = function () {
 
   Viewer.bindCartItemActions();
   Viewer._updateCartSubmitState();
+  Viewer.updateCartBadge();
+
 };
 
 Viewer.bindCartItemActions = function () {
@@ -639,7 +641,11 @@ Viewer._updateCartSubmitState = function () {
 };
 
 Viewer.updateCartBadge = function () {
-  const badge = document.querySelector(".cart-badge");
+  // 🔒 guard: header / cart button ยังไม่พร้อม
+  const cartBtn = document.getElementById("cartToggleBtn");
+  if (!cartBtn) return;
+
+  const badge = cartBtn.querySelector(".cart-badge");
 
   // 🔒 guard: DOM หรือ state ยังไม่พร้อม
   if (
@@ -660,6 +666,7 @@ Viewer.updateCartBadge = function () {
     badge.hidden = true;
   }
 };
+
 
 /* ======================================================
    STEP 7.4 — CREATE ORDER (VIEWER ONLY)
