@@ -548,14 +548,35 @@ Viewer.openCart = function () {
     onClose() {
       UI.closeCart();
     },
+
     onSubmit() {
       Viewer.createOrder();
+    },
+
+    // ➕ เพิ่มจำนวน
+    onIncrease(itemEl) {
+      const productId = itemEl?.dataset.productId;
+      if (!productId) return;
+      Viewer.updateCartQty(productId, +1);
+    },
+
+    // ➖ ลดจำนวน
+    onDecrease(itemEl) {
+      const productId = itemEl?.dataset.productId;
+      if (!productId) return;
+      Viewer.updateCartQty(productId, -1);
+    },
+
+    // ❌ ลบสินค้า
+    onRemove(itemEl) {
+      const productId = itemEl?.dataset.productId;
+      if (!productId) return;
+      Viewer.removeFromCart(productId);
     }
   });
 
   Viewer._updateCartSubmitState();
   Viewer.updateCartBadge();
-
 };
 
 Viewer.updateCartQty = function (productId, delta) {
