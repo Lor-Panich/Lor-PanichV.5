@@ -553,28 +553,9 @@ Viewer.openCart = function () {
     }
   });
 
-  Viewer.bindCartItemActions();
   Viewer._updateCartSubmitState();
   Viewer.updateCartBadge();
 
-};
-
-Viewer.bindCartItemActions = function () {
-  const sheet = document.getElementById("cartSheet");
-  if (!sheet || sheet._bound) return;
-  sheet._bound = true;
-
-  sheet.addEventListener("click", e => {
-    const itemEl = e.target.closest(".cart-item");
-    if (!itemEl) return;
-
-    const productId = itemEl.dataset.productId;
-    const action = e.target.dataset.action;
-
-    if (action === "inc") Viewer.updateCartQty(productId, +1);
-    if (action === "dec") Viewer.updateCartQty(productId, -1);
-    if (action === "remove") Viewer.removeFromCart(productId);
-  });
 };
 
 Viewer.updateCartQty = function (productId, delta) {
