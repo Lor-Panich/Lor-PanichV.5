@@ -275,12 +275,14 @@ Render.cartItem = function (item = {}) {
 
   return `
     <div class="cart-item" data-product-id="${productId}">
-      
+
       <!-- thumbnail -->
-      <img class="cart-thumb"
-           src="${image}"
-           alt="${name}"
-           loading="lazy" />
+      <img
+        class="cart-thumb"
+        src="${image}"
+        alt="${name}"
+        loading="lazy"
+      />
 
       <!-- info -->
       <div class="cart-item-info">
@@ -290,7 +292,7 @@ Render.cartItem = function (item = {}) {
         </div>
       </div>
 
-      <!-- qty -->
+      <!-- qty control -->
       <div class="cart-qty">
         <button data-action="dec" type="button">−</button>
         <span class="cart-qty-value">${qty}</span>
@@ -308,7 +310,6 @@ Render.cartItem = function (item = {}) {
     </div>
   `;
 };
-
 
 Render.cartFooter = function (total = 0) {
   return `
