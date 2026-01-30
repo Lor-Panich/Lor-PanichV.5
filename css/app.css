@@ -952,7 +952,7 @@ body.search-open .search-input {
 
 .qty-sheet-actions button {
   flex: 1;                 /* 🔑 กว้างเท่ากัน 50/50 */
-  height: 48px;            /* 🔑 iOS tap target */
+  min-height: 48px;           /* 🔑 iOS tap target */
   border-radius: 14px;     /* 🔑 iOS action radius */
 
   font-size: 16px;
