@@ -485,36 +485,47 @@ body.search-open .search-input {
 }
 
 /* ======================================================
-   STEP 9.3.x — Product Detail Image (1:1 • Centered • Smaller)
-   iOS CORRECT / SAFE
+   STEP 9.3.x — Product Detail Sheet Size (Unified)
+   - remove duplicate max-width / max-height
+   - improve optical balance (iOS-like)
 ====================================================== */
 
-/* จำกัดขนาด Sheet ให้ดูเล็กลง */
 .product-detail-sheet {
-  max-width: 88%;
-  max-height: 86dvh;
+  max-width: 86%;
+  max-height: 84dvh;
 }
 
-/* กล่องรูป */
+/* ======================================================
+   Product Image (1:1 • Centered • No placeholder feeling)
+====================================================== */
+
 .product-detail-sheet .product-image-wrap {
   width: 100%;
-  max-width: 260px;          /* 🔑 ตัวนี้คือหัวใจ */
-  aspect-ratio: 1 / 1;       /* 1:1 จริง */
+  max-width: 260px;          /* 🔑 visual anchor */
+  aspect-ratio: 1 / 1;
 
-  margin: 14px auto 0;       /* 🔑 จัดกลางด้วยสายตา */
+  margin: 16px auto 0;       /* 🔧 เพิ่ม breathing room นิดเดียว */
 
   overflow: hidden;
   border-radius: var(--radius-lg);
-  background: rgba(0,0,0,0.04);
+
+  /* glass-like neutral surface (ไม่เป็น placeholder) */
+  background:
+    linear-gradient(
+      120deg,
+      rgba(255,255,255,.18),
+      rgba(255,255,255,.08)
+    );
 }
 
-/* รูป */
+/* image */
 .product-detail-sheet .product-image-wrap img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center center;
 }
+
 
 /* ======================================================
    PRODUCT DETAIL CONTENT — BALANCED
@@ -678,7 +689,10 @@ body.search-open .search-input {
 .product-detail-sheet {
   position: fixed;
   left: 50%;
-  bottom: 0;
+
+  /* 🔑 FIX — iOS-style air gap (ไม่ชนพื้น) */
+  bottom: calc(env(safe-area-inset-bottom, 12px) + 6px);
+
   transform: translate(-50%, 100%);
 
   width: 100%;
