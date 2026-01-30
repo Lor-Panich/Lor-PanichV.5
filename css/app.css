@@ -288,13 +288,73 @@ body.search-open .search-input {
   pointer-events: auto;
 }
 
+/* ======================================================
+   TOAST CONTAINER — iOS Floating Zone
+====================================================== */
+
 #toastContainer {
   position: fixed;
-  top: env(safe-area-inset-top, 12px);
+  top: calc(env(safe-area-inset-top, 12px) + 8px);
   left: 50%;
   transform: translateX(-50%);
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
   z-index: 3000;
+
+  pointer-events: none; /* 🔑 toast ไม่ block UI */
 }
+
+/* ======================================================
+   TOAST — iOS Soft Pop
+====================================================== */
+
+.toast {
+  min-width: 220px;
+  max-width: 86vw;
+
+  padding: 12px 16px;
+
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+
+  color: var(--text-primary);
+
+  border-radius: 14px;
+  border: 1px solid var(--glass-border);
+
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px) saturate(1.1);
+  -webkit-backdrop-filter: blur(12px) saturate(1.1);
+
+  box-shadow:
+    0 10px 28px rgba(0,0,0,.18),
+    inset 0 1px 0 rgba(255,255,255,.6);
+
+  /* ✨ entrance animation */
+  opacity: 0;
+  transform: translateY(-6px) scale(0.96);
+
+  animation: toast-in 320ms cubic-bezier(.2,.8,.2,1) forwards;
+}
+
+/* exit handled by JS remove() — fade naturally */
+
+/* ======================================================
+   TOAST ANIMATION
+====================================================== */
+
+@keyframes toast-in {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+
 
 #loadingOverlay {
   position: fixed;
@@ -879,29 +939,50 @@ body.search-open .search-input {
   margin-bottom: 18px;       /* 🔑 แยกจาก QTY ชัด */
 }
 
-/* backdrop polish (D) *//* backdrop ต้องอยู่ "ใต้" sheet */
+/* ======================================================
+   GLOBAL BACKDROP — iOS Liquid Depth
+   Replace old web-ish backdrop
+====================================================== */
+
 #globalBackdrop {
   position: fixed;
   inset: 0;
 
-  background: rgba(0,0,0,.32);
-  backdrop-filter: blur(4px);
+  /* ✨ layered darkness (not flat black) */
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(0,0,0,.22),
+      rgba(0,0,0,.38)
+    );
 
-  z-index: 900;            /* 🔑 ต่ำกว่า sheet */
+  /* iOS-style depth blur */
+  backdrop-filter: blur(10px) saturate(1.05);
+  -webkit-backdrop-filter: blur(10px) saturate(1.05);
+
+  /* subtle fade */
+  opacity: 0;
+  transition: opacity 280ms cubic-bezier(.2,.8,.2,1);
+
+  z-index: 900; /* 🔑 must stay below sheet */
 }
 
+/* when overlay is active */
+.overlay.show #globalBackdrop {
+  opacity: 1;
+}
+
+/* 🌙 Dark mode — deeper but shows content separation */
 @media (prefers-color-scheme: dark) {
-  .add-to-cart-btn {
+  #globalBackdrop {
     background:
       linear-gradient(
         to bottom,
-        rgba(10,132,255,0.95),
-        rgba(10,132,255,0.85)
+        rgba(0,0,0,.35),
+        rgba(0,0,0,.55)
       );
 
-    box-shadow:
-      0 14px 34px rgba(10,132,255,0.55),
-      inset 0 1px 0 rgba(255,255,255,0.18);
+    backdrop-filter: blur(14px) saturate(1.08);
+    -webkit-backdrop-filter: blur(14px) saturate(1.08);
   }
 }
-
