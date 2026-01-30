@@ -193,7 +193,6 @@ UI.closeCart = function () {
   overlay.innerHTML = "";
 };
 
-// 🔹 Bind Cart Sheet UI events
 UI.bindCartEvents = function (handlers = {}) {
   const sheet = document.getElementById("cartSheet");
   if (!sheet) return;
@@ -202,6 +201,9 @@ UI.bindCartEvents = function (handlers = {}) {
   if (sheet._bound) return;
   sheet._bound = true;
 
+  // ==============================
+  // CLICK — ปุ่มต่าง ๆ
+  // ==============================
   sheet.addEventListener("click", function (e) {
     const btn = e.target.closest("[data-action]");
     if (!btn) return;
@@ -209,26 +211,28 @@ UI.bindCartEvents = function (handlers = {}) {
     const action = btn.dataset.action;
     const itemEl = btn.closest(".cart-item");
 
-    // ✅ close cart (Empty / Header / CTA)
     if (action === "close-cart") {
       handlers.onClose && handlers.onClose();
       return;
     }
 
-    // ✅ submit order
     if (action === "submit-order") {
       handlers.onSubmit && handlers.onSubmit();
       return;
     }
 
-       // ==================================================
-  // 🔥 NEW — Editable QTY Input (UI only)
-  // ==================================================
+    if (action === "remove") {
+      handlers.onRemove && handlers.onRemove(itemEl);
+      return;
+    }
+  });
 
+  // ==============================
+  // CHANGE — Editable QTY Input
+  // ==============================
   sheet.addEventListener("change", function (e) {
     const input = e.target;
 
-    // ฟังเฉพาะ qty input
     if (input.dataset.action !== "qty-input") return;
 
     const itemEl = input.closest(".cart-item");
@@ -236,25 +240,22 @@ UI.bindCartEvents = function (handlers = {}) {
 
     let qty = parseInt(input.value, 10);
 
-    // 🔒 normalize
     if (isNaN(qty) || qty < 1) {
       qty = 1;
     }
 
-    // (optional) max stock
     const max = parseInt(input.getAttribute("max"), 10);
     if (!isNaN(max) && qty > max) {
       qty = max;
     }
 
-    // 🔑 sync UI
     input.value = qty;
 
-    // 🚀 ส่งค่าให้ controller (viewer / app layer)
     handlers.onQtyInput &&
       handlers.onQtyInput(itemEl, qty);
   });
-
+};
+   
     // ==================================================
     // 🔥 STEP 2.6 — Cart Item Interactions (UI only)
     // ==================================================
