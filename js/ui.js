@@ -329,10 +329,10 @@ UI.closeProductDetail = function () {
     sheet.style.transform = "translate(-50%, 0)";
     sheet.style.transition = "";
     sheet._swipeBound = false;
-  }
 
-  // reset qty binding state
-  delete sheet._qtyBound; 
+    // 🔧 optional but safe: reset qty binding state
+    delete sheet._qtyBound;
+  }
 
   // cleanup DOM
   overlay.innerHTML = "";
