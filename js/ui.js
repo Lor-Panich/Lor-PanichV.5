@@ -256,30 +256,6 @@ UI.bindCartEvents = function (handlers = {}) {
   });
 };
    
-    // ==================================================
-    // 🔥 STEP 2.6 — Cart Item Interactions (UI only)
-    // ==================================================
-
-    // ➕ increase qty
-    if (action === "inc") {
-      handlers.onIncrease && handlers.onIncrease(itemEl);
-      return;
-    }
-
-    // ➖ decrease qty
-    if (action === "dec") {
-      handlers.onDecrease && handlers.onDecrease(itemEl);
-      return;
-    }
-
-    // ❌ remove item
-    if (action === "remove") {
-      handlers.onRemove && handlers.onRemove(itemEl);
-      return;
-    }
-  });
-};
-
 /* ======================================================
    STEP 10.2 — ORDER SUCCESS UI
    - UI only
