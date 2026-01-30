@@ -198,21 +198,28 @@ UI.bindCartEvents = function (handlers = {}) {
   const sheet = document.getElementById("cartSheet");
   if (!sheet) return;
 
-  // Close button / backdrop
-  const closeBtn = sheet.querySelector("[data-action='close-cart']");
-  if (closeBtn) {
-    closeBtn.addEventListener("click", () => {
-      handlers.onClose && handlers.onClose();
-    });
-  }
+  // 🔒 guard กัน bind ซ้ำ
+  if (sheet._bound) return;
+  sheet._bound = true;
 
-  // Submit order
-  const submitBtn = sheet.querySelector(".cart-submit-btn");
-  if (submitBtn) {
-    submitBtn.addEventListener("click", () => {
+  sheet.addEventListener("click", function (e) {
+    const btn = e.target.closest("[data-action]");
+    if (!btn) return;
+
+    const action = btn.dataset.action;
+
+    // ✅ close cart (ใช้ได้ทั้ง Empty / Header / Future CTA)
+    if (action === "close-cart") {
+      handlers.onClose && handlers.onClose();
+      return;
+    }
+
+    // ✅ submit order
+    if (action === "submit-order") {
       handlers.onSubmit && handlers.onSubmit();
-    });
-  }
+      return;
+    }
+  });
 };
 
 /* ======================================================
