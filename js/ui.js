@@ -216,6 +216,56 @@ UI.bindCartEvents = function (handlers = {}) {
 };
 
 /* ======================================================
+   STEP 10.2 — ORDER SUCCESS UI
+   - UI only
+   - use overlay stack
+   - no business logic
+====================================================== */
+
+// 🔹 Open Success Sheet
+UI.openOrderSuccess = function (html) {
+  const overlay = document.getElementById("orderSuccessSheet");
+  if (!overlay) return;
+
+  // inject success HTML
+  overlay.innerHTML = html;
+
+  // open via overlay stack
+  UI.openOverlay("orderSuccessSheet");
+};
+
+// 🔹 Close Success Sheet
+UI.closeOrderSuccess = function () {
+  const overlay = document.getElementById("orderSuccessSheet");
+  if (!overlay) return;
+
+  UI.closeOverlay("orderSuccessSheet");
+
+  // cleanup DOM
+  overlay.innerHTML = "";
+};
+
+// 🔹 Bind Success Screen Actions
+UI.bindOrderSuccess = function (handlers = {}) {
+  const sheet = document.getElementById("orderSuccessSheet");
+  if (!sheet) return;
+
+  // guard กัน bind ซ้ำ
+  if (sheet._bound) return;
+  sheet._bound = true;
+
+  const closeBtn =
+    sheet.querySelector("[data-action='close-success']");
+
+  if (closeBtn) {
+    closeBtn.onclick = function () {
+      handlers.onClose && handlers.onClose();
+    };
+  }
+};
+
+
+/* ======================================================
    STEP 8.4 — ADMIN UI WIRING
    - UI only
    - No API
