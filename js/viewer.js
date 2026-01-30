@@ -383,6 +383,9 @@ Viewer.addToCart = function (product, qty) {
 
   // 🛍 อัปเดต badge จำนวน "รายการ"
   Viewer.updateCartBadge();
+
+  // 💾 STEP 3 — persist cart 
+  Core.saveCart(); 
 };
 
 /* ======================================================
@@ -604,12 +607,14 @@ Viewer.setCartQty = function (productId, qty) {
       "warning"
     );
 
-    item.qty = maxStock; 
+    item.qty = maxStock;
+    Core.saveCart(); 
     Viewer.openCart(); // sync UI กลับ 
     return;
   }
 
   item.qty = qty;
+  Core.saveCart(); 
   Viewer.openCart(); // re-render
 };
 
@@ -621,6 +626,7 @@ Viewer.removeFromCart = function (productId) {
     it => it.productId !== productId
   );
 
+  Core.saveCart(); 
   Viewer.updateCartBadge(); // ✅ สำคัญ
   Viewer.openCart();        // re-render cart
 };
