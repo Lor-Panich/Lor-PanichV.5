@@ -241,10 +241,16 @@ Render.cartSheet = function (items = [], total = 0) {
 
   return `
     <div class="sheet cart-sheet" id="cartSheet">
+      
+      <!-- header -->
       <div class="sheet-header">
         <div class="sheet-title">ตะกร้าสินค้า</div>
+        <div class="sheet-subtitle">
+          ${items.length} รายการ
+        </div>
       </div>
 
+      <!-- content -->
       <div class="sheet-content">
         ${
           items.length > 0
@@ -253,7 +259,9 @@ Render.cartSheet = function (items = [], total = 0) {
         }
       </div>
 
+      <!-- footer -->
       ${Render.cartFooter(safeTotal)}
+
     </div>
   `;
 };
@@ -263,22 +271,61 @@ Render.cartItem = function (item = {}) {
   const name = item.name || "-";
   const price = Number(item.price) || 0;
   const qty = Number(item.qty) || 0;
+  const image =
+    item.image && typeof item.image === "string"
+      ? item.image
+      : "assets/placeholder.png";
 
   return `
     <div class="cart-item" data-product-id="${productId}">
+      
+      <!-- thumbnail -->
+      <img
+        class="cart-thumb"
+        src="${image}"
+        alt="${name}"
+        loading="lazy"
+      />
+
+      <!-- info -->
       <div class="cart-item-info">
         <div class="cart-item-name">${name}</div>
         <div class="cart-item-price">
-          ${price.toLocaleString()} × ${qty}
+          ฿${price.toLocaleString()}
         </div>
       </div>
 
-      <div class="cart-item-total">
-        ${(price * qty).toLocaleString()}
+      <!-- qty control -->
+      <div class="cart-qty">
+        <button
+          type="button"
+          class="cart-qty-btn"
+          data-action="dec"
+          aria-label="ลดจำนวน"
+        >−</button>
+
+        <span class="cart-qty-value">${qty}</span>
+
+        <button
+          type="button"
+          class="cart-qty-btn"
+          data-action="inc"
+          aria-label="เพิ่มจำนวน"
+        >+</button>
       </div>
+
+      <!-- remove -->
+      <button
+        type="button"
+        class="cart-remove"
+        data-action="remove"
+        aria-label="ลบสินค้า"
+      >✕</button>
+
     </div>
   `;
 };
+
 
 Render.cartFooter = function (total = 0) {
   return `
