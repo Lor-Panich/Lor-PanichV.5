@@ -341,34 +341,72 @@ body.search-open .search-input {
   box-shadow: var(--glass-shadow);
 
   cursor: pointer;
+
+  /* 🔑 iOS-style staggered motion */
   transition:
-    transform 140ms var(--ease-out),
-    box-shadow 140ms var(--ease-out),
-    background 140ms var(--ease-out);
+    transform 90ms cubic-bezier(.2,.8,.2,1),
+    box-shadow 180ms cubic-bezier(.2,.8,.2,1),
+    background 220ms ease;
 }
 
+/* iOS list cell tap */
 .product-card:active {
-  transform: scale(0.975);
+  transform: scale(0.985);
+
   box-shadow:
-    0 10px 30px rgba(0,0,0,.14),
-    inset 0 1px 0 rgba(255,255,255,.6);
+    0 6px 22px rgba(0,0,0,.18),
+    inset 0 1px 0 rgba(255,255,255,.55);
 }
+
+/* ======================================================
+   PRODUCT THUMB (iOS Liquid Glass • No Placeholder Feel)
+====================================================== */
 
 .product-thumb {
   width: 72px;
   height: 72px;
   flex-shrink: 0;
 
-  border-radius: var(--radius-md);
+  position: relative;
   overflow: hidden;
 
-  background: rgba(0,0,0,0.05);
+  border-radius: var(--radius-md);
+
+  /* Glass material instead of grey placeholder */
+  background:
+    linear-gradient(
+      120deg,
+      rgba(255,255,255,.18),
+      rgba(255,255,255,.08)
+    );
+
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
+/* image base (before decode) */
 .product-thumb img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+
+  opacity: 0;
+  filter: blur(6px);
+  transform: scale(1.03);
+
+  will-change: opacity, transform;
+
+  transition:
+    opacity 240ms ease,
+    filter 320ms ease,
+    transform 320ms cubic-bezier(.2,.8,.2,1);
+}
+
+/* image decoded / ready */
+.product-thumb img[src]:not([src=""]) {
+  opacity: 1;
+  filter: blur(0);
+  transform: scale(1);
 }
 
 .product-info {
