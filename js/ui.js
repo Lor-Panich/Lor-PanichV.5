@@ -174,11 +174,11 @@ UI.openCart = function (html) {
   const overlay = document.getElementById("cartSheet");
   if (!overlay) return;
 
-  // inject cart sheet HTML
   overlay.innerHTML = html;
-
-  // open overlay via stack system
   UI.openOverlay("cartSheet");
+
+  // 🔒 LOCK background scroll (Cart owns this)
+  document.body.style.overflow = "hidden";
 };
 
 // 🔹 Close Cart Sheet
@@ -186,10 +186,11 @@ UI.closeCart = function () {
   const overlay = document.getElementById("cartSheet");
   if (!overlay) return;
 
-  // close overlay via stack system
   UI.closeOverlay("cartSheet");
 
-  // cleanup content (❗ do NOT remove overlay element)
+  // 🔓 UNLOCK background scroll
+  document.body.style.overflow = "";
+
   overlay.innerHTML = "";
 };
 
