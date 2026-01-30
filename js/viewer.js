@@ -22,6 +22,12 @@ Viewer.init = async function () {
 Viewer.enter = async function () {
   Core.state.mode = "viewer";
 
+  // 🔄 STEP 2 — restore cart from previous session 
+  Core.loadCart(); 
+
+  // 🛍 update badge immediately (before render)
+  Viewer.updateCartBadge();
+   
   Viewer._renderLoading();
   await Viewer.loadProducts();
 };
