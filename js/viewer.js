@@ -449,6 +449,34 @@ Viewer._renderError = function (message) {
 
 };
 
+/* =========================================
+   ✅ ADD HERE — Order Success Screen
+========================================= */
+Viewer._renderSuccess = function () {
+  const order = Core.state.order.lastCreated;
+  if (!order) return;
+
+  // 1) render HTML ของ success ลง page
+  Viewer._mount(
+    Render.page({
+      content: Render.orderSuccessSheet(order)
+    })
+  );
+
+  // 2) เปิด success sheet ผ่าน UI layer
+  UI.openOrderSuccess(
+    document.getElementById("app").innerHTML
+  );
+
+  // 3) bind action ของ success screen
+  UI.bindOrderSuccess({
+    onClose() {
+      UI.closeOrderSuccess();
+      Viewer.enter(); // กลับไปหน้าเลือกสินค้าใหม่
+    }
+  });
+};
+
 /* ======================================================
    PRODUCT LIST + SEARCH
 ====================================================== */
