@@ -505,6 +505,16 @@ Viewer._renderSuccess = function () {
   );
 };
 
+/* =========================================
+   DOCUMENT MODE LIFECYCLE
+========================================= */
+
+Viewer._exitDocumentMode = function () {
+  if (document.body.classList.contains("document-mode")) {
+    document.body.classList.remove("document-mode");
+  }
+};
+
 /* ======================================================
    PRODUCT LIST + SEARCH
 ====================================================== */
@@ -591,6 +601,11 @@ Viewer.bindHeaderSearch = function () {
 };
 
 Viewer.bindHeaderCart = function () {
+  // 🔒 HARD GUARD — document mode ห้าม bind UI
+  if (document.body.classList.contains("document-mode")) {
+    return;
+  }
+
   const btn = document.getElementById("cartToggleBtn");
   if (!btn || btn._cartBound) return;
   btn._cartBound = true;
