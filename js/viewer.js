@@ -502,95 +502,31 @@ Viewer._renderSuccess = function () {
     )
   );
 
-  // 🔑 STEP 2.2 — bind ปุ่มดาวน์โหลด
-  Viewer._bindOrderDocumentActions();
-};
+  UI.bindOrderSuccess({
+    onShare() {
+      // Viewer ไม่ต้องทำอะไร
+      // UI toast อธิบายผู้ใช้ไปแล้ว
+    },
 
-/* =========================================
-   STEP 2.2 — BIND ORDER DOCUMENT ACTIONS
-========================================= */
-Viewer._bindOrderDocumentActions = function () {
-  const btn = document.querySelector(
-    "[data-action='download-order']"
-  );
-
-  // 🔒 guard กัน bind ซ้ำ
-  if (!btn || btn._bound) return;
-  btn._bound = true;
-
-  btn.addEventListener("click", async () => {
-    await Viewer._downloadOrderAsPNG();
-    Viewer._finishOrderFlow();
-  });
-};
-
-/* =========================================
-   STEP 2.3 — DOWNLOAD ORDER AS PNG (iOS SAFE)
-========================================= */
-Viewer._downloadOrderAsPNG = async function () {
-  const node = document.querySelector(".order-doc");
-  if (!node) return;
-
-  try {
-    const blob = await htmlToImage.toBlob(node, {
-      pixelRatio: 2,
-      backgroundColor: "#ffffff",
-      cacheBust: true   // 🔑 สำคัญมาก แก้ CORS บน iOS
-    });
-
-    if (!blob) {
-      throw new Error("Blob generation failed");
+    onFinish() {
+      Viewer._finishOrderFlow();
     }
-
-    Viewer._saveBlob(blob);
-
-  } catch (err) {
-    console.error("[downloadOrderAsPNG]", err);
-    UI.showToast("ไม่สามารถดาวน์โหลดรูปได้", "error");
-  }
-};
-
-/* =========================================
-   STEP 2.3.1 — SAVE PNG (iOS FRIENDLY)
-========================================= */
-Viewer._saveBlob = function (blob) {
-  const order = Core.state.order.lastCreated || {};
-  const orderId = order.orderId || "order";
-
-  const url = URL.createObjectURL(blob);
-
-  // 🔑 iOS Safari ต้องเปิดรูปใน tab ใหม่
-  const win = window.open(url, "_blank");
-
-  if (!win) {
-    UI.showToast("กรุณาอนุญาต popup เพื่อบันทึกรูป", "warning");
-    return;
-  }
-
-  // cleanup memory
-  setTimeout(() => {
-    URL.revokeObjectURL(url);
-  }, 4000);
+  });
 };
 
 /* =========================================
    STEP 2.4 — FINISH ORDER FLOW
 ========================================= */
 Viewer._finishOrderFlow = function () {
-
-  // 🧹 clear order ล่าสุด
   Core.state.order.lastCreated = null;
 
-  // 🚪 ออกจาก document mode
   Viewer._exitDocumentMode();
 
-  // UX feedback
-  UI.showToast("บันทึกใบสั่งซื้อเรียบร้อยแล้ว", "success");
+  UI.showToast("จบรายการเรียบร้อย", "success");
 
-  // ⏱ หน่วงนิดเดียว ให้ browser เริ่มโหลดไฟล์
   setTimeout(() => {
-    Viewer.enter(); // กลับหน้าเลือกสินค้า
-  }, 400);
+    Viewer.enter();
+  }, 300);
 };
 
 /* =========================================
