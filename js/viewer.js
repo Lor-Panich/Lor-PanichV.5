@@ -524,6 +524,56 @@ Viewer._bindOrderDocumentActions = function () {
 };
 
 /* =========================================
+   STEP 2.3 — DOWNLOAD ORDER AS PNG
+========================================= */
+Viewer._downloadOrderAsPNG = async function () {
+  const node = document.querySelector(".order-doc");
+  if (!node) return;
+
+  const order = Core.state.order.lastCreated || {};
+  const orderId = order.orderId || "order";
+
+  try {
+    const dataUrl = await htmlToImage.toPng(node, {
+      pixelRatio: 2,               // 🔑 คม
+      backgroundColor: "#ffffff"
+    });
+
+    const link = document.createElement("a");
+    link.href = dataUrl;
+    link.download = `ใบสั่งซื้อ-${orderId}.png`;
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+  } catch (err) {
+    console.error("[downloadOrderAsPNG]", err);
+    UI.showToast("ไม่สามารถดาวน์โหลดรูปได้", "error");
+  }
+};
+
+/* =========================================
+   STEP 2.4 — FINISH ORDER FLOW
+========================================= */
+Viewer._finishOrderFlow = function () {
+
+  // 🧹 clear order ล่าสุด
+  Core.state.order.lastCreated = null;
+
+  // 🚪 ออกจาก document mode
+  Viewer._exitDocumentMode();
+
+  // UX feedback
+  UI.showToast("บันทึกใบสั่งซื้อเรียบร้อยแล้ว", "success");
+
+  // ⏱ หน่วงนิดเดียว ให้ browser เริ่มโหลดไฟล์
+  setTimeout(() => {
+    Viewer.enter(); // กลับหน้าเลือกสินค้า
+  }, 400);
+};
+
+/* =========================================
    DOCUMENT MODE LIFECYCLE
 ========================================= */
 
