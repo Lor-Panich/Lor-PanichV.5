@@ -1673,14 +1673,17 @@ body.document-mode #app {
 }
 
 /* ======================================================
-   PRINT — A4 REAL OUTPUT (CLEAN)
+   PRINT — A4 REAL OUTPUT (CLEAN) ✅ FIXED
 ====================================================== */
 
 @media print {
 
+  /* ----------------------------
+     Base reset for print
+  ---------------------------- */
   body,
   #app {
-    background: #ffffff;
+    background: #ffffff !important;
     margin: 0;
     padding: 0;
   }
@@ -1689,18 +1692,41 @@ body.document-mode #app {
     display: block;
   }
 
-  /* 🔑 FIX A4 — ห้ามสูงเท่า A4 เต็ม */
+  /* ----------------------------
+     Force text color (Safari fix)
+  ---------------------------- */
+  body,
+  .order-doc,
+  .order-doc * {
+    color: #000 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* ----------------------------
+     A4 container (สำคัญมาก)
+  ---------------------------- */
   body.document-mode .a4-page {
     width: 210mm;
     margin: 0 auto;
     padding: 0;
     box-shadow: none;
 
-    /* 🔥 สำคัญมาก */
+    /* 🔥 ห้าม fix ความสูง */
     min-height: auto;
   }
 
-  /* hide UI */
+  /* ----------------------------
+     Prevent footer split
+  ---------------------------- */
+  .order-doc .doc-summary {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* ----------------------------
+     Hide non-print UI
+  ---------------------------- */
   #appHeader,
   #toastContainer,
   #loadingOverlay,
@@ -1708,7 +1734,9 @@ body.document-mode #app {
     display: none !important;
   }
 
-  /* A4 คุมด้วย @page อย่างเดียว */
+  /* ----------------------------
+     Page definition (ONLY here)
+  ---------------------------- */
   @page {
     size: A4;
     margin: 20mm;
