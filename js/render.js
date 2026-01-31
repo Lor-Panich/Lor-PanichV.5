@@ -608,7 +608,11 @@ Render.orderDocument = function (order = {}, items = []) {
           <strong>วันที่:</strong>
           ${
             order.createdAt
-              ? new Date(order.createdAt).toLocaleString()
+              ? new Date(order.createdAt).toLocaleString("th-TH", {
+                 dateStyle: "medium",
+                 timeStyle: "short"
+              })
+
               : "-"
           }
         </div>
