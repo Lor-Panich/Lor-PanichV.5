@@ -684,28 +684,32 @@ Render.orderDocument = function (order = {}, items = []) {
 <!-- =========================
      ACTIONS (NON PRINT)
 ========================== -->
-<div class="doc-actions no-print">
+<div class="doc-actions ios-share-sheet no-print">
 
-  <div class="doc-hint">
-    📌 หากต้องการบันทึกหรือพิมพ์เอกสาร<br />
-    กรุณาใช้ปุ่ม <strong>Share</strong> ของเบราว์เซอร์
+  <div class="ios-share-panel">
+
+    <button
+      class="ios-share-btn ios-share-primary"
+      type="button"
+      data-action="share-order"
+    >
+      📤 แชร์ / บันทึกเอกสาร
+    </button>
+
+    <button
+      class="ios-share-btn ios-share-secondary"
+      type="button"
+      data-action="finish-order"
+    >
+      เสร็จสิ้น
+    </button>
+
   </div>
 
-  <button
-    class="primary-btn"
-    type="button"
-    data-action="share-order"
-  >
-    แชร์ / บันทึกเอกสาร
-  </button>
-
-  <button
-    class="secondary-btn"
-    type="button"
-    data-action="finish-order"
-  >
-    จบรายการและกลับหน้าหลัก
-  </button>
+  <div class="ios-share-hint">
+    ใช้ปุ่ม Share ของเบราว์เซอร์<br />
+    เพื่อบันทึกหรือพิมพ์เอกสาร
+  </div>
 
 </div>
 `;
