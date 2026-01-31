@@ -599,10 +599,13 @@ Render.orderDocument = function (order = {}, items = []) {
       <!-- META -->
       <section class="doc-meta">
         <div>
-          <strong>เลขที่ใบสั่งซื้อ:</strong> ${order.orderId}
+          <strong>เลขที่ใบสั่งซื้อ:</strong> ${order.orderId || "-"}
         </div>
         <div>
-          <strong>วันที่:</strong> ${order.createdAt}
+          <strong>วันที่:</strong>
+          ${order.createdAt
+            ? new Date(order.createdAt).toLocaleString()
+            : "-"}
         </div>
       </section>
 
@@ -618,11 +621,17 @@ Render.orderDocument = function (order = {}, items = []) {
 
         ${items.map(it => `
           <div class="doc-row">
-            <img src="${it.image}" class="doc-thumb" />
-            <span>${it.productId}</span>
-            <span>${it.name}</span>
-            <span class="right">${it.price}</span>
-            <span class="right">${it.qty}</span>
+            <img
+              src="${it.image || ''}"
+              class="doc-thumb"
+              alt=""
+            />
+            <span>${it.productId || "-"}</span>
+            <span>${it.name || "-"}</span>
+            <span class="right">
+              ${Number(it.price || 0).toLocaleString()}
+            </span>
+            <span class="right">${it.qty || 0}</span>
           </div>
         `).join("")}
       </section>
@@ -630,7 +639,10 @@ Render.orderDocument = function (order = {}, items = []) {
       <!-- SUMMARY -->
       <footer class="doc-summary">
         <div class="total">
-          ยอดรวมทั้งสิ้น: <strong>${order.total} บาท</strong>
+          ยอดรวมทั้งสิ้น:
+          <strong>
+            ${Number(order.total || 0).toLocaleString()} บาท
+          </strong>
         </div>
       </footer>
 
