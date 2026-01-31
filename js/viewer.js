@@ -25,9 +25,11 @@ Viewer.enter = async function () {
   // 🔄 STEP 2 — restore cart from previous session 
   Core.loadCart(); 
 
+   
   // 🛍 update badge immediately (before render)
   Viewer.updateCartBadge();
-   
+
+  Viewer._exitDocumentMode(); 
   Viewer._renderLoading();
   await Viewer.loadProducts();
 };
@@ -188,18 +190,25 @@ Viewer._mount = function (html) {
   // mount page
   app.innerHTML = html;
 
+  const isDocumentMode =
+    document.body.classList.contains("document-mode");
+
   // 🔍 Toggle search-open class (Viewer controls)
-  if (Viewer._searchOpen) {
+  if (!isDocumentMode && Viewer._searchOpen) {
     document.body.classList.add("search-open");
   } else {
     document.body.classList.remove("search-open");
   }
 
   Render.afterRender();
-  Viewer._bindProductCardClick(); // 🔴 ADD
-  Viewer.bindHeaderSearch(); // 🔴 ADD
-  Viewer.bindHeaderCart(); 
-  Viewer.updateCartBadge(); 
+
+  // 🔒 Bind events only in app mode
+  if (!isDocumentMode) {
+    Viewer._bindProductCardClick();
+    Viewer.bindHeaderSearch();
+    Viewer.bindHeaderCart();
+    Viewer.updateCartBadge();
+  }
 };
 
 /* ======================================================
