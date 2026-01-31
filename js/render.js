@@ -637,16 +637,17 @@ Render.orderDocument = function (order = {}, items = []) {
             hasItems
               ? items.map(it => `
                   <div class="doc-row">
-                    <img
+                   <img
   src="${
-    it.image && it.image.startsWith("assets/")
-      ? it.image
-      : "assets/placeholder.png"
+    it.image
+      ? new URL(it.image, baseUrl).href
+      : new URL("assets/placeholder.png", baseUrl).href
   }"
   class="doc-thumb"
   alt="${it.name || "product"}"
   loading="eager"
 />
+
                     <span>${it.productId || "-"}</span>
                     <span>${it.name || "-"}</span>
                     <span class="right">
