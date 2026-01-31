@@ -478,24 +478,22 @@ Viewer._renderError = function (message) {
 };
 
 /* =========================================
-   ✅ ADD HERE — Order Success Screen
+   STEP 10 — ORDER DOCUMENT (A4)
 ========================================= */
 Viewer._renderSuccess = function () {
   const order = Core.state.order.lastCreated;
   if (!order) return;
 
-  // 1) เปิด success sheet ด้วย HTML จาก Render โดยตรง
-  UI.openOrderSuccess(
-    Render.orderSuccessSheet(order)
-  );
+  // 🔑 1) เข้า document mode
+  document.body.classList.add("document-mode");
 
-  // 2) bind action ของ success screen
-  UI.bindOrderSuccess({
-    onClose() {
-      UI.closeOrderSuccess();
-      Viewer.enter(); // กลับไปหน้าเลือกสินค้าใหม่
-    }
-  });
+  // 🔑 2) mount เอกสาร A4 ลง app ตรง ๆ
+  Viewer._mount(
+    Render.orderDocument(
+      order,
+      order.items || []
+    )
+  );
 };
 
 /* ======================================================
