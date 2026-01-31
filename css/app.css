@@ -1927,3 +1927,88 @@ body.document-mode .a4-page {
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
 }
+
+/* ======================================================
+   iOS SHARE SHEET STYLE — DOCUMENT HELPER
+   Chrome iOS SAFE
+====================================================== */
+
+.ios-share-helper {
+  position: sticky;
+  bottom: 0;
+  z-index: 50;
+
+  padding:
+    12px 16px
+    calc(16px + env(safe-area-inset-bottom));
+
+  background: #f2f2f7;
+
+  border-top: 1px solid rgba(0,0,0,0.12);
+
+  /* ❌ ห้ามใช้ blur / transform */
+}
+
+/* hint text */
+.ios-share-hint {
+  text-align: center;
+
+  font-size: 13px;
+  line-height: 1.4;
+
+  color: #1c1c1e;
+  margin-bottom: 10px;
+}
+
+/* button group */
+.ios-share-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* base iOS button */
+.ios-btn {
+  width: 100%;
+  min-height: 48px;
+
+  border-radius: 14px;
+  border: none;
+
+  font-size: 16px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+/* primary (blue) */
+.ios-btn-primary {
+  color: #fff;
+  background: #007aff;
+
+  box-shadow:
+    0 6px 16px rgba(0,122,255,0.35);
+}
+
+.ios-btn-primary:active {
+  filter: brightness(0.92);
+}
+
+/* secondary (neutral) */
+.ios-btn-secondary {
+  background: #ffffff;
+  color: #007aff;
+
+  border: 1px solid rgba(0,0,0,0.12);
+}
+
+.ios-btn-secondary:active {
+  background: #e5e5ea;
+}
+
+@media print {
+  .ios-share-helper {
+    display: none !important;
+  }
+}
+
