@@ -588,93 +588,101 @@ Render.orderDocument = function (order = {}, items = []) {
   const hasItems = Array.isArray(items) && items.length > 0;
 
   return `
-    <div class="a4-page order-doc">
+    <div class="order-doc-wrapper">
 
-      <!-- HEADER -->
-      <header class="doc-header">
-        <div class="doc-brand">
-          <h1>ร้านค้า Lor-Panich</h1>
-          <div class="doc-subtitle">ใบสั่งซื้อสินค้า</div>
-        </div>
-      </header>
+      <!-- =========================
+           A4 DOCUMENT (PRINT AREA)
+      ========================== -->
+      <div class="a4-page order-doc">
 
-      <!-- META -->
-      <section class="doc-meta">
-        <div>
-          <strong>เลขที่ใบสั่งซื้อ:</strong>
-          ${order.orderId || "-"}
-        </div>
-        <div>
-          <strong>วันที่:</strong>
+        <!-- HEADER -->
+        <header class="doc-header">
+          <div class="doc-brand">
+            <h1>ร้านค้า Lor-Panich</h1>
+            <div class="doc-subtitle">ใบสั่งซื้อสินค้า</div>
+          </div>
+        </header>
+
+        <!-- META -->
+        <section class="doc-meta">
+          <div>
+            <strong>เลขที่ใบสั่งซื้อ:</strong>
+            ${order.orderId || "-"}
+          </div>
+          <div>
+            <strong>วันที่:</strong>
+            ${
+              order.createdAt
+                ? new Date(order.createdAt).toLocaleString("th-TH", {
+                    dateStyle: "medium",
+                    timeStyle: "short"
+                  })
+                : "-"
+            }
+          </div>
+        </section>
+
+        <!-- ITEMS -->
+        <section class="doc-items">
+
+          <div class="doc-table-header">
+            <span></span>
+            <span>รหัสสินค้า</span>
+            <span>ชื่อสินค้า</span>
+            <span class="right">ราคา</span>
+            <span class="right">จำนวน</span>
+          </div>
+
           ${
-            order.createdAt
-              ? new Date(order.createdAt).toLocaleString("th-TH", {
-                 dateStyle: "medium",
-                 timeStyle: "short"
-              })
-
-              : "-"
-          }
-        </div>
-      </section>
-
-      <!-- ITEMS -->
-      <section class="doc-items">
-
-        <div class="doc-table-header">
-          <span></span>
-          <span>รหัสสินค้า</span>
-          <span>ชื่อสินค้า</span>
-          <span class="right">ราคา</span>
-          <span class="right">จำนวน</span>
-        </div>
-
-        ${
-          hasItems
-            ? items.map(it => `
-                <div class="doc-row">
-                  <img
-                    src="${it.image || ""}"
-                    class="doc-thumb"
-                    alt=""
-                  />
-                  <span>${it.productId || "-"}</span>
-                  <span>${it.name || "-"}</span>
-                  <span class="right">
-                    ${Number(it.price || 0).toLocaleString()}
-                  </span>
-                  <span class="right">
-                    ${Number(it.qty || 0)}
-                  </span>
+            hasItems
+              ? items.map(it => `
+                  <div class="doc-row">
+                    <img
+                      src="${it.image || ""}"
+                      class="doc-thumb"
+                      alt="${it.name || "product"}"
+                    />
+                    <span>${it.productId || "-"}</span>
+                    <span>${it.name || "-"}</span>
+                    <span class="right">
+                      ${Number(it.price || 0).toLocaleString()}
+                    </span>
+                    <span class="right">
+                      ${Number(it.qty || 0)}
+                    </span>
+                  </div>
+                `).join("")
+              : `
+                <div
+                  style="
+                    padding: 12mm 0;
+                    font-size: 13px;
+                    color: #555;
+                  "
+                >
+                  ไม่พบรายการสินค้า
                 </div>
-              `).join("")
-            : `
-              <div
-                style="
-                  padding: 12mm 0;
-                  font-size: 13px;
-                  color: #555;
-                "
-              >
-                ไม่พบรายการสินค้า
-              </div>
-            `
-        }
+              `
+          }
 
-      </section>
+        </section>
 
-         <!-- SUMMARY -->
-      <footer class="doc-summary">
-        <div class="total">
-          ยอดรวมทั้งสิ้น:
-          <strong>
-            ${Number(order.total || 0).toLocaleString()} บาท
-          </strong>
-        </div>
-      </footer>
+        <!-- SUMMARY -->
+        <footer class="doc-summary repeatable">
+          <div class="total">
+            ยอดรวมทั้งสิ้น:
+            <strong>
+              ${Number(order.total || 0).toLocaleString()} บาท
+            </strong>
+          </div>
+        </footer>
 
-      <!-- ACTIONS -->
-      <div class="doc-actions">
+      </div>
+
+      <!-- =========================
+           ACTIONS (NON PRINT)
+      ========================== -->
+      <div class="doc-actions no-print">
         <button
           class="primary-btn"
           type="button"
