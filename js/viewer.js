@@ -520,6 +520,10 @@ Viewer._renderSuccess = function () {
 Viewer._finishOrderFlow = function () {
   Core.state.order.lastCreated = null;
 
+  // 🔑 RESET order success binding (สำคัญมาก)
+  const app = document.getElementById("app");
+  if (app) delete app._orderSuccessBound;
+
   Viewer._exitDocumentMode();
 
   UI.showToast("จบรายการเรียบร้อย", "success");
