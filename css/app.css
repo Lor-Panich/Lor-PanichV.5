@@ -1559,6 +1559,10 @@ body.search-open .search-input {
   page-break-inside: avoid;
 }
 
+.doc-items {
+  page-break-before: auto;
+}
+
 /* ======================================================
    ORDER DOCUMENT — TEXT SAFETY
    Screen vs Print Behavior
