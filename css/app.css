@@ -1738,5 +1738,21 @@ body.document-mode .a4-page {
   }
 }
 
+/* ======================================================
+   NON-PRINT ELEMENTS
+   - Hide buttons / actions when printing or exporting
+====================================================== */
+
+.no-print {
+  margin-top: 16px;
+  text-align: center;
+}
+
+/* ❌ ซ่อนทุกอย่างที่ไม่ใช่เอกสาร */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
 
 
