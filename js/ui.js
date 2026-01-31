@@ -289,19 +289,38 @@ UI.bindOrderSuccess = function (handlers = {}) {
   const sheet = document.getElementById("orderSuccessSheet");
   if (!sheet) return;
 
-  // guard กัน bind ซ้ำ
+  // 🔒 guard กัน bind ซ้ำ
   if (sheet._bound) return;
   sheet._bound = true;
 
-  const closeBtn =
-    sheet.querySelector("[data-action='close-success']");
+  // 🔹 ปุ่มแชร์ / บันทึก
+  const shareBtn =
+    sheet.querySelector("[data-action='share-order']");
 
-  if (closeBtn) {
-    closeBtn.onclick = function () {
-      handlers.onClose && handlers.onClose();
+  if (shareBtn) {
+    shareBtn.onclick = function () {
+      // UI ทำได้แค่อธิบายผู้ใช้
+      UI.showToast(
+        "ใช้ปุ่ม Share ของเบราว์เซอร์เพื่อบันทึกหรือพิมพ์เอกสาร",
+        "info",
+        3000
+      );
+
+      handlers.onShare && handlers.onShare();
+    };
+  }
+
+  // 🔹 ปุ่มจบโฟล
+  const finishBtn =
+    sheet.querySelector("[data-action='finish-order']");
+
+  if (finishBtn) {
+    finishBtn.onclick = function () {
+      handlers.onFinish && handlers.onFinish();
     };
   }
 };
+
 
 
 /* ======================================================
