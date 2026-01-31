@@ -257,49 +257,30 @@ UI.bindCartEvents = function (handlers = {}) {
 };
    
 /* ======================================================
-   STEP 10.2 — ORDER SUCCESS UI
+   STEP 10.2 — ORDER SUCCESS UI (DOCUMENT MODE)
    - UI only
-   - use overlay stack
-   - no business logic
+   - ❌ No overlay
+   - ❌ No business logic
+   - ✅ Bind directly in #app
 ====================================================== */
 
-// 🔹 Open Success Sheet
-UI.openOrderSuccess = function (html) {
-  const overlay = document.getElementById("orderSuccessSheet");
-  if (!overlay) return;
-
-  // inject success HTML
-  overlay.innerHTML = html;
-
-  // open via overlay stack
-  UI.openOverlay("orderSuccessSheet");
-};
-
-UI.closeOrderSuccess = function () {
-  const overlay = document.getElementById("orderSuccessSheet");
-  if (!overlay) return;
-
-  delete overlay._bound;   // ⭐ สำคัญ
-  UI.closeOverlay("orderSuccessSheet");
-  overlay.innerHTML = "";
-};
-
-// 🔹 Bind Success Screen Actions
 UI.bindOrderSuccess = function (handlers = {}) {
-  const sheet = document.getElementById("orderSuccessSheet");
-  if (!sheet) return;
+  const root = document.getElementById("app");
+  if (!root) return;
 
-  // 🔒 guard กัน bind ซ้ำ
-  if (sheet._bound) return;
-  sheet._bound = true;
+  // 🔒 guard กัน bind ซ้ำ (ผูกกับ document mode)
+  if (root._orderSuccessBound) return;
+  root._orderSuccessBound = true;
 
-  // 🔹 ปุ่มแชร์ / บันทึก
-  const shareBtn =
-    sheet.querySelector("[data-action='share-order']");
+  // ==============================
+  // 🔹 Share / Save Document
+  // ==============================
+  const shareBtn = root.querySelector(
+    "[data-action='share-order']"
+  );
 
   if (shareBtn) {
-    shareBtn.onclick = function () {
-      // UI ทำได้แค่อธิบายผู้ใช้
+    shareBtn.addEventListener("click", () => {
       UI.showToast(
         "ใช้ปุ่ม Share ของเบราว์เซอร์เพื่อบันทึกหรือพิมพ์เอกสาร",
         "info",
@@ -307,19 +288,23 @@ UI.bindOrderSuccess = function (handlers = {}) {
       );
 
       handlers.onShare && handlers.onShare();
-    };
+    });
   }
 
-  // 🔹 ปุ่มจบโฟล
-  const finishBtn =
-    sheet.querySelector("[data-action='finish-order']");
+  // ==============================
+  // 🔹 Finish Order Flow
+  // ==============================
+  const finishBtn = root.querySelector(
+    "[data-action='finish-order']"
+  );
 
   if (finishBtn) {
-    finishBtn.onclick = function () {
+    finishBtn.addEventListener("click", () => {
       handlers.onFinish && handlers.onFinish();
-    };
+    });
   }
 };
+
 
 
 
