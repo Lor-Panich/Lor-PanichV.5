@@ -1871,3 +1871,34 @@ body.document-mode .a4-page {
   }
 }
 
+/* ======================================================
+   FIX: User Guidance Text Visibility (SCREEN ONLY)
+====================================================== */
+
+/* กลุ่มข้อความแนะนำผู้ใช้ */
+.user-guide,
+.document-hint,
+.doc-hint {
+  color: #1c1c1e;        /* 🔑 บังคับให้เข้ม */
+  font-size: 14px;
+  line-height: 1.5;
+  opacity: 1;
+}
+
+/* แสดงเฉพาะบนหน้าจอ */
+@media screen {
+  body.document-mode .user-guide,
+  body.document-mode .document-hint,
+  body.document-mode .doc-hint {
+    display: block;
+  }
+}
+
+/* ❌ ไม่ให้ติดไปตอน print */
+@media print {
+  .user-guide,
+  .document-hint,
+  .doc-hint {
+    display: none !important;
+  }
+}
