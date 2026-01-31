@@ -1490,32 +1490,6 @@ body.search-open .search-input {
   box-shadow: none;
 }
 
-/* ======================================================
-   10. ORDER DOCUMENT (A4) — SCREEN SAFE VERSION
-====================================================== */
-
-.a4-page {
-  /* 🖨️ จำกัดขนาด A4 สำหรับ desktop / print */
-  max-width: 210mm;
-
-  /* 📱 screen ต้องไม่ฝืน mm */
-  width: 100%;
-  min-height: auto;          /* 🔑 สำคัญที่สุด */
-
-  margin: 0 auto;
-  padding: 10mm 8mm;
-
-  background: #ffffff;
-  color: #000000;
-
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 14px;
-  line-height: 1.4;
-
-  box-sizing: border-box;
-}
-
-
 .order-doc .doc-header {
   border-bottom: 2px solid #000;
   margin-bottom: 12mm;
@@ -1662,21 +1636,6 @@ body.document-mode #app {
 }
 
 /* ======================================================
-   ORDER DOCUMENT — SCREEN PREVIEW (ALL SCREEN)
-====================================================== */
-
-body.document-mode .a4-page {
-  width: 100%;
-  max-width: 100%;
-  margin: 0 auto 24px;
-
-  box-shadow:
-    0 24px 60px rgba(0,0,0,.25);
-
-  transform-origin: top center;
-}
-
-/* ======================================================
    MOBILE SCREEN ADJUSTMENTS
 ====================================================== */
 
@@ -1686,8 +1645,7 @@ body.document-mode .a4-page {
   body.document-mode .a4-page {
     font-size: 14px;
     line-height: 1.45;
-    transform: scale(0.96);
-  }
+    }
 
   .order-doc .doc-table-header,
   .order-doc .doc-row {
@@ -1715,7 +1673,7 @@ body.document-mode .a4-page {
 }
 
 /* ======================================================
-   PRINT — A4 REAL OUTPUT
+   PRINT — A4 REAL OUTPUT (CLEAN)
 ====================================================== */
 
 @media print {
@@ -1733,13 +1691,10 @@ body.document-mode .a4-page {
   }
 
   body.document-mode .a4-page {
-    width: 210mm;
-    max-width: 210mm;
-    min-height: 297mm;
-
     margin: 0;
-    padding: 20mm;
-
+    padding: 0;          /* 🔥 FIX ตัวจริง */
+    width: 210mm;
+    min-height: 297mm;
     box-shadow: none;
   }
 
@@ -1752,15 +1707,7 @@ body.document-mode .a4-page {
   }
 
   @page {
+    size: A4;
     margin: 20mm;
-  }
-
-  .order-doc::after {
-    content: "หน้า " counter(page);
-    position: fixed;
-    bottom: 10mm;
-    right: 20mm;
-    font-size: 12px;
-    color: #555;
   }
 }
