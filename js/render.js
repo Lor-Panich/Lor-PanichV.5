@@ -682,18 +682,21 @@ Render.orderDocument = function (order = {}, items = []) {
       </div>
 
       <!-- =========================
-           ACTIONS (NON PRINT)
+      ACTIONS (NON PRINT)
       ========================== -->
-      <div class="doc-actions no-print">
-        <button
-          class="primary-btn"
-          type="button"
-          data-action="download-order"
-        >
-          ดาวน์โหลดใบสั่งซื้อ
-        </button>
-      </div>
+<div class="doc-actions no-print">
 
-    </div>
-  `;
-};
+  <div class="doc-hint">
+    📌 หากต้องการบันทึกหรือส่งเอกสาร<br>
+    ให้ใช้ปุ่ม <strong>Share</strong> ของเบราว์เซอร์
+  </div>
+
+  <button
+    class="primary-btn"
+    type="button"
+    data-action="finish-order"
+  >
+    จบรายการ / กลับหน้าหลัก
+  </button>
+
+</div>
