@@ -525,33 +525,52 @@ Viewer._bindOrderDocumentActions = function () {
 };
 
 /* =========================================
-   STEP 2.3 — DOWNLOAD ORDER AS PNG
+   STEP 2.3 — DOWNLOAD ORDER AS PNG (iOS SAFE)
 ========================================= */
 Viewer._downloadOrderAsPNG = async function () {
   const node = document.querySelector(".order-doc");
   if (!node) return;
 
-  const order = Core.state.order.lastCreated || {};
-  const orderId = order.orderId || "order";
-
   try {
-    const dataUrl = await htmlToImage.toPng(node, {
-      pixelRatio: 2,               // 🔑 คม
-      backgroundColor: "#ffffff"
+    const blob = await htmlToImage.toBlob(node, {
+      pixelRatio: 2,
+      backgroundColor: "#ffffff",
+      cacheBust: true   // 🔑 สำคัญมาก แก้ CORS บน iOS
     });
 
-    const link = document.createElement("a");
-    link.href = dataUrl;
-    link.download = `ใบสั่งซื้อ-${orderId}.png`;
+    if (!blob) {
+      throw new Error("Blob generation failed");
+    }
 
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    Viewer._saveBlob(blob);
 
   } catch (err) {
     console.error("[downloadOrderAsPNG]", err);
     UI.showToast("ไม่สามารถดาวน์โหลดรูปได้", "error");
   }
+};
+
+/* =========================================
+   STEP 2.3.1 — SAVE PNG (iOS FRIENDLY)
+========================================= */
+Viewer._saveBlob = function (blob) {
+  const order = Core.state.order.lastCreated || {};
+  const orderId = order.orderId || "order";
+
+  const url = URL.createObjectURL(blob);
+
+  // 🔑 iOS Safari ต้องเปิดรูปใน tab ใหม่
+  const win = window.open(url, "_blank");
+
+  if (!win) {
+    UI.showToast("กรุณาอนุญาต popup เพื่อบันทึกรูป", "warning");
+    return;
+  }
+
+  // cleanup memory
+  setTimeout(() => {
+    URL.revokeObjectURL(url);
+  }, 4000);
 };
 
 /* =========================================
