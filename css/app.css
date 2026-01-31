@@ -1564,13 +1564,13 @@ body.search-open .search-input {
 ====================== */
 @media screen {
 
-  /* ชื่อสินค้า */
-  .order-doc .doc-row span:nth-child(3) {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    max-width: 100%;
-  }
+/* ✅ Document screen preview — ชื่อสินค้าขึ้นบรรทัดใหม่ */
+body.document-mode .order-doc .doc-row span:nth-child(3) {
+  white-space: normal;        /* 🔑 ขึ้นบรรทัดใหม่ */
+  overflow: visible;
+  text-overflow: unset;
+  word-break: break-word;     /* 🔑 กันชื่อยาวมาก */
+}
 
   /* รหัสสินค้า */
   .order-doc .doc-row span:nth-child(2) {
