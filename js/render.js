@@ -708,3 +708,5 @@ Render.orderDocument = function (order = {}, items = []) {
   </button>
 
 </div>
+`;
+};
