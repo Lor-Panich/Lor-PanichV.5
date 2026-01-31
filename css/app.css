@@ -1541,200 +1541,150 @@ body.search-open .search-input {
 }
 
 /* ======================================================
-   ORDER DOCUMENT — TEXT SAFETY
-   Screen vs Print Behavior
+   DOCUMENT MODE — SCREEN ONLY
+   (Preview บนมือถือ / เว็บ)
 ====================================================== */
-
-/* ======================
-   SCREEN (มือถือ / เว็บ)
-====================== */
 @media screen {
 
-/* ✅ Document screen preview — ชื่อสินค้าขึ้นบรรทัดใหม่ */
-body.document-mode .order-doc .doc-row span:nth-child(3) {
-  white-space: normal;        /* 🔑 ขึ้นบรรทัดใหม่ */
-  overflow: visible;
-  text-overflow: unset;
-  word-break: break-word;     /* 🔑 กันชื่อยาวมาก */
-}
-
-  /* รหัสสินค้า */
-  .order-doc .doc-row span:nth-child(2) {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-}
-
-/* ======================
-   PRINT (A4 จริง)
-====================== */
-@media print {
-
-  /* ชื่อสินค้า — ให้ขึ้นบรรทัดได้ */
-  .order-doc .doc-row span:nth-child(3) {
-    white-space: normal;
-    overflow: visible;
-    text-overflow: unset;
+  body.document-mode {
+    background: #f2f2f7;
+    overflow-y: auto;
+    overscroll-behavior: contain;
   }
 
-  /* รหัสสินค้า — ยังตัดได้ (กันยาวเกิน) */
-  .order-doc .doc-row span:nth-child(2) {
-    white-space: nowrap;
+  body.document-mode #appHeader {
+    display: none;
   }
-}
 
+  body.document-mode #app {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
 
-.order-doc .doc-thumb {
-  width: 40px;
-  height: 40px;
-  object-fit: cover;
-  border: 1px solid #ccc;
-}
+    padding: 12px 8px 24px;
+    min-height: 100dvh;
+    overflow-x: hidden;
+  }
 
-.order-doc .doc-summary {
-  margin-top: 12mm;
-  padding-top: 6mm;
-  border-top: 2px solid #000;
-
-  display: flex;
-  justify-content: flex-end;
-
-  font-size: 16px;
-  font-weight: 700;
-}
-
-/* ======================================================
-   DOCUMENT MODE — BASE
-   (ใช้ทุก device)
-====================================================== */
-
-body.document-mode {
-  background: #f2f2f7;
-  overflow-y: auto;
-
-  overscroll-behavior: contain; /* ➕ กัน bounce ดึงทั้งหน้า */
-}
-
-body.document-mode #appHeader {
-  display: none;
-}
-
-/* ======================================================
-   DOCUMENT PREVIEW CONTAINER — SCREEN
-====================================================== */
-
-body.document-mode #app {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-
-  padding: 12px 8px 24px;
-
-  overflow-x: hidden;
-  min-height: 100dvh;        /* 🔑 Safari safety */
-}
-
-/* ======================================================
-   MOBILE SCREEN ADJUSTMENTS
-====================================================== */
-
-@media screen and (max-width: 480px) {
-
-  /* 🔑 ป้องกัน iOS auto-zoom */
-  body.document-mode .a4-page {
-    font-size: 14px;
-    line-height: 1.45;
+  /* Mobile tuning */
+  @media (max-width: 480px) {
+    body.document-mode .a4-page {
+      font-size: 14px;
+      line-height: 1.45;
     }
 
-  .order-doc .doc-table-header,
-  .order-doc .doc-row {
-    grid-template-columns:
-      32px
-      1fr
-      2.4fr
-      1.2fr
-      0.8fr;
+    .order-doc .doc-table-header,
+    .order-doc .doc-row {
+      grid-template-columns:
+        32px
+        1fr
+        2.4fr
+        1.2fr
+        0.8fr;
+    }
+
+    .order-doc .doc-thumb {
+      width: 32px;
+      height: 32px;
+    }
   }
 
-  .order-doc .doc-thumb {
-    width: 32px;
-    height: 32px;
+  /* ชื่อสินค้าขึ้นบรรทัดได้ (preview) */
+  body.document-mode .order-doc .doc-row span:nth-child(3) {
+    white-space: normal;
+    word-break: break-word;
   }
 }
 
-/* ======================================================
-   NON-PRINT ELEMENTS (SCREEN ONLY)
-====================================================== */
-
-.no-print {
-  margin-top: 16px;
-  text-align: center;
-}
 
 /* ======================================================
-   PRINT — A4 FINAL (FIXED & STABLE)
+   PRINT — A4 REAL OUTPUT (ONE BLOCK ONLY)
 ====================================================== */
 @media print {
 
-  /* ---------- PAGE SETUP ---------- */
-  @page {
-    size: A4;
-    margin: 20mm;
+  /* ===============================
+     1. HARD RESET (ฆ่า Glass ทั้งหมด)
+     =============================== */
+  * {
+    box-shadow: none !important;
+    text-shadow: none !important;
+    filter: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
   }
 
   html, body {
+    background: #ffffff !important;
+    color: #000000 !important;
     margin: 0;
     padding: 0;
-    background: #fff !important;
   }
 
-  /* ---------- FORCE BLACK TEXT ---------- */
-  body,
-  .order-doc,
-  .order-doc * {
-    color: #000 !important;
-    background: transparent !important;
-    box-shadow: none !important;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
-
-  /* ---------- APP WRAPPER ---------- */
-  #app {
-    display: block;
-    padding: 0;
-    margin: 0;
-  }
-
-  /* ---------- A4 PAGE ---------- */
-  .a4-page {
-    width: 210mm;
-    min-height: 297mm;   /* 🔑 สำคัญมาก */
-    margin: 0 auto;
-    padding: 0;
-    box-sizing: border-box;
-  }
-
-  /* ---------- DOCUMENT ---------- */
-  .order-doc {
-    display: block;
-  }
-
-  .doc-items,
-  .doc-row,
-  .doc-summary {
-    break-inside: avoid;
-    page-break-inside: avoid;
-  }
-
-  /* ---------- HIDE UI ---------- */
+  /* ===============================
+     2. ตัด App / UI ออก
+     =============================== */
   #appHeader,
   #toastContainer,
   #loadingOverlay,
   .no-print {
     display: none !important;
   }
+
+  #app {
+    display: block !important;
+    padding: 0 !important;
+    min-height: auto !important;
+  }
+
+  /* ===============================
+     3. A4 PAGE = กระดาษจริง
+     =============================== */
+  body.document-mode .a4-page {
+    width: 210mm;
+    margin: 0 auto;
+    padding: 0;
+    min-height: auto !important;
+
+    background: #ffffff !important;
+    box-shadow: none !important;
+    display: block !important;
+  }
+
+  /* ===============================
+     4. บังคับสีตัวอักษร 100%
+     =============================== */
+  .order-doc,
+  .order-doc * {
+    color: #000000 !important;
+    background: transparent !important;
+  }
+
+  /* ===============================
+     5. ตาราง / ข้อความ
+     =============================== */
+  .order-doc .doc-row span:nth-child(3) {
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  .order-doc .doc-row span:nth-child(2) {
+    white-space: nowrap;
+  }
+
+  /* ===============================
+     6. กัน summary แตกหน้า
+     =============================== */
+  .order-doc .doc-row,
+  .order-doc .doc-summary {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* ===============================
+     7. Page Setup
+     =============================== */
+  @page {
+    size: A4;
+    margin: 20mm;
+  }
 }
-
-
