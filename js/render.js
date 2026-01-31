@@ -663,7 +663,7 @@ Render.orderDocument = function (order = {}, items = []) {
 
       </section>
 
-      <!-- SUMMARY -->
+         <!-- SUMMARY -->
       <footer class="doc-summary">
         <div class="total">
           ยอดรวมทั้งสิ้น:
@@ -672,6 +672,17 @@ Render.orderDocument = function (order = {}, items = []) {
           </strong>
         </div>
       </footer>
+
+      <!-- ACTIONS -->
+      <div class="doc-actions">
+        <button
+          class="primary-btn"
+          type="button"
+          data-action="download-order"
+        >
+          ดาวน์โหลดใบสั่งซื้อ
+        </button>
+      </div>
 
     </div>
   `;
