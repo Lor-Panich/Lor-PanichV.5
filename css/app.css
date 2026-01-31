@@ -1491,13 +1491,16 @@ body.search-open .search-input {
 }
 
 /* ======================================================
-   10. ORDER DOCUMENT (A4)
+   10. ORDER DOCUMENT (A4) — SCREEN SAFE VERSION
 ====================================================== */
 
 .a4-page {
-  max-width: 210mm;     /* ⬅️ จำกัดขนาดสูงสุดแบบ A4 */
-  min-height: 297mm;
-  width: auto;          /* ⬅️ ปล่อยให้ screen คุมเอง */
+  /* 🖨️ จำกัดขนาด A4 สำหรับ desktop / print */
+  max-width: 210mm;
+
+  /* 📱 screen ต้องไม่ฝืน mm */
+  width: 100%;
+  min-height: auto;          /* 🔑 สำคัญที่สุด */
 
   margin: 0 auto;
   padding: 10mm 8mm;
@@ -1510,8 +1513,8 @@ body.search-open .search-input {
   line-height: 1.4;
 
   box-sizing: border-box;
-
 }
+
 
 .order-doc .doc-header {
   border-bottom: 2px solid #000;
@@ -1628,20 +1631,23 @@ body.document-mode .order-doc .doc-row span:nth-child(3) {
 }
 
 /* ======================================================
-   DOCUMENT MODE
+   DOCUMENT MODE — BASE
+   (ใช้ทุก device)
 ====================================================== */
+
+body.document-mode {
+  background: #f2f2f7;
+  overflow-y: auto;
+
+  overscroll-behavior: contain; /* ➕ กัน bounce ดึงทั้งหน้า */
+}
 
 body.document-mode #appHeader {
   display: none;
 }
 
-/* 📄 Screen preview background */
-body.document-mode {
-  background: #f2f2f7;
-}
-
 /* ======================================================
-   DOCUMENT PREVIEW CONTAINER (SCREEN)
+   DOCUMENT PREVIEW CONTAINER — SCREEN
 ====================================================== */
 
 body.document-mode #app {
@@ -1650,32 +1656,39 @@ body.document-mode #app {
   align-items: flex-start;
 
   padding: 12px 8px 24px;
+
   overflow-x: hidden;
+  min-height: 100dvh;        /* 🔑 Safari safety */
 }
 
 /* ======================================================
-   ORDER DOCUMENT — SCREEN PREVIEW
+   ORDER DOCUMENT — SCREEN PREVIEW (ALL SCREEN)
 ====================================================== */
 
 body.document-mode .a4-page {
   width: 100%;
   max-width: 100%;
-
   margin: 0 auto 24px;
 
-  /* ✨ preview polish */
   box-shadow:
     0 24px 60px rgba(0,0,0,.25);
+
+  transform-origin: top center;
 }
 
+/* ======================================================
+   MOBILE SCREEN ADJUSTMENTS
+====================================================== */
+
 @media screen and (max-width: 480px) {
+
+  /* 🔑 ป้องกัน iOS auto-zoom */
   body.document-mode .a4-page {
-    font-size: 14px;   /* 🔑 กัน auto zoom */
+    font-size: 14px;
     line-height: 1.45;
+    transform: scale(0.96);
   }
-}
 
-@media screen and (max-width: 480px) {
   .order-doc .doc-table-header,
   .order-doc .doc-row {
     grid-template-columns:
@@ -1685,7 +1698,6 @@ body.document-mode .a4-page {
       1.2fr
       0.8fr;
   }
-}
 
   .order-doc .doc-thumb {
     width: 32px;
@@ -1693,14 +1705,22 @@ body.document-mode .a4-page {
   }
 }
 
+/* ======================================================
+   NON-PRINT ELEMENTS (SCREEN ONLY)
+====================================================== */
+
+.no-print {
+  margin-top: 16px;
+  text-align: center;
+}
 
 /* ======================================================
-   ORDER DOCUMENT — PRINT
+   PRINT — A4 REAL OUTPUT
 ====================================================== */
 
 @media print {
 
-  /* 🧻 reset screen layout */
+  /* reset screen layout */
   body,
   #app {
     background: #ffffff;
@@ -1713,26 +1733,24 @@ body.document-mode .a4-page {
   }
 
   body.document-mode .a4-page {
-    /* ✅ A4 จริง */
     width: 210mm;
     max-width: 210mm;
     min-height: 297mm;
 
-    /* ❌ ล้างของ screen */
-    box-shadow: none;
     margin: 0;
     padding: 20mm;
+
+    box-shadow: none;
   }
 
-  /* 🔒 hide UI */
+  /* hide UI */
   #appHeader,
   #toastContainer,
-  #loadingOverlay {
+  #loadingOverlay,
+  .no-print {
     display: none !important;
   }
-}
 
-@media print {
   @page {
     margin: 20mm;
   }
@@ -1744,62 +1762,5 @@ body.document-mode .a4-page {
     right: 20mm;
     font-size: 12px;
     color: #555;
-  }
-}
-
-/* ======================================================
-   NON-PRINT ELEMENTS
-   - Hide buttons / actions when printing or exporting
-====================================================== */
-
-.no-print {
-  margin-top: 16px;
-  text-align: center;
-}
-
-/* ❌ ซ่อนทุกอย่างที่ไม่ใช่เอกสาร */
-@media print {
-  .no-print {
-    display: none !important;
-  }
-}
-
-/* ===============================
-   DOCUMENT MODE — MOBILE FIX
-=============================== */
-body.document-mode {
-  background: #000;           /* กันจอดำหลอกตา */
-  overflow-y: auto;           /* 🔑 อนุญาตให้ scroll */
-}
-
-/* Desktop (ค่าเดิม) */
-.a4-page {
-  width: 210mm;
-  min-height: 297mm;
-  margin: 0 auto;
-}
-
-/* 📱 Mobile */
-@media (max-width: 768px) {
-  .a4-page {
-    width: 100vw;
-    min-height: auto;
-    padding: 16px;
-    box-sizing: border-box;
-    transform: scale(0.95);   /* กันล้นขอบ */
-    transform-origin: top center;
-  }
-
-  .order-doc-wrapper {
-    overflow-x: hidden;
-  }
-}
-
-@media (max-width: 768px) {
-  .doc-actions {
-    position: sticky;
-    bottom: 0;
-    background: #111;
-    padding: 12px;
   }
 }
