@@ -244,6 +244,21 @@ Viewer._isOverlayOpen = function () {
       || UI._overlayStack.includes("qtySheet");
 };
 
+
+/* ======================================================
+   VIEWER HELPERS (PURE)
+====================================================== */
+
+/**
+ * normalize product stock value
+ * - ensure number
+ * - prevent NaN / null / string
+ */
+Viewer._normalizeStock = function (product) {
+  return Number(product?.stock ?? 0);
+};
+
+
 /* ======================================================
    PRODUCT DETAIL ENTRY (STEP 9.1)
 ====================================================== */
@@ -251,20 +266,28 @@ Viewer._isOverlayOpen = function () {
 Viewer.openProduct = function (product) {
   if (!product) return;
 
+  const stock = Viewer._normalizeStock(product);
+
+  // ⭐ ADD — safety guard
+  if (product.stock <= 0) {
+    UI.showToast("สินค้าหมด", "warning");
+    return;
+  }
+
+  // ===== เดิม =====
   Viewer._selectedQty = 1;
   Viewer._productStep = "idle";
-
   Core.state.viewer.activeProduct = product;
 
   UI.openProductDetail(
     Render.productDetailSheet(product)
   );
 
-  // 🔴 STEP 9.3 — bind Add to Cart (ENTER QTY STEP ONLY)
   UI.bindAddToCart(() => {
     Viewer.enterQtyStep();
   });
-}; // ✅ ปิดตรงนี้
+};
+
 
 /* ======================================================
    STEP 9.2 — ENTER QTY STEP (MODAL VERSION)
@@ -274,6 +297,8 @@ Viewer.enterQtyStep = function () {
   const product = Core.state.viewer.activeProduct;
   if (!product) return;
 
+  const stock = Viewer._normalizeStock(product);
+   
   // ❌ guard: สินค้าหมด
   if (product.stock <= 0) {
     UI.showToast("สินค้าหมด", "warning");
@@ -296,8 +321,9 @@ Viewer.enterQtyStep = function () {
   const qtyRoot = document.getElementById("qtySheet");
   if (!qtyRoot) return;
 
-  // ✅ FIX 1: clear bind guard ทุกครั้งที่เปิด
+  // ⭐ ADD — reset ทุกอย่างที่เกี่ยวกับ qty
   delete qtyRoot._qtyBound;
+  Viewer._selectedQty = 1; // 🔑 ensure state sync 
 
   // ✅ FIX 2: reset DOM qty value กัน state ค้าง
   const valueEl = qtyRoot.querySelector("[data-role='qty-value']");
@@ -332,6 +358,8 @@ Viewer.confirmQty = function () {
   const qty = Viewer._selectedQty;
 
   if (!product) return;
+
+  const stock = Viewer._normalizeStock(product); 
 
   if (qty <= 0 || qty > product.stock) {
     UI.showToast(`สินค้า "${product.name}" คงเหลือ ${product.stock} ชิ้น`, "warning");
