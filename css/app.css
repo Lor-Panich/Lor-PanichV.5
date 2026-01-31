@@ -1764,4 +1764,42 @@ body.document-mode .a4-page {
   }
 }
 
+/* ===============================
+   DOCUMENT MODE — MOBILE FIX
+=============================== */
+body.document-mode {
+  background: #000;           /* กันจอดำหลอกตา */
+  overflow-y: auto;           /* 🔑 อนุญาตให้ scroll */
+}
 
+/* Desktop (ค่าเดิม) */
+.a4-page {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto;
+}
+
+/* 📱 Mobile */
+@media (max-width: 768px) {
+  .a4-page {
+    width: 100vw;
+    min-height: auto;
+    padding: 16px;
+    box-sizing: border-box;
+    transform: scale(0.95);   /* กันล้นขอบ */
+    transform-origin: top center;
+  }
+
+  .order-doc-wrapper {
+    overflow-x: hidden;
+  }
+}
+
+@media (max-width: 768px) {
+  .doc-actions {
+    position: sticky;
+    bottom: 0;
+    background: #111;
+    padding: 12px;
+  }
+}
