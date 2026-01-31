@@ -1781,3 +1781,93 @@ body.document-mode .a4-page {
   }
 
 }
+
+/* ======================================================
+   ✅ FINAL PRINT FIX — iOS Safari / Chrome SAFE
+   (Cut Glass Completely)
+====================================================== */
+@media print {
+
+  /* 1. Kill ALL visual effects at root */
+  html, body {
+    background: #fff !important;
+    color: #000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+
+    filter: none !important;
+    transform: none !important;
+  }
+
+  * {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    filter: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  /* 2. Hide app UI */
+  #appHeader,
+  #toastContainer,
+  #loadingOverlay,
+  .no-print {
+    display: none !important;
+  }
+
+  /* 3. App wrapper = plain document */
+  #app {
+    display: block !important;
+    padding: 0 !important;
+    min-height: auto !important;
+  }
+
+  /* 4. A4 PAGE — Portrait ONLY */
+  body.document-mode .a4-page {
+    width: 210mm !important;
+    max-width: 210mm !important;
+    min-height: auto !important;
+
+    margin: 0 auto !important;
+    padding: 20mm !important;
+
+    background: #fff !important;
+    color: #000 !important;
+
+    transform: none !important;
+  }
+
+  /* 5. Force text visibility (Safari bug fix) */
+  .order-doc,
+  .order-doc * {
+    color: #000 !important;
+    background: transparent !important;
+    opacity: 1 !important;
+  }
+
+  /* 6. Table text wrapping */
+  .order-doc .doc-row span:nth-child(3) {
+    white-space: normal !important;
+    word-break: break-word !important;
+  }
+
+  .order-doc .doc-row span:nth-child(2) {
+    white-space: nowrap !important;
+  }
+
+  /* 7. Prevent page breaks */
+  .order-doc .doc-row,
+  .order-doc .doc-summary {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* 8. Page setup — Portrait A4 */
+  @page {
+    size: A4 portrait;
+    margin: 20mm;
+  }
+}
+
