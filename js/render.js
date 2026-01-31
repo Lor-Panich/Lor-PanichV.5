@@ -577,3 +577,63 @@ Render.orderSuccessSheet = function (order = {}) {
   `;
 };
 
+/* ======================================================
+   STEP 10.2 — ORDER DOCUMENT (A4 / PRINT READY)
+   - HTML only
+   - No state
+   - No event binding
+====================================================== */
+
+Render.orderDocument = function (order = {}, items = []) {
+  return `
+    <div class="a4-page order-doc">
+
+      <!-- HEADER -->
+      <header class="doc-header">
+        <div class="doc-brand">
+          <h1>ร้านค้า Lor-Panich</h1>
+          <div class="doc-subtitle">ใบสั่งซื้อสินค้า</div>
+        </div>
+      </header>
+
+      <!-- META -->
+      <section class="doc-meta">
+        <div>
+          <strong>เลขที่ใบสั่งซื้อ:</strong> ${order.orderId}
+        </div>
+        <div>
+          <strong>วันที่:</strong> ${order.createdAt}
+        </div>
+      </section>
+
+      <!-- ITEMS -->
+      <section class="doc-items">
+        <div class="doc-table-header">
+          <span></span>
+          <span>รหัสสินค้า</span>
+          <span>ชื่อสินค้า</span>
+          <span class="right">ราคา</span>
+          <span class="right">จำนวน</span>
+        </div>
+
+        ${items.map(it => `
+          <div class="doc-row">
+            <img src="${it.image}" class="doc-thumb" />
+            <span>${it.productId}</span>
+            <span>${it.name}</span>
+            <span class="right">${it.price}</span>
+            <span class="right">${it.qty}</span>
+          </div>
+        `).join("")}
+      </section>
+
+      <!-- SUMMARY -->
+      <footer class="doc-summary">
+        <div class="total">
+          ยอดรวมทั้งสิ้น: <strong>${order.total} บาท</strong>
+        </div>
+      </footer>
+
+    </div>
+  `;
+};
