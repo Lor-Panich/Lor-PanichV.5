@@ -493,16 +493,17 @@ Viewer._renderSuccess = function () {
   const order = Core.state.order.lastCreated;
   if (!order) return;
 
-  // 🔑 1) เข้า document mode
   document.body.classList.add("document-mode");
 
-  // 🔑 2) mount เอกสาร A4 ลง app ตรง ๆ
   Viewer._mount(
     Render.orderDocument(
       order,
       order.items || []
     )
   );
+
+  // 🔑 STEP 2.2 — bind ปุ่มดาวน์โหลด
+  Viewer._bindOrderDocumentActions();
 };
 
 /* =========================================
