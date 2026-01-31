@@ -506,6 +506,24 @@ Viewer._renderSuccess = function () {
 };
 
 /* =========================================
+   STEP 2.2 — BIND ORDER DOCUMENT ACTIONS
+========================================= */
+Viewer._bindOrderDocumentActions = function () {
+  const btn = document.querySelector(
+    "[data-action='download-order']"
+  );
+
+  // 🔒 guard กัน bind ซ้ำ
+  if (!btn || btn._bound) return;
+  btn._bound = true;
+
+  btn.addEventListener("click", async () => {
+    await Viewer._downloadOrderAsPNG();
+    Viewer._finishOrderFlow();
+  });
+};
+
+/* =========================================
    DOCUMENT MODE LIFECYCLE
 ========================================= */
 
