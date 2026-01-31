@@ -1591,5 +1591,60 @@ body.document-mode {
   margin: 0 auto;
 }
 
+/* ======================================================
+   ORDER DOCUMENT — SCREEN PREVIEW
+   (Document Mode Only)
+====================================================== */
 
+@media screen {
 
+  body.document-mode {
+    background: #f2f2f7; /* neutral canvas */
+  }
+
+  body.document-mode .a4-page {
+    /* 🔑 scale down for screen preview */
+    transform: scale(0.75);
+    transform-origin: top center;
+
+    margin-top: 16px;
+    margin-bottom: 24px;
+
+    /* ✨ preview polish */
+    box-shadow:
+      0 24px 60px rgba(0,0,0,.25);
+  }
+
+}
+
+@media screen and (max-width: 480px) {
+  body.document-mode .a4-page {
+    transform: scale(0.6);
+  }
+}
+
+/* ======================================================
+   ORDER DOCUMENT — PRINT
+====================================================== */
+
+@media print {
+
+  /* 🔒 reset screen artifacts */
+  body {
+    background: #ffffff;
+  }
+
+  body.document-mode .a4-page {
+    transform: none;
+    box-shadow: none;
+    margin: 0;
+  }
+
+  /* 🔒 hide any leftover UI just in case */
+  #appHeader,
+  #toastContainer,
+  #loadingOverlay {
+    display: none !important;
+  }
+
+}
