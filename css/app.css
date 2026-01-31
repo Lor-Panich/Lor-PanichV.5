@@ -1495,8 +1495,9 @@ body.search-open .search-input {
 ====================================================== */
 
 .a4-page {
-  width: 210mm;
+  max-width: 210mm;     /* ⬅️ จำกัดขนาดสูงสุดแบบ A4 */
   min-height: 297mm;
+  width: auto;          /* ⬅️ ปล่อยให้ screen คุมเอง */
 
   margin: 0 auto;
   padding: 20mm;
@@ -1510,8 +1511,6 @@ body.search-open .search-input {
 
   box-sizing: border-box;
 
-  /* 🔑 สำคัญมากสำหรับหลายหน้า */
-  page-break-after: always;
 }
 
 .order-doc .doc-header {
@@ -1554,6 +1553,27 @@ body.search-open .search-input {
   break-inside: avoid;
   page-break-inside: avoid;
 }
+
+/* ======================================================
+   ORDER DOCUMENT — TEXT SAFETY
+   Prevent long product name breaking layout
+====================================================== */
+
+/* ชื่อสินค้า */
+.order-doc .doc-row span:nth-child(3) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+/* รหัสสินค้า (เผื่อยาวผิดปกติ) */
+.order-doc .doc-row span:nth-child(2) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 
 .order-doc .doc-thumb {
   width: 40px;
@@ -1622,26 +1642,60 @@ body.document-mode .a4-page {
   }
 }
 
+@media screen and (max-width: 480px) {
+  .order-doc .doc-table-header,
+  .order-doc .doc-row {
+    grid-template-columns:
+      36px   /* รูป */
+      1fr    /* รหัส */
+      2.2fr  /* ชื่อ */
+      1fr    /* ราคา */
+      0.8fr; /* จำนวน */
+  }
+
+  .order-doc .doc-thumb {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+
 /* ======================================================
    ORDER DOCUMENT — PRINT
 ====================================================== */
 
 @media print {
 
-  body {
+  /* 🧻 reset screen layout */
+  body,
+  #app {
     background: #ffffff;
+    margin: 0;
+    padding: 0;
+  }
+
+  body.document-mode #app {
+    display: block;
   }
 
   body.document-mode .a4-page {
+    /* ✅ A4 จริง */
+    width: 210mm;
+    max-width: 210mm;
+    min-height: 297mm;
+
+    /* ❌ ล้างของ screen */
     box-shadow: none;
     margin: 0;
+    padding: 20mm;
   }
 
-  /* 🔒 hide any leftover UI just in case */
+  /* 🔒 hide UI */
   #appHeader,
   #toastContainer,
   #loadingOverlay {
     display: none !important;
   }
-
 }
+
+
