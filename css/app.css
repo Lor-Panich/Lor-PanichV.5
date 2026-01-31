@@ -1490,4 +1490,106 @@ body.search-open .search-input {
   box-shadow: none;
 }
 
+/* ======================================================
+   10. ORDER DOCUMENT (A4)
+====================================================== */
+
+.a4-page {
+  width: 210mm;
+  min-height: 297mm;
+
+  margin: 0 auto;
+  padding: 20mm;
+
+  background: #ffffff;
+  color: #000000;
+
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+
+  box-sizing: border-box;
+
+  /* 🔑 สำคัญมากสำหรับหลายหน้า */
+  page-break-after: always;
+}
+
+.order-doc .doc-header {
+  border-bottom: 2px solid #000;
+  margin-bottom: 12mm;
+  padding-bottom: 6mm;
+}
+
+.order-doc .doc-title {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.order-doc .doc-meta {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10mm;
+  font-size: 13px;
+}
+
+.order-doc .doc-table-header,
+.order-doc .doc-row {
+  display: grid;
+  grid-template-columns: 48px 1fr 2fr 1fr 1fr;
+  gap: 8px;
+  align-items: center;
+}
+
+.order-doc .doc-table-header {
+  font-weight: 600;
+  border-bottom: 1.5px solid #000;
+  padding-bottom: 6px;
+}
+
+.order-doc .doc-row {
+  padding: 6px 0;
+  border-bottom: 1px solid #ddd;
+
+  /* 🔑 กันโดนตัดครึ่งหน้า */
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.order-doc .doc-thumb {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border: 1px solid #ccc;
+}
+
+.order-doc .doc-summary {
+  margin-top: 12mm;
+  padding-top: 6mm;
+  border-top: 2px solid #000;
+
+  display: flex;
+  justify-content: flex-end;
+
+  font-size: 16px;
+  font-weight: 700;
+}
+
+/* ======================================================
+   DOCUMENT MODE
+====================================================== */
+
+body.document-mode #appHeader {
+  display: none;
+}
+
+body.document-mode {
+  background: #ffffff;
+}
+
+.order-doc {
+  max-width: 210mm;
+  margin: 0 auto;
+}
+
+
 
