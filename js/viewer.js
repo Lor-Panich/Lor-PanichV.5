@@ -800,11 +800,8 @@ Viewer.createOrder = async function () {
     // 🔹 ส่งไป Backend (PENDING)
     const order = await API.createOrder(items);
 
-    new Date(order.createdAt).toLocaleString("th-TH", {
-      dateStyle: "medium",
-      timeStyle: "short"
-    })
-     
+    order.createdAt = new Date().toISOString();
+          
     // 🔑 PATCH — เติมข้อมูลสำหรับ document
     order.items = [...items];                 // ⭐ สำคัญที่สุด
     order.total = Viewer._calcCartTotal();    // ⭐ ให้ตรงกับ cart จริง
