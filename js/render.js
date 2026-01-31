@@ -585,6 +585,8 @@ Render.orderSuccessSheet = function (order = {}) {
 ====================================================== */
 
 Render.orderDocument = function (order = {}, items = []) {
+  const hasItems = Array.isArray(items) && items.length > 0;
+
   return `
     <div class="a4-page order-doc">
 
@@ -599,18 +601,22 @@ Render.orderDocument = function (order = {}, items = []) {
       <!-- META -->
       <section class="doc-meta">
         <div>
-          <strong>เลขที่ใบสั่งซื้อ:</strong> ${order.orderId || "-"}
+          <strong>เลขที่ใบสั่งซื้อ:</strong>
+          ${order.orderId || "-"}
         </div>
         <div>
           <strong>วันที่:</strong>
-          ${order.createdAt
-            ? new Date(order.createdAt).toLocaleString()
-            : "-"}
+          ${
+            order.createdAt
+              ? new Date(order.createdAt).toLocaleString()
+              : "-"
+          }
         </div>
       </section>
 
       <!-- ITEMS -->
       <section class="doc-items">
+
         <div class="doc-table-header">
           <span></span>
           <span>รหัสสินค้า</span>
@@ -619,21 +625,38 @@ Render.orderDocument = function (order = {}, items = []) {
           <span class="right">จำนวน</span>
         </div>
 
-        ${items.map(it => `
-          <div class="doc-row">
-            <img
-              src="${it.image || ''}"
-              class="doc-thumb"
-              alt=""
-            />
-            <span>${it.productId || "-"}</span>
-            <span>${it.name || "-"}</span>
-            <span class="right">
-              ${Number(it.price || 0).toLocaleString()}
-            </span>
-            <span class="right">${it.qty || 0}</span>
-          </div>
-        `).join("")}
+        ${
+          hasItems
+            ? items.map(it => `
+                <div class="doc-row">
+                  <img
+                    src="${it.image || ""}"
+                    class="doc-thumb"
+                    alt=""
+                  />
+                  <span>${it.productId || "-"}</span>
+                  <span>${it.name || "-"}</span>
+                  <span class="right">
+                    ${Number(it.price || 0).toLocaleString()}
+                  </span>
+                  <span class="right">
+                    ${Number(it.qty || 0)}
+                  </span>
+                </div>
+              `).join("")
+            : `
+              <div
+                style="
+                  padding: 12mm 0;
+                  font-size: 13px;
+                  color: #555;
+                "
+              >
+                ไม่พบรายการสินค้า
+              </div>
+            `
+        }
+
       </section>
 
       <!-- SUMMARY -->
