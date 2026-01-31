@@ -1534,7 +1534,12 @@ body.search-open .search-input {
 .order-doc .doc-table-header,
 .order-doc .doc-row {
   display: grid;
-  grid-template-columns: 48px 1fr 2fr 1fr 1fr;
+  grid-template-columns:
+    48px   /* รูป */
+    90px   /* รหัสสินค้า */
+    1fr    /* ชื่อสินค้า (ยืดได้ช่องเดียว) */
+    90px   /* ราคา */
+    70px;  /* จำนวน */
   gap: 8px;
   align-items: center;
 }
