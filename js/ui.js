@@ -268,7 +268,7 @@ UI.bindOrderSuccess = function (handlers = {}) {
   const root = document.getElementById("app");
   if (!root) return;
 
-  // 🔒 guard กัน bind ซ้ำ (ผูกกับ document mode)
+  // 🔒 guard กัน bind ซ้ำ
   if (root._orderSuccessBound) return;
   root._orderSuccessBound = true;
 
@@ -281,13 +281,8 @@ UI.bindOrderSuccess = function (handlers = {}) {
 
   if (shareBtn) {
     shareBtn.addEventListener("click", () => {
-      UI.showToast(
-        "ใช้ปุ่ม Share ของเบราว์เซอร์เพื่อบันทึกหรือพิมพ์เอกสาร",
-        "info",
-        3000
-      );
-
-      handlers.onShare && handlers.onShare();
+      // ✅ เปิด native Print / Share flow ของ Safari
+      window.print();
     });
   }
 
@@ -304,8 +299,6 @@ UI.bindOrderSuccess = function (handlers = {}) {
     });
   }
 };
-
-
 
 
 /* ======================================================
