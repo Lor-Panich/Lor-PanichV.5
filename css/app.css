@@ -1582,13 +1582,9 @@ body.document-mode #appHeader {
   display: none;
 }
 
+/* 📄 Screen preview background */
 body.document-mode {
-  background: #ffffff;
-}
-
-.order-doc {
-  max-width: 210mm;
-  margin: 0 auto;
+  background: #f2f2f7;
 }
 
 /* ======================================================
@@ -1606,44 +1602,25 @@ body.document-mode #app {
 
 /* ======================================================
    ORDER DOCUMENT — SCREEN PREVIEW
-   (Document Mode Only)
 ====================================================== */
 
-@media screen {
+body.document-mode .a4-page {
+  width: 100%;
+  max-width: 100%;
 
-  body.document-mode {
-    background: #f2f2f7; /* neutral canvas */
-  }
+  margin: 0 auto 24px;
 
-  body.document-mode #app {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-
-    padding: 12px 8px 24px;
-    overflow-x: hidden;
-  }
-
-  body.document-mode .a4-page {
-    width: 100%;
-    max-width: 100%;
-
-    margin: 0 auto 24px;
-
-    /* ✨ preview polish */
-    box-shadow:
-      0 24px 60px rgba(0,0,0,.25);
-  }
-
+  /* ✨ preview polish */
+  box-shadow:
+    0 24px 60px rgba(0,0,0,.25);
 }
 
-/* 📱 Mobile fine-tune */
 @media screen and (max-width: 480px) {
   body.document-mode .a4-page {
-    padding: 14mm 10mm;
+    padding: 12mm 12mm;
+    font-size: 13.5px; /* อ่านสบายขึ้นบนมือถือ */
   }
 }
-
 
 /* ======================================================
    ORDER DOCUMENT — PRINT
@@ -1651,13 +1628,11 @@ body.document-mode #app {
 
 @media print {
 
-  /* 🔒 reset screen artifacts */
   body {
     background: #ffffff;
   }
 
   body.document-mode .a4-page {
-    transform: none;
     box-shadow: none;
     margin: 0;
   }
