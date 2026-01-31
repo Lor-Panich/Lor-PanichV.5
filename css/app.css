@@ -1556,22 +1556,46 @@ body.search-open .search-input {
 
 /* ======================================================
    ORDER DOCUMENT — TEXT SAFETY
-   Prevent long product name breaking layout
+   Screen vs Print Behavior
 ====================================================== */
 
-/* ชื่อสินค้า */
-.order-doc .doc-row span:nth-child(3) {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  max-width: 100%;
+/* ======================
+   SCREEN (มือถือ / เว็บ)
+====================== */
+@media screen {
+
+  /* ชื่อสินค้า */
+  .order-doc .doc-row span:nth-child(3) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+  }
+
+  /* รหัสสินค้า */
+  .order-doc .doc-row span:nth-child(2) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }
 
-/* รหัสสินค้า (เผื่อยาวผิดปกติ) */
-.order-doc .doc-row span:nth-child(2) {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+/* ======================
+   PRINT (A4 จริง)
+====================== */
+@media print {
+
+  /* ชื่อสินค้า — ให้ขึ้นบรรทัดได้ */
+  .order-doc .doc-row span:nth-child(3) {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+  }
+
+  /* รหัสสินค้า — ยังตัดได้ (กันยาวเกิน) */
+  .order-doc .doc-row span:nth-child(2) {
+    white-space: nowrap;
+  }
 }
 
 
@@ -1637,8 +1661,8 @@ body.document-mode .a4-page {
 
 @media screen and (max-width: 480px) {
   body.document-mode .a4-page {
-    padding: 12mm 12mm;
-    font-size: 13.5px; /* อ่านสบายขึ้นบนมือถือ */
+    font-size: 14px;   /* 🔑 กัน auto zoom */
+    line-height: 1.45;
   }
 }
 
@@ -1697,5 +1721,21 @@ body.document-mode .a4-page {
     display: none !important;
   }
 }
+
+@media print {
+  @page {
+    margin: 20mm;
+  }
+
+  .order-doc::after {
+    content: "หน้า " counter(page);
+    position: fixed;
+    bottom: 10mm;
+    right: 20mm;
+    font-size: 12px;
+    color: #555;
+  }
+}
+
 
 
