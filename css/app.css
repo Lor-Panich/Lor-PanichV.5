@@ -1763,3 +1763,21 @@ body.document-mode .a4-page {
   }
 }
 
+/* ======================================================
+   CHROME PRINT FINAL FIX — FORCE INK COLOR
+   (SAFE: print only, no screen impact)
+====================================================== */
+@media print {
+
+  html,
+  body,
+  body.document-mode,
+  body.document-mode * {
+    color: #000000 !important;
+    background: transparent !important;
+
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+}
