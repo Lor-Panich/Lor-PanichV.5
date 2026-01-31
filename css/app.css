@@ -1678,7 +1678,6 @@ body.document-mode #app {
 
 @media print {
 
-  /* reset screen layout */
   body,
   #app {
     background: #ffffff;
@@ -1690,12 +1689,15 @@ body.document-mode #app {
     display: block;
   }
 
+  /* 🔑 FIX A4 — ห้ามสูงเท่า A4 เต็ม */
   body.document-mode .a4-page {
-    margin: 0;
-    padding: 0;          /* 🔥 FIX ตัวจริง */
     width: 210mm;
-    min-height: 297mm;
+    margin: 0 auto;
+    padding: 0;
     box-shadow: none;
+
+    /* 🔥 สำคัญมาก */
+    min-height: auto;
   }
 
   /* hide UI */
@@ -1706,6 +1708,7 @@ body.document-mode #app {
     display: none !important;
   }
 
+  /* A4 คุมด้วย @page อย่างเดียว */
   @page {
     size: A4;
     margin: 20mm;
