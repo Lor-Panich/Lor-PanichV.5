@@ -637,12 +637,8 @@ Render.orderDocument = function (order = {}, items = []) {
             hasItems
               ? items.map(it => `
                   <div class="doc-row">
-                   <img
-  src="${
-    it.image
-      ? new URL(it.image, baseUrl).href
-      : new URL("assets/placeholder.png", baseUrl).href
-  }"
+                 <img
+  src="${it.image || "assets/placeholder.png"}"
   class="doc-thumb"
   alt="${it.name || "product"}"
   loading="eager"
