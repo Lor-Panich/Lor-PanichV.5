@@ -1500,7 +1500,7 @@ body.search-open .search-input {
   width: auto;          /* ⬅️ ปล่อยให้ screen คุมเอง */
 
   margin: 0 auto;
-  padding: 20mm;
+  padding: 10mm 8mm;
 
   background: #ffffff;
   color: #000000;
