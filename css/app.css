@@ -2132,4 +2132,94 @@ body.document-mode .a4-page {
   font-variant-numeric: tabular-nums;
 }
 
+/* ======================================================
+   STEP C.9.7 — TIMELINE (READABILITY / V5)
+====================================================== */
+
+.admin-timeline {
+  padding: 16px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.timeline-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 18px; /* 🔑 เว้นจังหวะการอ่าน */
+}
+
+.timeline-item {
+  display: grid;
+  grid-template-columns: 88px 1fr; /* เวลา | เนื้อหา */
+  gap: 14px;
+
+  padding: 12px 14px;
+
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+
+  border-radius: 14px;
+  border: 1px solid var(--glass-border);
+
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+.timeline-time {
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--text-secondary);
+
+  white-space: nowrap;
+  padding-top: 2px;
+}
+
+.timeline-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.timeline-title {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.1px;
+}
+
+.timeline-meta {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.timeline-type-in .timeline-title {
+  color: var(--success);
+}
+
+.timeline-type-out .timeline-title {
+  color: var(--danger);
+}
+
+.timeline-type-adjust .timeline-title {
+  color: var(--accent);
+}
+
+.timeline-type-approved .timeline-title {
+  color: var(--success);
+}
+
+.timeline-type-rejected .timeline-title {
+  color: var(--danger);
+}
+
+.admin-timeline .order-link {
+  font-weight: 600;
+  font-size: 13px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
 
