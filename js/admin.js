@@ -32,6 +32,11 @@ Admin.init = async function () {
     return;
   }
 
+  // STEP A1.4 — set default admin view (safe)
+  if (!Core.state.admin.view) {
+    Core.state.admin.view = "orders";
+  }
+   
   await Admin.loadOrders();
 };
 
