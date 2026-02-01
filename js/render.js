@@ -1001,3 +1001,88 @@ Render.adminOrderDetailView = function (order = {}) {
     </div>
   `;
 };
+
+/* ======================================================
+   STEP C.9.3 — ADMIN TIMELINE VIEW (READ ONLY)
+   - Render only
+   - Use normalized timeline events
+====================================================== */
+
+Render.adminTimelineView = function (events = []) {
+  if (!Render.can("viewHistory")) {
+    return Render.adminReadonly("ไม่มีสิทธิ์ดู Timeline");
+  }
+
+  if (!Array.isArray(events) || events.length === 0) {
+    return Render.empty("ไม่มีเหตุการณ์");
+  }
+
+  return `
+    <div class="admin-timeline">
+
+      ${Render.adminHeader(
+        "Timeline การเคลื่อนไหว",
+        ""
+      )}
+
+      <ul class="timeline-list">
+        ${events.map(Render.adminTimelineItem).join("")}
+      </ul>
+
+    </div>
+  `;
+};
+
+/* ======================================================
+   STEP C.9.3 — TIMELINE ITEM
+====================================================== */
+
+Render.adminTimelineItem = function (ev = {}) {
+  const timeText =
+    ev.time instanceof Date
+      ? ev.time.toLocaleString("th-TH")
+      : "-";
+
+  return `
+    <li
+      class="
+        timeline-item
+        timeline-kind-${ev.kind || ""}
+        timeline-type-${ev.type || ""}
+      "
+    >
+      <div class="timeline-time">
+        ${timeText}
+      </div>
+
+      <div class="timeline-body">
+        <div class="timeline-title">
+          ${ev.title || "-"}
+        </div>
+
+        <div class="timeline-meta">
+          ${
+            ev.meta && ev.meta.by
+              ? `โดย ${ev.meta.by}`
+              : ""
+          }
+
+          ${
+            ev.orderId
+              ? `
+                • <a
+                    href="#"
+                    class="order-link"
+                    data-order-id="${ev.orderId}"
+                  >
+                    ${ev.orderId}
+                  </a>
+              `
+              : ""
+          }
+        </div>
+      </div>
+    </li>
+  `;
+};
+
