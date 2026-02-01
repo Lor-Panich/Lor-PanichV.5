@@ -58,12 +58,24 @@ Core.state = {
   /* ================= ADMIN ================= */
   admin: {
     loggedIn: false,
-    user: null,
+
+    user: {
+      username: null,
+      role: null
+    },
+
     token: null,
+
+    permissions: {
+      manageOrders: false,
+      manageProducts: false,
+      manageStock: false,
+      viewHistory: false
+    },
 
     orders: [],
     stockLogs: []
-  },
+  },   // 👈 ต้องมี comma ตรงนี้
 
   /* ================= UI ================= */
   ui: {
@@ -75,6 +87,42 @@ Core.state = {
 /* ======================================================
    STATE HELPERS
 ====================================================== */
+Core.mapPermissionsByRole = function (role) {
+  // normalize role (กัน null / undefined)
+  role = String(role || "").toLowerCase();
+
+  switch (role) {
+    case "owner":
+      return {
+        manageOrders: true,
+        manageProducts: true,
+        manageStock: true,
+        viewHistory: true
+      };
+
+    case "staff":
+      return {
+        manageOrders: true,
+        manageProducts: false,
+        manageStock: true,
+        viewHistory: true
+      };
+
+    default:
+      // viewer หรือ role อื่น ๆ
+      return {
+        manageOrders: false,
+        manageProducts: false,
+        manageStock: false,
+        viewHistory: false
+      };
+  }
+};
+
+Core.can = function (permission) {
+  return Core.state.admin.permissions[permission] === true;
+};
+
 
 Core.resetViewerState = function () {
   Core.state.viewer.products = [];
@@ -94,8 +142,16 @@ Core.resetOrder = function () {         // 🔴 ADDED
 
 Core.resetAdminState = function () {
   Core.state.admin.loggedIn = false;
-  Core.state.admin.user = null;
+
+  Core.state.admin.user = {
+    username: null,
+    role: null
+  };
+
   Core.state.admin.token = null;
+
+  Core.state.admin.permissions = Core.mapPermissionsByRole(null);
+
   Core.state.admin.orders = [];
   Core.state.admin.stockLogs = [];
 };
