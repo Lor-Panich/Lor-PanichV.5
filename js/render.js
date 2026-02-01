@@ -807,6 +807,8 @@ Render.adminHistoryView = function ({ stockLogs = [], orders = [] }) {
   return `
     <div class="admin-history">
 
+      ${Render.adminMenu()}
+
       ${Render.adminHeader(
         "ประวัติการทำรายการ",
         ""
@@ -981,6 +983,8 @@ Render.adminOrderDetailView = function (order = {}) {
   return `
     <div class="admin-order-detail">
 
+      ${Render.adminMenu()}
+
       ${Render.adminHeader(
         "รายละเอียดคำสั่งซื้อ",
         `
@@ -1101,6 +1105,8 @@ Render.adminTimelineView = function (events = []) {
 
   return `
     <div class="admin-timeline">
+
+      ${Render.adminMenu()}
 
       ${Render.adminHeader(
         "Timeline การเคลื่อนไหว",
