@@ -217,6 +217,7 @@ Render.adminProductsView = function (products = []) {
                     <th class="right">ราคา</th>
                     <th class="right">คงเหลือ</th>
                     <th>สถานะ</th>
+                    <th class="right"></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -250,6 +251,17 @@ Render.adminProductRow = function (product = {}) {
             : `<span class="status-inactive">ปิดขาย</span>`
         }
       </td>
+      <td class="right">
+       <button
+         type="button"
+         class="btn icon"
+         data-action="edit-product"
+         data-product-id="${product.productId || ""}"
+         aria-label="แก้ไขสินค้า"
+       >
+         ✏️
+       </button>
+     </td>
     </tr>
   `;
 };
