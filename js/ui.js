@@ -658,3 +658,42 @@ UI.bindOrderDetail = function (handlers = {}) {
   });
 };
 
+/* ======================================================
+   STEP C.9.6 — TIMELINE MENU ENTRY (UI ONLY)
+   - UI only
+   - Permission: viewHistory
+   - Dispatch to admin.js
+====================================================== */
+
+UI.bindTimelineMenu = function () {
+  // 🔐 permission guard (read-only)
+  if (
+    !window.Core ||
+    typeof Core.can !== "function" ||
+    !Core.can("viewHistory")
+  ) {
+    return;
+  }
+
+  const btn = document.querySelector(
+    "[data-action='open-timeline']"
+  );
+
+  if (!btn) return;
+
+  // 🔒 guard กัน bind ซ้ำ
+  if (btn._bound) return;
+  btn._bound = true;
+
+  btn.addEventListener("click", function (e) {
+    e.preventDefault();
+
+    if (
+      window.Admin &&
+      typeof Admin.renderTimeline === "function"
+    ) {
+      Admin.renderTimeline();
+    }
+  });
+};
+
