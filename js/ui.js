@@ -587,3 +587,42 @@ UI.bindHistoryFilter = function () {
   }
 };
 
+/* ======================================================
+   STEP C.7.2 — ORDER LINK UI BINDING
+   - UI only
+   - No state mutation
+   - Dispatch to admin.js
+====================================================== */
+
+UI.bindOrderLinks = function () {
+  // 🔐 permission guard (read-only)
+  if (
+    !window.Core ||
+    typeof Core.can !== "function" ||
+    !Core.can("viewHistory")
+  ) {
+    return;
+  }
+
+  const links = document.querySelectorAll(".order-link");
+  if (!links.length) return;
+
+  links.forEach(link => {
+    // 🔒 guard กัน bind ซ้ำ
+    if (link._bound) return;
+    link._bound = true;
+
+    link.addEventListener("click", function (e) {
+      e.preventDefault();
+
+      const orderId = link.dataset.orderId;
+      if (!orderId) return;
+
+      // 👉 ส่งต่อให้ Admin Controller
+      if (window.Admin && typeof Admin.openOrderDetail === "function") {
+        Admin.openOrderDetail(orderId);
+      }
+    });
+  });
+};
+
