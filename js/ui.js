@@ -939,3 +939,32 @@ UI.bindEditProductButtons = function () {
     }
   });
 };
+
+/* ======================================================
+   STEP A2.x — ADD PRODUCT BUTTON UI BINDING
+   - UI only
+   - No state mutation
+   - Dispatch to admin.js
+====================================================== */
+
+UI.bindAddProductButtons = function () {
+  const root = document.querySelector(".admin-products");
+  if (!root) return;
+
+  // 🔒 guard กัน bind ซ้ำ
+  if (root._addBound) return;
+  root._addBound = true;
+
+  root.addEventListener("click", function (e) {
+    const btn = e.target.closest("[data-action='add-product']");
+    if (!btn) return;
+
+    // 👉 dispatch ไป admin controller
+    if (
+      window.Admin &&
+      typeof Admin.openAddProduct === "function"
+    ) {
+      Admin.openAddProduct();
+    }
+  });
+};
