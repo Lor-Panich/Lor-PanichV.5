@@ -312,6 +312,15 @@ UI.bindAdminOrderActions = function (handlers = {}) {
   const root = document.querySelector(".admin-order-list");
   if (!root) return;
 
+   // 🔐 PERMISSION GUARD — ไม่มีสิทธิ์ → ไม่ bind อะไรเลย
+   if (
+     !window.Core ||
+     typeof Core.can !== "function" ||
+     !Core.can("manageOrders")
+   ) {
+     return;
+   }
+   
   // 🔒 Optional guard: กัน bind ซ้ำ
   if (root.dataset.bound === "1") return;
   root.dataset.bound = "1";
