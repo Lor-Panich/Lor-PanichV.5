@@ -506,3 +506,31 @@ sheet.addEventListener("touchmove", e => {
     }
   });
 };
+
+/* ======================================================
+   STEP A — ADMIN LOGIN UI
+   - UI only
+   - รับ input อย่างเดียว
+   - ส่งต่อให้ admin.js
+====================================================== */
+
+UI.bindAdminLogin = function (handlers = {}) {
+  const btn = document.getElementById("adminLoginBtn");
+  if (!btn) return;
+
+  // 🔒 guard กัน bind ซ้ำ
+  if (btn._bound) return;
+  btn._bound = true;
+
+  btn.addEventListener("click", function () {
+    const usernameEl = document.getElementById("adminUsername");
+    const passwordEl = document.getElementById("adminPassword");
+
+    if (!usernameEl || !passwordEl) return;
+
+    const username = usernameEl.value.trim();
+    const password = passwordEl.value;
+
+    handlers.onLogin && handlers.onLogin(username, password);
+  });
+};
