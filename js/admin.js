@@ -385,6 +385,11 @@ Admin.renderTimeline = function () {
 
   app.innerHTML = html;
 
+  // 🔑 STEP C.10.5 — bind timeline filter AFTER render
+  if (window.UI && typeof UI.bindTimelineFilter === "function") {
+    UI.bindTimelineFilter();
+  }   
+
   // reuse order drill-down (STEP C.7)
   if (window.UI && typeof UI.bindOrderLinks === "function") {
     UI.bindOrderLinks();
