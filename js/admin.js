@@ -51,7 +51,7 @@ Admin.loadOrders = async function () {
 
     Core.state.admin.orders = Array.isArray(orders) ? orders : [];
 
-    Admin.renderOrders();
+    Admin.Orders();
 
   } catch (err) {
     console.error("[Admin.loadOrders]", err);
@@ -78,6 +78,44 @@ Admin.renderOrders = function () {
     onApprove: Admin.confirmApprove,
     onReject: Admin.confirmReject
   });
+};
+
+/* ======================================================
+   STEP A1.3 — ADMIN VIEW SWITCHER (CENTRAL RENDER)
+   - Decide which admin view to render
+   - No UI logic
+   - No side effect
+====================================================== */
+
+Admin.render = function () {
+  const view = Core.state.admin.view;
+
+  switch (view) {
+    case "orders":
+      // behavior เดิม
+      Admin.renderOrders();
+      break;
+
+    case "products":
+      // placeholder (STEP A2 จะมาเติม)
+      if (typeof Admin.renderProducts === "function") {
+        Admin.renderProducts();
+      }
+      break;
+
+    case "timeline":
+      Admin.renderTimeline();
+      break;
+
+    case "history":
+      Admin.renderHistory();
+      break;
+
+    default:
+      // fallback ปลอดภัย
+      Core.state.admin.view = "orders";
+      Admin.renderOrders();
+  }
 };
 
 /* ======================================================
