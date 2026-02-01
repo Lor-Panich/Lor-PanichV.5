@@ -406,6 +406,84 @@ Admin.openEditProduct = function (productId) {
 };
 
 /* ======================================================
+   STEP A2.3.2 — SUBMIT EDIT PRODUCT
+   - Frontend only
+   - Call backend updateProduct
+====================================================== */
+
+Admin.submitEditProduct = async function () {
+  if (!Admin.guard("manageProducts", "ไม่มีสิทธิ์แก้ไขสินค้า")) {
+    return;
+  }
+
+  const idEl = document.getElementById("editProductId");
+  const nameEl = document.getElementById("editProductName");
+  const priceEl = document.getElementById("editProductPrice");
+  const stockEl = document.getElementById("editProductStock");
+  const activeEl = document.getElementById("editProductActive");
+
+  if (!idEl || !nameEl || !priceEl || !stockEl) {
+    UI.showToast("ฟอร์มไม่สมบูรณ์", "error");
+    return;
+  }
+
+  const productId = idEl.value;
+  const name = nameEl.value.trim();
+  const price = Number(priceEl.value);
+  const stock = Number(stockEl.value);
+  const active = activeEl ? activeEl.checked : false;
+
+  /* ===== BASIC VALIDATION ===== */
+  if (!productId || !name) {
+    UI.showToast("ข้อมูลสินค้าไม่ครบ", "warning");
+    return;
+  }
+
+  if (!Number.isInteger(price) || price < 0) {
+    UI.showToast("ราคาต้องเป็นตัวเลขจำนวนเต็ม ≥ 0", "warning");
+    return;
+  }
+
+  if (!Number.isInteger(stock) || stock < 0) {
+    UI.showToast("สต๊อกต้องเป็นตัวเลขจำนวนเต็ม ≥ 0", "warning");
+    return;
+  }
+
+  UI.showLoading("กำลังบันทึกการแก้ไขสินค้า...");
+
+  try {
+    await API.updateProduct(Core.state.admin.token, {
+      productId,
+      name,
+      price,
+      stock,
+      active
+    });
+
+    UI.showToast("บันทึกการแก้ไขเรียบร้อย", "success");
+
+    UI.closeOverlay("adminSheet");
+
+    // reload products (viewer source of truth)
+    if (typeof Core.loadProducts === "function") {
+      await Core.loadProducts();
+    }
+
+    // render products view ใหม่
+    Admin.render();
+
+  } catch (err) {
+    console.error("[Admin.submitEditProduct]", err);
+    UI.showToast(
+      err.message || "บันทึกการแก้ไขไม่สำเร็จ",
+      "error"
+    );
+  } finally {
+    UI.hideLoading();
+  }
+};
+
+/* ======================================================
    STEP C.6.2 — HISTORY FILTER / SEARCH / SORT
    - Read-only
    - Frontend only
