@@ -871,3 +871,35 @@ UI.bindAddProductSheet = function (handlers = {}) {
     }
   });
 };
+
+/* ======================================================
+   STEP A2.3.1 — EDIT PRODUCT BUTTON UI BINDING
+   - UI only
+   - No state mutation
+   - Dispatch to admin.js
+====================================================== */
+
+UI.bindEditProductButtons = function () {
+  const root = document.querySelector(".admin-products");
+  if (!root) return;
+
+  // 🔒 guard กัน bind ซ้ำ
+  if (root._editBound) return;
+  root._editBound = true;
+
+  root.addEventListener("click", function (e) {
+    const btn = e.target.closest("[data-action='edit-product']");
+    if (!btn) return;
+
+    const productId = btn.dataset.productId;
+    if (!productId) return;
+
+    // 👉 dispatch ไป admin controller
+    if (
+      window.Admin &&
+      typeof Admin.openEditProduct === "function"
+    ) {
+      Admin.openEditProduct(productId);
+    }
+  });
+};
