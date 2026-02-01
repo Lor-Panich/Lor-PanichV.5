@@ -873,6 +873,42 @@ UI.bindAddProductSheet = function (handlers = {}) {
 };
 
 /* ======================================================
+   STEP A2.3.1 — EDIT PRODUCT SHEET UI BINDING
+   - UI only
+   - No state mutation
+   - Dispatch to admin.js
+====================================================== */
+
+UI.bindEditProductSheet = function (handlers = {}) {
+  const sheet = document.querySelector(".admin-product-sheet");
+  if (!sheet) return;
+
+  // 🔒 guard กัน bind ซ้ำ
+  if (sheet._bound) return;
+  sheet._bound = true;
+
+  sheet.addEventListener("click", function (e) {
+    const btn = e.target.closest("[data-action]");
+    if (!btn) return;
+
+    const action = btn.dataset.action;
+
+    if (
+      action === "close-sheet" ||
+      action === "cancel-edit-product"
+    ) {
+      handlers.onCancel && handlers.onCancel();
+      return;
+    }
+
+    if (action === "submit-edit-product") {
+      handlers.onSubmit && handlers.onSubmit();
+      return;
+    }
+  });
+};
+
+/* ======================================================
    STEP A2.3.1 — EDIT PRODUCT BUTTON UI BINDING
    - UI only
    - No state mutation
