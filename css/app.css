@@ -1722,76 +1722,6 @@ body.document-mode .a4-page {
 }
 
 /* ======================================================
-   PRINT — A4 REAL OUTPUT
-====================================================== */
-
-@media print {
-
-  /* reset screen layout */
-  body,
-  #app {
-    background: #ffffff;
-    margin: 0;
-    padding: 0;
-  }
-
-  body.document-mode #app {
-    display: block;
-  }
-
-  body.document-mode .a4-page {
-    width: 210mm;
-    max-width: 210mm;
-    min-height: 297mm;
-
-    margin: 0;
-    padding: 20mm;
-
-    box-shadow: none;
-  }
-
-  /* hide UI */
-  #appHeader,
-  #toastContainer,
-  #loadingOverlay,
-  .no-print {
-    display: none !important;
-  }
-
-  @page {
-    margin: 20mm;
-  }
-
-  .order-doc::after {
-    content: "หน้า " counter(page);
-    position: fixed;
-    bottom: 10mm;
-    right: 20mm;
-    font-size: 12px;
-    color: #555;
-  }
-}
-
-/* ======================================================
-   CHROME PRINT FINAL FIX — FORCE INK COLOR
-   (SAFE: print only, no screen impact)
-====================================================== */
-@media print {
-
-  html,
-  body,
-  body.document-mode,
-  body.document-mode * {
-    color: #000000 !important;
-    background: transparent !important;
-
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-
-}
-
-/* ======================================================
    ✅ FINAL PRINT FIX — iOS Safari / Chrome SAFE
    (Cut Glass Completely)
 ====================================================== */
@@ -1813,7 +1743,6 @@ body.document-mode .a4-page {
     -webkit-backdrop-filter: none !important;
     filter: none !important;
     transform: none !important;
-    opacity: 1 !important;
     box-shadow: none !important;
     text-shadow: none !important;
   }
@@ -1840,7 +1769,7 @@ body.document-mode .a4-page {
     min-height: auto !important;
 
     margin: 0 auto !important;
-    padding: 20mm !important;
+    padding: 18mm !important; /* optical balance */
 
     background: #fff !important;
     color: #000 !important;
@@ -1876,7 +1805,7 @@ body.document-mode .a4-page {
   /* 8. Page setup — Portrait A4 */
   @page {
     size: A4 portrait;
-    margin: 20mm;
+    margin: 0;
   }
 }
 
