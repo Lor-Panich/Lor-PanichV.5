@@ -420,19 +420,19 @@ Admin.exportTimelineCSV = function () {
     return;
   }
 
-  const headers = [
+    const headers = [
     "time",
     "kind",
-    "type",
+    "type", 
     "title",
     "orderId",
-    "by",
+    "actor",      // who did this
     "productId",
     "qty",
     "before",
     "after",
     "total"
-  ];
+   ];
 
   const rows = events.map(ev => ([
     ev.time instanceof Date ? ev.time.toISOString() : "",
