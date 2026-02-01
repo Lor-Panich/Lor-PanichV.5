@@ -1070,7 +1070,12 @@ Render.adminTimelineView = function (events = []) {
 
           <button
             class="secondary-btn"
-     
+            type="button"
+            data-action="print-timeline"
+          >
+            Print
+          </button>
+        `
       )}
 
       ${Render.adminTimelineFilterBar()}      
