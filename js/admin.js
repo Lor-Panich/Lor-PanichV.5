@@ -394,6 +394,11 @@ Admin.renderTimeline = function () {
   if (window.UI && typeof UI.bindOrderLinks === "function") {
     UI.bindOrderLinks();
   }
+
+  // 🔑 STEP C.11.5 — bind Export / Print AFTER render
+  if (window.UI && typeof UI.bindTimelineActions === "function") {
+    UI.bindTimelineActions();
+  }   
 };
 
 /* ======================================================
