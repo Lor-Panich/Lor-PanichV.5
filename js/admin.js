@@ -148,15 +148,6 @@ Admin.render = function () {
        UI.bindEditProductButtons();
      }
 
-     // bind add product button
-     const addBtn = document.querySelector(
-       "[data-action='add-product']"
-     );
-
-     if (addBtn && !addBtn._bound) {
-       addBtn._bound = true;
-       addBtn.onclick = Admin.openAddProduct;
-     }
    }     
   }   
 };
