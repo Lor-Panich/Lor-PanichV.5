@@ -1038,10 +1038,16 @@ Render.adminTimelineView = function (events = []) {
 ====================================================== */
 
 Render.adminTimelineItem = function (ev = {}) {
-  const timeText =
+  const time =
     ev.time instanceof Date
-      ? ev.time.toLocaleString("th-TH")
-      : "-";
+      ? ev.time
+      : ev.time
+        ? new Date(ev.time)
+        : null;
+
+  const timeText = time
+    ? time.toLocaleString("th-TH")
+    : "-";
 
   return `
     <li
