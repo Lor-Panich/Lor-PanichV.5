@@ -82,6 +82,10 @@ Core.state = {
       keyword: "",    // search: productId / orderId / by
       sort: "DESC"    // DESC (ใหม่ → เก่า) | ASC
     }
+     /* ================= TIMELINE FILTER ================= */
+     timelineFilter: {
+       scope: "ALL"    // ALL | ORDER | STOCK
+     }     
   },   // 👈 ต้องมี comma ตรงนี้
 
   /* ================= UI ================= */
