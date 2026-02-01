@@ -765,7 +765,8 @@ UI.bindTimelineActions = function () {
 
   if (exportBtn && !exportBtn._bound) {
     exportBtn._bound = true;
-    exportBtn.addEventListener("click", function () {
+    exportBtn.addEventListener("click", function (e) {
+    e.preventDefault();
       if (
         window.Admin &&
         typeof Admin.exportTimelineCSV === "function"
@@ -781,7 +782,8 @@ UI.bindTimelineActions = function () {
 
   if (printBtn && !printBtn._bound) {
     printBtn._bound = true;
-    printBtn.addEventListener("click", function () {
+    printBtn.addEventListener("click", function (e) {
+      e.preventDefault();
       if (
         window.Admin &&
         typeof Admin.printTimeline === "function"
