@@ -8,6 +8,21 @@
 window.Admin = {};
 
 /* ======================================================
+   PERMISSION GUARD (STEP B)
+====================================================== */
+
+Admin.guard = function (permission, message) {
+  if (!Core.can(permission)) {
+    UI.showToast(
+      message || "คุณไม่มีสิทธิ์ดำเนินการนี้",
+      "error"
+    );
+    return false;
+  }
+  return true;
+};
+
+/* ======================================================
    ENTRY
 ====================================================== */
 
@@ -17,8 +32,7 @@ Admin.init = async function () {
     return;
   }
 
- if (!Core.can("manageOrders")) {
-   UI.showToast("คุณไม่มีสิทธิ์เข้าถึงคำสั่งซื้อ", "error");
+ if (!Admin.guard("manageOrders", "คุณไม่มีสิทธิ์เข้าถึงคำสั่งซื้อ")) {
    return;
  }
 
@@ -87,10 +101,9 @@ Admin.confirmReject = function (orderId) {
 ====================================================== */
 
 Admin.approveOrder = async function (orderId) {
-  if (!Core.can("manageOrders")) {
-    UI.showToast("คุณไม่มีสิทธิ์อนุมัติคำสั่งซื้อ", "error");
-    return;
-  } 
+ if (!Admin.guard("manageOrders", "คุณไม่มีสิทธิ์อนุมัติคำสั่งซื้อ")) {
+   return;
+ }
  
   UI.showLoading("กำลังอนุมัติคำสั่งซื้อ...");
 
@@ -112,8 +125,7 @@ Admin.approveOrder = async function (orderId) {
 };
 
 Admin.rejectOrder = async function (orderId) {
-  if (!Core.can("manageOrders")) {
-    UI.showToast("คุณไม่มีสิทธิ์ปฏิเสธคำสั่งซื้อ", "error");
+  if (!Admin.guard("manageOrders", "คุณไม่มีสิทธิ์ปฏิเสธคำสั่งซื้อ")) {
     return;
   }
    
