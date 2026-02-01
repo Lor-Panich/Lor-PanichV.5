@@ -2022,6 +2022,8 @@ body.document-mode .a4-page {
   display: flex;
   flex-direction: column;
   gap: 24px;
+  max-width: 1200px;
+  margin: 0 auto; 
 }
 
 .admin-history-section h3 {
@@ -2042,6 +2044,7 @@ body.document-mode .a4-page {
   border-radius: 14px;
   overflow: hidden;
   border: 1px solid var(--glass-border);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.06); 
 }
 
 .admin-table thead th {
@@ -2052,6 +2055,9 @@ body.document-mode .a4-page {
   color: var(--text-secondary);
 
   background: rgba(255,255,255,0.35);
+  position: sticky;
+  top: 0;
+  z-index: 1;   
 }
 
 @media (prefers-color-scheme: dark) {
@@ -2064,25 +2070,38 @@ body.document-mode .a4-page {
   padding: 10px 12px;
   border-top: 1px solid rgba(0,0,0,0.04);
   vertical-align: top;
+  transition: background 120ms ease; 
+  line-height: 1.45; 
+}
+
+.admin-table tbody tr:hover td {
+  background: rgba(0,0,0,0.03);
 }
 
 @media (prefers-color-scheme: dark) {
   .admin-table tbody td {
     border-top: 1px solid rgba(255,255,255,0.06);
   }
+
+  .admin-table tbody tr:hover td {
+    background: rgba(255,255,255,0.04);
+  }   
 }
 
 /* log type hint — minimal */
 .log-type-IN td {
   color: var(--success);
+  font-weight: 500;
 }
 
 .log-type-OUT td {
   color: var(--danger);
+  font-weight: 500;
 }
 
 .log-type-ADJUST td {
   color: var(--accent);
+  font-weight: 500;
 }
 
 .admin-order-history-table td:nth-child(2) {
