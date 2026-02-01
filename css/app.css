@@ -1741,8 +1741,6 @@ body.document-mode .a4-page {
   * {
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
-    filter: none !important;
-    transform: none !important;
     box-shadow: none !important;
     text-shadow: none !important;
   }
@@ -1769,7 +1767,7 @@ body.document-mode .a4-page {
   body.document-mode .a4-page {
     width: 210mm !important;
     max-width: 210mm !important;
-    min-height: auto !important;
+    min-height: 297mm !important;
 
     margin: 0 auto !important;
     padding: 18mm !important; /* optical balance */
@@ -1808,7 +1806,7 @@ body.document-mode .a4-page {
   /* 8. Page setup — Portrait A4 */
   @page {
     size: A4 portrait;
-    margin: 0;
+    margin: 10mm;
   }
 }
 
