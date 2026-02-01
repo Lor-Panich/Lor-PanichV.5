@@ -355,4 +355,30 @@ Admin.buildTimelineEvents = function () {
   return events;
 };
 
+/* ======================================================
+   STEP C.9.5 — RENDER TIMELINE (ENTRY POINT)
+   - Read-only
+   - Permission: viewHistory
+   - Use normalized timeline events
+====================================================== */
+
+Admin.renderTimeline = function () {
+  if (!Admin.guard("viewHistory", "ไม่มีสิทธิ์ดู Timeline")) {
+    return;
+  }
+
+  const events = Admin.buildTimelineEvents();
+
+  const html = Render.adminTimelineView(events);
+
+  const app = document.getElementById("app");
+  if (!app) return;
+
+  app.innerHTML = html;
+
+  // reuse order drill-down (STEP C.7)
+  if (window.UI && typeof UI.bindOrderLinks === "function") {
+    UI.bindOrderLinks();
+  }
+};
 
