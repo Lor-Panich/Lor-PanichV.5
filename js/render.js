@@ -117,7 +117,8 @@ Render.adminHeader = function (title = "", rightHTML = "") {
         ${
           Render.can("manageProducts") ||
           Render.can("manageOrders") ||
-          Render.can("manageStock")
+          Render.can("manageStock") ||
+          Render.can("viewHistory")
             ? rightHTML
             : ""
         }
