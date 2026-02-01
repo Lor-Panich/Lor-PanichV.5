@@ -255,6 +255,103 @@ Render.adminProductRow = function (product = {}) {
 };
 
 /* ======================================================
+   STEP A2.2.1 — ADMIN ADD PRODUCT SHEET (RENDER ONLY)
+   - HTML only
+   - No state mutation
+   - No API
+   - No event binding
+====================================================== */
+
+Render.adminAddProductSheet = function () {
+  return `
+    <div class="sheet admin-product-sheet">
+
+      <div class="sheet-header">
+        <div class="sheet-title">เพิ่มสินค้าใหม่</div>
+        <button
+          type="button"
+          class="sheet-close-btn"
+          data-action="close-sheet"
+        >✕</button>
+      </div>
+
+      <div class="sheet-content">
+
+        <label class="form-field">
+          <span>รหัสสินค้า (SKU)</span>
+          <input
+            type="text"
+            id="newProductId"
+            placeholder="เช่น SKU-001"
+            autocomplete="off"
+          />
+        </label>
+
+        <label class="form-field">
+          <span>ชื่อสินค้า</span>
+          <input
+            type="text"
+            id="newProductName"
+            placeholder="ชื่อสินค้า"
+            autocomplete="off"
+          />
+        </label>
+
+        <label class="form-field">
+          <span>ราคา</span>
+          <input
+            type="number"
+            id="newProductPrice"
+            min="0"
+            step="1"
+          />
+        </label>
+
+        <label class="form-field">
+          <span>จำนวนคงเหลือ</span>
+          <input
+            type="number"
+            id="newProductStock"
+            min="0"
+            step="1"
+          />
+        </label>
+
+        <label class="form-field checkbox">
+          <input
+            type="checkbox"
+            id="newProductActive"
+            checked
+          />
+          <span>เปิดขาย</span>
+        </label>
+
+      </div>
+
+      <div class="sheet-footer">
+        <button
+          type="button"
+          class="secondary-btn"
+          data-action="cancel-add-product"
+        >
+          ยกเลิก
+        </button>
+
+        <button
+          type="button"
+          class="primary-btn"
+          data-action="submit-add-product"
+        >
+          บันทึกสินค้า
+        </button>
+      </div>
+
+    </div>
+  `;
+};
+
+
+/* ======================================================
    CANONICAL: EMPTY STATE
 ====================================================== */
 
