@@ -51,7 +51,7 @@ Admin.loadOrders = async function () {
 
     Core.state.admin.orders = Array.isArray(orders) ? orders : [];
 
-    Admin.Orders();
+    Admin.render();
 
   } catch (err) {
     console.error("[Admin.loadOrders]", err);
