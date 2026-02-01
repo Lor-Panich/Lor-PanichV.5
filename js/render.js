@@ -1131,3 +1131,58 @@ Render.adminTimelineItem = function (ev = {}) {
   `;
 };
 
+/* ======================================================
+   STEP C.11.2 — TIMELINE PRINT VIEW (READ ONLY)
+   - Print / A4
+   - No state
+   - No event
+====================================================== */
+
+Render.adminTimelinePrintView = function (events = []) {
+  if (!Render.can("viewHistory")) {
+    return Render.adminReadonly("ไม่มีสิทธิ์พิมพ์ Timeline");
+  }
+
+  if (!Array.isArray(events) || events.length === 0) {
+    return Render.empty("ไม่มีเหตุการณ์");
+  }
+
+  return `
+    <div class="timeline-print">
+
+      <h1>Timeline การเคลื่อนไหว</h1>
+
+      <table class="print-table">
+        <thead>
+          <tr>
+            <th>เวลา</th>
+            <th>ประเภท</th>
+            <th>รายละเอียด</th>
+            <th>ผู้ทำ</th>
+            <th>อ้างอิง</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${events.map(ev => `
+            <tr>
+              <td>
+                ${
+                  ev.time instanceof Date
+                    ? ev.time.toLocaleString("th-TH")
+                    : "-"
+                }
+              </td>
+              <td>${ev.kind || "-"} / ${ev.type || "-"}</td>
+              <td>${ev.title || "-"}</td>
+              <td>${ev.meta?.by || "-"}</td>
+              <td>${ev.orderId || "-"}</td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+
+    </div>
+  `;
+};
+
+
