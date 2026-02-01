@@ -349,10 +349,19 @@ Admin.buildTimelineEvents = function () {
     }
   });
 
-  /* ========= SORT: NEW → OLD ========= */
-  events.sort((a, b) => b.time - a.time);
+/* ========= APPLY TIMELINE FILTER (STEP C.10) ========= */
+const scope = Core.state.admin.timelineFilter.scope;
 
-  return events;
+let filteredEvents = events;
+
+if (scope !== "ALL") {
+  filteredEvents = events.filter(ev => ev.kind === scope);
+}
+
+/* ========= SORT: NEW → OLD ========= */
+filteredEvents.sort((a, b) => b.time - a.time);
+
+return filteredEvents;
 };
 
 /* ======================================================
