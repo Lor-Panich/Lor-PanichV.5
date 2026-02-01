@@ -226,4 +226,45 @@ Admin.getFilteredStockLogs = function () {
   return result;
 };
 
+/* ======================================================
+   STEP C.7.3 — OPEN ORDER DETAIL (READ ONLY)
+   - Read from Core.state.admin.orders
+   - No API call
+   - Permission: viewHistory
+====================================================== */
+
+Admin.openOrderDetail = function (orderId) {
+  if (!Admin.guard("viewHistory", "ไม่มีสิทธิ์ดูรายละเอียดคำสั่งซื้อ")) {
+    return;
+  }
+
+  const orders = Core.state.admin.orders || [];
+  const order = orders.find(o => o.orderId === orderId);
+
+  if (!order) {
+    UI.showToast("ไม่พบคำสั่งซื้อ", "error");
+    return;
+  }
+
+  Admin.renderOrderDetail(order);
+};
+
+/* ======================================================
+   STEP C.7.4 — RENDER ORDER DETAIL (DELEGATE ONLY)
+====================================================== */
+
+Admin.renderOrderDetail = function (order) {
+  const html = Render.adminOrderDetailView(order);
+
+  const app = document.getElementById("app");
+  if (!app) return;
+
+  app.innerHTML = html;
+
+  // UI binding (back button)
+  if (window.UI && typeof UI.bindOrderDetail === "function") {
+    UI.bindOrderDetail();
+  }
+};
+
 
