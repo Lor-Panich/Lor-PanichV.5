@@ -8,6 +8,19 @@
 
 window.Render = {};
 
+ /* ======================================================
+    ADMIN PERMISSION HELPER (RENDER ONLY)
+    - Read Core.can()
+    - No logic / no fallback
+ ====================================================== */
+ 
+ Render.can = function (permission) {
+   if (!window.Core || typeof Core.can !== "function") {
+     return false;
+   }
+   return Core.can(permission);
+ };
+
 /* ======================================================
    AFTER RENDER HOOK (EXTENSION POINT)
 ====================================================== */
@@ -101,7 +114,13 @@ Render.adminHeader = function (title = "", rightHTML = "") {
     <div class="admin-header">
       <div class="admin-title">${title}</div>
       <div class="admin-actions">
-        ${rightHTML}
+        ${
+          Render.can("manageProducts") ||
+          Render.can("manageOrders") ||
+          Render.can("manageStock")
+            ? rightHTML
+            : ""
+        }
       </div>
     </div>
   `;
@@ -714,3 +733,16 @@ Render.orderDocument = function (order = {}, items = []) {
 </div>
 `;
 };
+
+/* ======================================================
+   ADMIN READONLY LABEL (CANONICAL)
+====================================================== */
+
+Render.adminReadonly = function (message = "ไม่มีสิทธิ์ดำเนินการ") {
+  return `
+    <span class="admin-readonly">
+      ${message}
+    </span>
+  `;
+};
+
