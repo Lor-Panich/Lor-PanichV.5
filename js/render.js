@@ -1050,10 +1050,6 @@ Render.adminTimelineView = function (events = []) {
     return Render.adminReadonly("ไม่มีสิทธิ์ดู Timeline");
   }
 
-  if (!Array.isArray(events) || events.length === 0) {
-    return Render.empty("ไม่มีเหตุการณ์");
-  }
-
   return `
     <div class="admin-timeline">
 
@@ -1155,18 +1151,17 @@ Render.adminTimelineItem = function (ev = {}) {
 ====================================================== */
 
 Render.adminTimelinePrintView = function (events = []) {
-  if (!Render.can("viewHistory")) {
-    return Render.adminReadonly("ไม่มีสิทธิ์พิมพ์ Timeline");
-  }
-
-  if (!Array.isArray(events) || events.length === 0) {
-    return Render.empty("ไม่มีเหตุการณ์");
-  }
 
   return `
     <div class="timeline-print">
 
-      <h1>Timeline การเคลื่อนไหว</h1>
+       <h1>Timeline การเคลื่อนไหว</h1>
+       <div class="print-meta">
+         ประเภท: ${
+           Core?.state?.admin?.timelineFilter?.scope || "ALL"
+         } |
+         พิมพ์เมื่อ: ${new Date().toLocaleString("th-TH")}
+       </div>
 
       <table class="print-table">
         <thead>
