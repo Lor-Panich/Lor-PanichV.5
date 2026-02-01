@@ -763,6 +763,39 @@ Render.adminHistoryView = function ({ stockLogs = [], orders = [] }) {
         ""
       )}
 
+     <!-- ===============================
+          STEP C.6.3 — HISTORY FILTER BAR
+          (Render only / No logic)
+     =============================== -->
+     
+     <div class="history-filter">
+
+       <select id="historyType" class="history-filter-type">
+         <option value="ALL">ทั้งหมด</option>
+         <option value="IN">รับเข้า</option>
+         <option value="OUT">ตัดสต๊อก</option>
+         <option value="ADJUST">ปรับยอด</option>
+         <option value="CREATE">สร้างสินค้า</option>
+       </select>
+
+       <input
+         id="historySearch"
+         class="history-filter-search"
+         type="search"
+         placeholder="ค้นหา SKU / Order / ผู้ใช้"
+         autocomplete="off"
+       />
+
+       <button
+         id="historySort"
+         class="history-filter-sort"
+         type="button"
+       >
+         ใหม่ → เก่า
+       </button>
+
+     </div>
+
       <section class="admin-history-section">
         <h3>ประวัติสต๊อก</h3>
         ${Render.adminStockLogTable(stockLogs)}
