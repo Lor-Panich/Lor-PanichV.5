@@ -1152,14 +1152,15 @@ Render.adminTimelineItem = function (ev = {}) {
 
 Render.adminTimelinePrintView = function (events = []) {
 
+  const scope =
+    Core?.state?.admin?.timelineFilter?.scope || "ALL";
+
   return `
     <div class="timeline-print">
 
        <h1>Timeline การเคลื่อนไหว</h1>
        <div class="print-meta">
-         ประเภท: ${
-           Core?.state?.admin?.timelineFilter?.scope || "ALL"
-         } |
+         ประเภท: ${scope} |
          พิมพ์เมื่อ: ${new Date().toLocaleString("th-TH")}
        </div>
 
@@ -1174,21 +1175,26 @@ Render.adminTimelinePrintView = function (events = []) {
           </tr>
         </thead>
         <tbody>
-          ${events.map(ev => `
+          ${events.map(ev => {
+            const time =
+              ev.time instanceof Date
+                ? ev.time
+                : ev.time
+                  ? new Date(ev.time)
+                  : null;
+
+            return `
             <tr>
               <td>
-                ${
-                  ev.time instanceof Date
-                    ? ev.time.toLocaleString("th-TH")
-                    : "-"
-                }
+                ${time ? time.toLocaleString("th-TH") : "-"}
               </td>
-              <td>${ev.kind || "-"} / ${ev.type || "-"}</td>
-              <td>${ev.title || "-"}</td>
-              <td>${ev.meta?.by || "-"}</td>
-              <td>${ev.orderId || "-"}</td>
+              <td>${ev.kind ?? "-"} / ${ev.type ?? "-"}</td>
+              <td>${ev.title ?? "-"}</td>
+              <td>${ev.meta?.by ?? "-"}</td>
+              <td>${ev.orderId ?? "-"}</td>
             </tr>
-          `).join("")}
+            `;
+          }).join("")}
         </tbody>
       </table>
 
