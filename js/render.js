@@ -1003,6 +1003,43 @@ Render.adminOrderDetailView = function (order = {}) {
 };
 
 /* ======================================================
+   STEP C.10.3 — TIMELINE FILTER BAR (RENDER ONLY)
+====================================================== */
+
+Render.adminTimelineFilterBar = function () {
+  const scope =
+    Core?.state?.admin?.timelineFilter?.scope || "ALL";
+
+  return `
+    <div class="timeline-filter">
+      <button
+        type="button"
+        data-scope="ALL"
+        class="${scope === "ALL" ? "active" : ""}"
+      >
+        ทั้งหมด
+      </button>
+
+      <button
+        type="button"
+        data-scope="ORDER"
+        class="${scope === "ORDER" ? "active" : ""}"
+      >
+        คำสั่งซื้อ
+      </button>
+
+      <button
+        type="button"
+        data-scope="STOCK"
+        class="${scope === "STOCK" ? "active" : ""}"
+      >
+        สต๊อก
+      </button>
+    </div>
+  `;
+};
+
+/* ======================================================
    STEP C.9.3 — ADMIN TIMELINE VIEW (READ ONLY)
    - Render only
    - Use normalized timeline events
@@ -1024,6 +1061,8 @@ Render.adminTimelineView = function (events = []) {
         "Timeline การเคลื่อนไหว",
         ""
       )}
+
+      ${Render.adminTimelineFilterBar()}      
 
       <ul class="timeline-list">
         ${events.map(Render.adminTimelineItem).join("")}
