@@ -435,12 +435,14 @@ Admin.exportTimelineCSV = function () {
    ];
 
   const rows = events.map(ev => ([
-    ev.time instanceof Date ? ev.time.toISOString() : "",
+  ev.time instanceof Date
+   ? ev.time.toLocaleString("th-TH")
+   : "",
     ev.kind || "",
     ev.type || "",
     ev.title || "",
     ev.orderId || "",
-    (ev.meta && ev.meta.by) || "",
+    ev.meta?.by || "",
     (ev.meta && ev.meta.productId) || "",
     ev.meta && typeof ev.meta.qty === "number" ? ev.meta.qty : "",
     ev.meta && typeof ev.meta.before === "number" ? ev.meta.before : "",
@@ -448,13 +450,15 @@ Admin.exportTimelineCSV = function () {
     ev.meta && typeof ev.meta.total === "number" ? ev.meta.total : ""
   ]));
 
-  const csv = [headers, ...rows]
+  const csv = "\uFEFF" + [headers, ...rows]
     .map(row => row.map(Admin._csvEscape).join(","))
     .join("\n");
 
   Admin._downloadFile(
     csv,
-    "timeline_" + Date.now() + ".csv",
+     "timeline_" +
+      Core.state.admin.timelineFilter.scope.toLowerCase() +
+      "_" + Date.now() + ".csv",
     "text/csv;charset=utf-8;"
   );
 };
