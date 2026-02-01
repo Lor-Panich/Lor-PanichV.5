@@ -742,4 +742,53 @@ UI.bindTimelineFilter = function () {
   });
 };
 
+/* ======================================================
+   STEP C.11.5 — TIMELINE EXPORT / PRINT UI BINDING
+   - UI only
+   - Permission: viewHistory
+   - Dispatch to admin.js
+====================================================== */
+
+UI.bindTimelineActions = function () {
+  // 🔐 permission guard (read-only)
+  if (
+    !window.Core ||
+    typeof Core.can !== "function" ||
+    !Core.can("viewHistory")
+  ) {
+    return;
+  }
+
+  const exportBtn = document.querySelector(
+    "[data-action='export-timeline']"
+  );
+
+  if (exportBtn && !exportBtn._bound) {
+    exportBtn._bound = true;
+    exportBtn.addEventListener("click", function () {
+      if (
+        window.Admin &&
+        typeof Admin.exportTimelineCSV === "function"
+      ) {
+        Admin.exportTimelineCSV();
+      }
+    });
+  }
+
+  const printBtn = document.querySelector(
+    "[data-action='print-timeline']"
+  );
+
+  if (printBtn && !printBtn._bound) {
+    printBtn._bound = true;
+    printBtn.addEventListener("click", function () {
+      if (
+        window.Admin &&
+        typeof Admin.printTimeline === "function"
+      ) {
+        Admin.printTimeline();
+      }
+    });
+  }
+};
 
