@@ -120,6 +120,15 @@ html, body {
     box-shadow 220ms ease;
 }
 
+ /* 🔐 MODE GUARD — ลด glass/motion นอก Viewer */
+ body.admin-mode #appHeader,
+ body.document-mode #appHeader {
+   backdrop-filter: none;
+   -webkit-backdrop-filter: none;
+   background: var(--app-bg);
+   box-shadow: none;
+ }
+
 /* ======================================================
    HEADER LAYOUT
 ====================================================== */
