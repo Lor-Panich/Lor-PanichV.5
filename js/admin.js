@@ -138,6 +138,10 @@ Admin.render = function () {
      </section>
    </div>
  `;
+  // 🔑 DIFF 5 — bind UI หลัง render เท่านั้น
+  if (window.UI) {
+    UI.bindAdminMenu();
+  }   
 };
 
 /* ======================================================
