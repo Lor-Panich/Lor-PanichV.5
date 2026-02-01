@@ -746,3 +746,126 @@ Render.adminReadonly = function (message = "ไม่มีสิทธิ์ด
   `;
 };
 
+/* ======================================================
+   STEP C.3 — ADMIN HISTORY VIEW (READ ONLY)
+====================================================== */
+
+Render.adminHistoryView = function ({ stockLogs = [], orders = [] }) {
+  if (!Render.can("viewHistory")) {
+    return Render.adminReadonly("ไม่มีสิทธิ์ดูประวัติ");
+  }
+
+  return `
+    <div class="admin-history">
+
+      ${Render.adminHeader(
+        "ประวัติการทำรายการ",
+        ""
+      )}
+
+      <section class="admin-history-section">
+        <h3>ประวัติสต๊อก</h3>
+        ${Render.adminStockLogTable(stockLogs)}
+      </section>
+
+      <section class="admin-history-section">
+        <h3>ประวัติคำสั่งซื้อ</h3>
+        ${Render.adminOrderHistoryTable(orders)}
+      </section>
+
+    </div>
+  `;
+};
+
+Render.adminStockLogTable = function (logs = []) {
+  if (!Array.isArray(logs) || logs.length === 0) {
+    return Render.empty("ไม่มีประวัติสต๊อก");
+  }
+
+  return `
+    <table class="admin-table admin-stock-log-table">
+      <thead>
+        <tr>
+          <th>เวลา</th>
+          <th>สินค้า</th>
+          <th>ประเภท</th>
+          <th>จำนวน</th>
+          <th>ก่อน</th>
+          <th>หลัง</th>
+          <th>โดย</th>
+          <th>อ้างอิง</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${logs.map(Render.adminStockLogRow).join("")}
+      </tbody>
+    </table>
+  `;
+};
+
+Render.adminStockLogRow = function (log = {}) {
+  return `
+    <tr class="log-type-${log.type || ""}">
+      <td>
+        ${
+          log.timestamp
+            ? new Date(log.timestamp).toLocaleString("th-TH")
+            : "-"
+        }
+      </td>
+      <td>${log.productId || "-"}</td>
+      <td>${log.type || "-"}</td>
+      <td>${log.qty ?? "-"}</td>
+      <td>${log.before ?? "-"}</td>
+      <td>${log.after ?? "-"}</td>
+      <td>${log.by || "-"}</td>
+      <td>${log.orderId || "-"}</td>
+    </tr>
+  `;
+};
+
+Render.adminOrderHistoryTable = function (orders = []) {
+  if (!Array.isArray(orders) || orders.length === 0) {
+    return Render.empty("ไม่มีประวัติคำสั่งซื้อ");
+  }
+
+  return `
+    <table class="admin-table admin-order-history-table">
+      <thead>
+        <tr>
+          <th>Order</th>
+          <th>สถานะ</th>
+          <th>ยอดรวม</th>
+          <th>อัปเดตโดย</th>
+          <th>เวลา</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${orders.map(Render.adminOrderHistoryRow).join("")}
+      </tbody>
+    </table>
+  `;
+};
+
+Render.adminOrderHistoryRow = function (order = {}) {
+  return `
+    <tr>
+      <td>${order.orderId || "-"}</td>
+      <td>${order.status || "-"}</td>
+      <td>${Number(order.total || 0).toLocaleString()}</td>
+      <td>
+        ${order.approvedBy || order.rejectedBy || "-"}
+      </td>
+      <td>
+        ${
+          order.updatedAt || order.createdAt
+            ? new Date(
+                order.updatedAt || order.createdAt
+              ).toLocaleString("th-TH")
+            : "-"
+        }
+      </td>
+    </tr>
+  `;
+};
+
