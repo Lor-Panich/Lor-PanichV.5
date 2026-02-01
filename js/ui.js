@@ -839,3 +839,35 @@ UI.bindTimelineActions = function () {
   }
 };
 
+/* ======================================================
+   STEP A2.2.2 — ADD PRODUCT SHEET UI BINDING
+   - UI only
+   - No state mutation
+   - Dispatch to admin.js
+====================================================== */
+
+UI.bindAddProductSheet = function (handlers = {}) {
+  const sheet = document.querySelector(".admin-sheet");
+  if (!sheet) return;
+
+  // 🔒 guard กัน bind ซ้ำ
+  if (sheet._bound) return;
+  sheet._bound = true;
+
+  sheet.addEventListener("click", function (e) {
+    const btn = e.target.closest("[data-action]");
+    if (!btn) return;
+
+    const action = btn.dataset.action;
+
+    if (action === "close-sheet" || action === "cancel-add") {
+     handlers.onCancel && handlers.onCancel();
+      return;
+    }
+
+    if (action === "submit-add") {
+      handlers.onSubmit && handlers.onSubmit();
+      return;
+    }
+  });
+};
