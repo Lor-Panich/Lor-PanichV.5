@@ -20,7 +20,7 @@ Admin.init = async function () {
  if (!Core.can("manageOrders")) {
    UI.showToast("คุณไม่มีสิทธิ์เข้าถึงคำสั่งซื้อ", "error");
    return;
- } 
+ }
 
   await Admin.loadOrders();
 };
