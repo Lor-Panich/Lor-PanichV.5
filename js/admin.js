@@ -297,4 +297,62 @@ Admin.renderHistory = function () {
   UI.bindOrderLinks();
 };
 
+/* ======================================================
+   STEP C.9.2 — BUILD TIMELINE EVENTS
+   - Merge Stock Logs + Orders
+   - Normalize to single schema
+   - Sort by time (DESC)
+   - Read-only
+====================================================== */
+
+Admin.buildTimelineEvents = function () {
+  if (!Core.can("viewHistory")) {
+    return [];
+  }
+
+  const events = [];
+
+  /* ========= STOCK LOGS ========= */
+  (Core.state.admin.stockLogs || []).forEach(log => {
+    events.push({
+      id: log.logId,
+      time: new Date(log.timestamp),
+      kind: "STOCK",
+      type: log.type, // IN | OUT | ADJUST | CREATE
+      title: `${log.type} • ${log.productId}`,
+      meta: {
+        productId: log.productId,
+        qty: log.qty,
+        before: log.before,
+        after: log.after,
+        by: log.by
+      },
+      orderId: log.orderId || null
+    });
+  });
+
+  /* ========= ORDERS ========= */
+  (Core.state.admin.orders || []).forEach(order => {
+    if (order.status === "APPROVED" || order.status === "REJECTED") {
+      events.push({
+        id: order.orderId + "-" + order.status,
+        time: new Date(order.updatedAt || order.createdAt),
+        kind: "ORDER",
+        type: order.status, // APPROVED | REJECTED
+        title: `${order.status} • ${order.orderId}`,
+        meta: {
+          total: order.total,
+          by: order.approvedBy || order.rejectedBy
+        },
+        orderId: order.orderId
+      });
+    }
+  });
+
+  /* ========= SORT: NEW → OLD ========= */
+  events.sort((a, b) => b.time - a.time);
+
+  return events;
+};
+
 
