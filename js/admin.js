@@ -360,6 +360,44 @@ Admin.openAddProduct = function () {
 };
 
 /* ======================================================
+   STEP A2.3.1 — OPEN EDIT PRODUCT SHEET
+   - Open overlay
+   - Render edit sheet
+   - Bind submit / cancel
+====================================================== */
+
+Admin.openEditProduct = function (productId) {
+  if (!Admin.guard("manageProducts", "ไม่มีสิทธิ์แก้ไขสินค้า")) {
+    return;
+  }
+
+  const products = Core.state.products || [];
+  const product = products.find(p => p.productId === productId);
+
+  if (!product) {
+    UI.showToast("ไม่พบสินค้า", "error");
+    return;
+  }
+
+  const overlay = document.getElementById("adminSheet");
+  if (!overlay) return;
+
+  // render edit sheet
+  overlay.innerHTML = Render.adminEditProductSheet(product);
+
+  // open overlay via stack system
+  UI.openOverlay("adminSheet");
+
+  // 🔑 bind edit sheet actions AFTER render
+  if (window.UI && typeof UI.bindEditProductSheet === "function") {
+    UI.bindEditProductSheet({
+      onCancel: () => UI.closeOverlay("adminSheet"),
+      onSubmit: Admin.submitEditProduct // STEP A2.3.2
+    });
+  }
+};
+
+/* ======================================================
    STEP C.6.2 — HISTORY FILTER / SEARCH / SORT
    - Read-only
    - Frontend only
