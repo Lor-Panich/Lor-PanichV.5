@@ -543,3 +543,47 @@ UI.bindAdminLogin = function (handlers = {}) {
     handlers.onLogin && handlers.onLogin(username, password);
   });
 };
+
+/* ======================================================
+   STEP C.6.4 — HISTORY FILTER UI BINDING
+   - UI only
+   - เปลี่ยน state อย่างเดียว
+   - No render logic
+====================================================== */
+
+UI.bindHistoryFilter = function () {
+  // ต้องมี permission ดูประวัติเท่านั้น
+  if (
+    !window.Core ||
+    typeof Core.can !== "function" ||
+    !Core.can("viewHistory")
+  ) {
+    return;
+  }
+
+  const typeEl   = document.getElementById("historyType");
+  const searchEl = document.getElementById("historySearch");
+  const sortBtn  = document.getElementById("historySort");
+
+  if (typeEl) {
+    typeEl.onchange = () => {
+      Core.state.admin.historyFilter.type = typeEl.value;
+    };
+  }
+
+  if (searchEl) {
+    searchEl.oninput = () => {
+      Core.state.admin.historyFilter.keyword = searchEl.value;
+    };
+  }
+
+  if (sortBtn) {
+    sortBtn.onclick = () => {
+      Core.state.admin.historyFilter.sort =
+        Core.state.admin.historyFilter.sort === "DESC"
+          ? "ASC"
+          : "DESC";
+    };
+  }
+};
+
