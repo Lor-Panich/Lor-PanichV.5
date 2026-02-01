@@ -1053,8 +1053,8 @@ Render.adminTimelineItem = function (ev = {}) {
     <li
       class="
         timeline-item
-        timeline-kind-${ev.kind || ""}
-        timeline-type-${ev.type || ""}
+        timeline-kind-${String(ev.kind || "").toLowerCase()}
+        timeline-type-${String(ev.type || "").toLowerCase()}
       "
     >
       <div class="timeline-time">
@@ -1068,7 +1068,7 @@ Render.adminTimelineItem = function (ev = {}) {
 
         <div class="timeline-meta">
           ${
-            ev.meta && ev.meta.by
+            ev.meta?.by
               ? `โดย ${ev.meta.by}`
               : ""
           }
