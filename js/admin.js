@@ -94,33 +94,50 @@ Admin.renderOrders = function () {
 
 Admin.render = function () {
   const view = Core.state.admin.view;
+  const app = document.getElementById("app");
+  if (!app) return;
+
+  let content = ""; 
 
   switch (view) {
     case "orders":
       // behavior เดิม
-      Admin.renderOrders();
+      content = Render.adminOrderList(Core.state.admin.orders);
       break;
 
     case "products":
       // placeholder (STEP A2 จะมาเติม)
       if (typeof Admin.renderProducts === "function") {
-        Admin.renderProducts();
+        content = Admin.renderProducts();
       }
       break;
 
-    case "timeline":
-      Admin.renderTimeline();
+     case "timeline":
+      content = Render.adminTimelineView(
+        Admin.buildTimelineEvents()
+      );
       break;
 
     case "history":
-      Admin.renderHistory();
+     content = Render.adminHistoryView({
+       stockLogs: Admin.getFilteredStockLogs(),
+       orders: Core.state.admin.orders
+     });
       break;
 
     default:
       // fallback ปลอดภัย
       Core.state.admin.view = "orders";
-      Admin.renderOrders();
+      content = Render.adminOrderList(Core.state.admin.orders);
   }
+ app.innerHTML = `
+   <div class="admin-layout">
+     ${Render.adminMenu()}
+     <section class="admin-view">
+       ${content}
+     </section>
+   </div>
+ `;
 };
 
 /* ======================================================
