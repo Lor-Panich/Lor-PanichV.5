@@ -914,3 +914,90 @@ Render.adminOrderHistoryRow = function (order = {}) {
   `;
 };
 
+/* ======================================================
+   STEP C.7.4 — ADMIN ORDER DETAIL VIEW (READ ONLY)
+   - HTML only
+   - No state mutation
+   - No API
+   - No event binding
+====================================================== */
+
+Render.adminOrderDetailView = function (order = {}) {
+  if (!Render.can("viewHistory")) {
+    return Render.adminReadonly("ไม่มีสิทธิ์ดูรายละเอียดคำสั่งซื้อ");
+  }
+
+  const items = Array.isArray(order.items) ? order.items : [];
+
+  return `
+    <div class="admin-order-detail">
+
+      ${Render.adminHeader(
+        "รายละเอียดคำสั่งซื้อ",
+        `
+          <button
+            class="secondary-btn"
+            data-action="back-to-history"
+            type="button"
+          >
+            ← กลับไปประวัติ
+          </button>
+        `
+      )}
+
+      <div class="order-detail-meta card">
+        <div><strong>Order ID:</strong> ${order.orderId || "-"}</div>
+        <div><strong>สถานะ:</strong> ${order.status || "-"}</div>
+        <div><strong>ยอดรวม:</strong> ${Number(order.total || 0).toLocaleString()} บาท</div>
+        <div>
+          <strong>วันที่:</strong>
+          ${
+            order.createdAt
+              ? new Date(order.createdAt).toLocaleString("th-TH")
+              : "-"
+          }
+        </div>
+        <div>
+          <strong>อัปเดตโดย:</strong>
+          ${order.approvedBy || order.rejectedBy || "-"}
+        </div>
+      </div>
+
+      <div class="order-detail-items card">
+        <h3>รายการสินค้า</h3>
+
+        ${
+          items.length
+            ? `
+              <table class="admin-table admin-order-detail-table">
+                <thead>
+                  <tr>
+                    <th>รหัสสินค้า</th>
+                    <th>ชื่อสินค้า</th>
+                    <th class="right">ราคา</th>
+                    <th class="right">จำนวน</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${items.map(it => `
+                    <tr>
+                      <td>${it.productId || "-"}</td>
+                      <td>${it.name || "-"}</td>
+                      <td class="right">
+                        ${Number(it.price || 0).toLocaleString()}
+                      </td>
+                      <td class="right">
+                        ${Number(it.qty || 0)}
+                      </td>
+                    </tr>
+                  `).join("")}
+                </tbody>
+              </table>
+            `
+            : Render.empty("ไม่พบรายการสินค้า")
+        }
+      </div>
+
+    </div>
+  `;
+};
