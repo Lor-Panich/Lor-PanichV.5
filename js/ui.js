@@ -344,6 +344,51 @@ UI.bindAdminOrderActions = function (handlers = {}) {
 };
 
 /* ======================================================
+   STEP A1.4 — ADMIN MENU UI BINDING
+   - UI only
+   - เปลี่ยน state อย่างเดียว
+   - Dispatch render ไป admin.js
+====================================================== */
+
+UI.bindAdminMenu = function () {
+  // 🔐 permission guard — ต้องอยู่ในโหมด admin เท่านั้น
+  if (
+    !window.Core ||
+    !Core.state ||
+    Core.state.mode !== "admin"
+  ) {
+    return;
+  }
+
+  const menu = document.querySelector(".admin-menu");
+  if (!menu) return;
+
+  // 🔒 guard กัน bind ซ้ำ
+  if (menu._bound) return;
+  menu._bound = true;
+
+  menu.addEventListener("click", function (e) {
+    const btn = e.target.closest("[data-view]");
+    if (!btn) return;
+
+    const view = btn.dataset.view;
+    if (!view) return;
+
+    // ✅ เปลี่ยน state อย่างเดียว
+    Core.state.admin.view = view;
+
+    // 🔁 render ผ่าน Admin controller
+    if (
+      window.Admin &&
+      typeof Admin.render === "function"
+    ) {
+      Admin.render();
+    }
+  });
+};
+
+
+/* ======================================================
    STEP 9.1 — PRODUCT DETAIL UI (FIXED)
 ====================================================== */
 
