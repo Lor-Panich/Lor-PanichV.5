@@ -128,6 +128,54 @@ Render.adminHeader = function (title = "", rightHTML = "") {
 };
 
 /* ======================================================
+   STEP A1.2 — ADMIN MENU (RENDER ONLY)
+   - View switcher (UI only)
+   - No logic
+   - No event binding
+====================================================== */
+
+Render.adminMenu = function () {
+  const view = Core?.state?.admin?.view || "orders";
+
+  return `
+    <nav class="admin-menu">
+      <button
+        type="button"
+        class="admin-menu-item ${view === "orders" ? "active" : ""}"
+        data-view="orders"
+      >
+        Orders
+      </button>
+
+      <button
+        type="button"
+        class="admin-menu-item ${view === "products" ? "active" : ""}"
+        data-view="products"
+      >
+        Products
+      </button>
+
+      <button
+        type="button"
+        class="admin-menu-item ${view === "timeline" ? "active" : ""}"
+        data-view="timeline"
+      >
+        Timeline
+      </button>
+
+      <button
+        type="button"
+        class="admin-menu-item ${view === "history" ? "active" : ""}"
+        data-view="history"
+      >
+        History
+      </button>
+    </nav>
+  `;
+};
+
+
+/* ======================================================
    CANONICAL: EMPTY STATE
 ====================================================== */
 
