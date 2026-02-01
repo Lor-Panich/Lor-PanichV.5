@@ -331,6 +331,35 @@ Admin.submitAddProduct = async function () {
 };
 
 /* ======================================================
+   STEP A2.2.3 — OPEN ADD PRODUCT SHEET
+   - Open overlay
+   - Bind submit / cancel
+====================================================== */
+
+Admin.openAddProduct = function () {
+  if (!Admin.guard("manageProducts", "ไม่มีสิทธิ์เพิ่มสินค้า")) {
+    return;
+  }
+
+  const overlay = document.getElementById("adminSheet");
+  if (!overlay) return;
+
+  // render sheet UI
+  overlay.innerHTML = Render.adminAddProductSheet();
+
+  // open overlay via stack system
+  UI.openOverlay("adminSheet");
+
+  // 🔑 bind sheet actions AFTER render
+  if (window.UI && typeof UI.bindAddProductSheet === "function") {
+    UI.bindAddProductSheet({
+      onCancel: () => UI.closeOverlay("adminSheet"),
+      onSubmit: Admin.submitAddProduct
+    });
+  }
+};
+
+/* ======================================================
    STEP C.6.2 — HISTORY FILTER / SEARCH / SORT
    - Read-only
    - Frontend only
