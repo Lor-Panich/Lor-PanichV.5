@@ -479,3 +479,38 @@ Admin._downloadFile = function (content, filename, mimeType) {
   a.remove();
 };
 
+/* ======================================================
+   STEP C.11.2 — PRINT TIMELINE
+   - Use normalized timeline events
+   - Respect current timeline filter (scope)
+   - Read-only
+====================================================== */
+
+Admin.printTimeline = function () {
+  if (!Admin.guard("viewHistory", "ไม่มีสิทธิ์พิมพ์ Timeline")) {
+    return;
+  }
+
+  const events = Admin.buildTimelineEvents();
+
+  if (!Array.isArray(events) || events.length === 0) {
+    UI.showToast("ไม่มีข้อมูลให้พิมพ์", "warning");
+    return;
+  }
+
+  const html = Render.adminTimelinePrintView(events);
+
+  const app = document.getElementById("app");
+  if (!app) return;
+
+  // 🔒 เข้าโหมดเอกสาร (print mode)
+  document.body.classList.add("document-mode");
+
+  app.innerHTML = html;
+
+  // 🔔 delay เล็กน้อยให้ DOM พร้อมก่อน print
+  setTimeout(() => {
+    window.print();
+  }, 100);
+};
+
