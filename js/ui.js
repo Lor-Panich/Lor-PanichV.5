@@ -626,3 +626,35 @@ UI.bindOrderLinks = function () {
   });
 };
 
+/* ======================================================
+   STEP C.7.6 — ORDER DETAIL BACK BUTTON UI BINDING
+   - UI only
+   - No state mutation
+   - Dispatch to admin.js
+====================================================== */
+
+UI.bindOrderDetail = function (handlers = {}) {
+  // 🔐 permission guard (read-only)
+  if (
+    !window.Core ||
+    typeof Core.can !== "function" ||
+    !Core.can("viewHistory")
+  ) {
+    return;
+  }
+
+  const btn = document.querySelector(
+    "[data-action='back-to-history']"
+  );
+
+  if (!btn) return;
+
+  // 🔒 guard กัน bind ซ้ำ
+  if (btn._bound) return;
+  btn._bound = true;
+
+  btn.addEventListener("click", function () {
+    handlers.onBack && handlers.onBack();
+  });
+};
+
