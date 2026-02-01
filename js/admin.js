@@ -141,6 +141,23 @@ Admin.render = function () {
   // 🔑 DIFF 5 — bind UI หลัง render เท่านั้น
   if (window.UI) {
     UI.bindAdminMenu();
+
+   // STEP A2 — Products view bindings
+   if (Core.state.admin.view === "products") {
+     if (typeof UI.bindEditProductButtons === "function") {
+       UI.bindEditProductButtons();
+     }
+
+     // bind add product button
+     const addBtn = document.querySelector(
+       "[data-action='add-product']"
+     );
+
+     if (addBtn && !addBtn._bound) {
+       addBtn._bound = true;
+       addBtn.onclick = Admin.openAddProduct;
+     }
+   }     
   }   
 };
 
