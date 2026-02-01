@@ -174,6 +174,77 @@ Render.adminMenu = function () {
   `;
 };
 
+/* ======================================================
+   STEP A2.1.1 — ADMIN PRODUCTS VIEW (READ ONLY)
+   - List all products
+   - No action / no edit
+   - Render only
+====================================================== */
+
+Render.adminProductsView = function (products = []) {
+  if (!Render.can("manageProducts")) {
+    return Render.adminReadonly("ไม่มีสิทธิ์ดูข้อมูลสินค้า");
+  }
+
+  return `
+    <div class="admin-products">
+
+      ${Render.adminMenu()}
+
+      ${Render.adminHeader(
+        "สินค้า",
+        ""
+      )}
+
+      <section class="admin-products-section">
+
+        ${
+          Array.isArray(products) && products.length > 0
+            ? `
+              <table class="admin-table admin-products-table">
+                <thead>
+                  <tr>
+                    <th>รหัสสินค้า</th>
+                    <th>ชื่อสินค้า</th>
+                    <th class="right">ราคา</th>
+                    <th class="right">คงเหลือ</th>
+                    <th>สถานะ</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${products.map(Render.adminProductRow).join("")}
+                </tbody>
+              </table>
+            `
+            : Render.empty("ยังไม่มีสินค้า")
+        }
+
+      </section>
+    </div>
+  `;
+};
+
+Render.adminProductRow = function (product = {}) {
+  return `
+    <tr>
+      <td>${product.productId || "-"}</td>
+      <td>${product.name || "-"}</td>
+      <td class="right">
+        ${Number(product.price || 0).toLocaleString()}
+      </td>
+      <td class="right">
+        ${Number(product.stock || 0)}
+      </td>
+      <td>
+        ${
+          product.active
+            ? `<span class="status-active">เปิดขาย</span>`
+            : `<span class="status-inactive">ปิดขาย</span>`
+        }
+      </td>
+    </tr>
+  `;
+};
 
 /* ======================================================
    CANONICAL: EMPTY STATE
