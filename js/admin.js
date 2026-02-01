@@ -17,6 +17,11 @@ Admin.init = async function () {
     return;
   }
 
+ if (!Core.can("manageOrders")) {
+   UI.showToast("คุณไม่มีสิทธิ์เข้าถึงคำสั่งซื้อ", "error");
+   return;
+ } 
+
   await Admin.loadOrders();
 };
 
@@ -82,6 +87,11 @@ Admin.confirmReject = function (orderId) {
 ====================================================== */
 
 Admin.approveOrder = async function (orderId) {
+  if (!Core.can("manageOrders")) {
+    UI.showToast("คุณไม่มีสิทธิ์อนุมัติคำสั่งซื้อ", "error");
+    return;
+  } 
+ 
   UI.showLoading("กำลังอนุมัติคำสั่งซื้อ...");
 
   try {
@@ -102,6 +112,11 @@ Admin.approveOrder = async function (orderId) {
 };
 
 Admin.rejectOrder = async function (orderId) {
+  if (!Core.can("manageOrders")) {
+    UI.showToast("คุณไม่มีสิทธิ์ปฏิเสธคำสั่งซื้อ", "error");
+    return;
+  }
+   
   UI.showLoading("กำลังปฏิเสธคำสั่งซื้อ...");
 
   try {
@@ -118,3 +133,43 @@ Admin.rejectOrder = async function (orderId) {
     UI.hideLoading();
   }
 };
+
+/* ======================================================
+   ADMIN LOGIN FLOW (STEP A)
+====================================================== */
+
+Admin.login = async function (username, password) {
+  UI.showLoading("กำลังเข้าสู่ระบบ...");
+
+  try {
+    const res = await API.adminLogin(username, password);
+
+    // 🔑 frontend role policy (ยังไม่แตะ backend)
+    const role =
+      res.username === "owner"
+        ? "owner"
+        : "staff";
+
+    const permissions = Core.mapPermissionsByRole(role);
+
+    Core.state.admin.loggedIn = true;
+    Core.state.admin.token = res.token;
+    Core.state.admin.user = {
+      username: res.username,
+      role
+    };
+    Core.state.admin.permissions = permissions;
+
+    Core.state.mode = "admin";
+
+    UI.showToast("เข้าสู่ระบบสำเร็จ", "success");
+
+    await Admin.init();
+
+  } catch (err) {
+    UI.showToast(err.message || "เข้าสู่ระบบไม่สำเร็จ", "error");
+  } finally {
+    UI.hideLoading();
+  }
+};
+
