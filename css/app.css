@@ -1751,6 +1751,9 @@ body.document-mode .a4-page {
   #appHeader,
   #toastContainer,
   #loadingOverlay,
+  #globalBackdrop,
+  .overlay,
+  .overlay.show,   
   .no-print {
     display: none !important;
   }
