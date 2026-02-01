@@ -362,6 +362,104 @@ Render.adminAddProductSheet = function () {
   `;
 };
 
+/* ======================================================
+   STEP A2.3.1 — ADMIN EDIT PRODUCT SHEET (RENDER ONLY)
+   - HTML only
+   - No state mutation
+   - No API
+   - No event binding
+====================================================== */
+
+Render.adminEditProductSheet = function (product = {}) {
+  return `
+    <div class="sheet admin-product-sheet">
+
+      <div class="sheet-header">
+        <div class="sheet-title">แก้ไขสินค้า</div>
+        <button
+          type="button"
+         class="sheet-close-btn"
+          data-action="close-sheet"
+        >✕</button>
+      </div>
+
+      <div class="sheet-content">
+
+        <label class="form-field">
+          <span>รหัสสินค้า (SKU)</span>
+          <input
+            type="text"
+            id="editProductId"
+            value="${product.productId || ""}"
+            disabled
+          />
+        </label>
+
+        <label class="form-field">
+          <span>ชื่อสินค้า</span>
+          <input
+            type="text"
+            id="editProductName"
+            value="${product.name || ""}"
+            autocomplete="off"
+          />
+        </label>
+
+        <label class="form-field">
+          <span>ราคา</span>
+          <input
+            type="number"
+            id="editProductPrice"
+            min="0"
+            step="1"
+            value="${Number(product.price || 0)}"
+          />
+        </label>
+
+        <label class="form-field">
+          <span>จำนวนคงเหลือ</span>
+          <input
+            type="number"
+            id="editProductStock"
+            min="0"
+            step="1"
+            value="${Number(product.stock || 0)}"
+          />
+        </label>
+
+        <label class="form-field checkbox">
+          <input
+            type="checkbox"
+            id="editProductActive"
+            ${product.active ? "checked" : ""}
+          />
+          <span>เปิดขาย</span>
+        </label>
+
+      </div>
+
+      <div class="sheet-footer">
+        <button
+          type="button"
+          class="secondary-btn"
+          data-action="cancel-edit-product"
+        >
+          ยกเลิก
+        </button>
+
+        <button
+          type="button"
+          class="primary-btn"
+          data-action="submit-edit-product"
+        >
+          บันทึกการแก้ไข
+        </button>
+      </div>
+
+    </div>
+  `;
+};
+
 
 /* ======================================================
    CANONICAL: EMPTY STATE
