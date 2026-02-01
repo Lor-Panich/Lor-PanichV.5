@@ -269,4 +269,32 @@ Admin.renderOrderDetail = function (order) {
   }
 };
 
+/* ======================================================
+   STEP C.5 — RENDER HISTORY (ENTRY POINT)
+   - Render admin history view
+   - Bind filter + order links
+====================================================== */
+
+Admin.renderHistory = function () {
+  if (!Admin.guard("viewHistory", "ไม่มีสิทธิ์ดูประวัติ")) {
+    return;
+  }
+
+  const filteredLogs = Admin.getFilteredStockLogs();
+
+  const html = Render.adminHistoryView({
+    stockLogs: filteredLogs,
+    orders: Core.state.admin.orders
+  });
+
+  const app = document.getElementById("app");
+  if (!app) return;
+
+  app.innerHTML = html;
+
+  // 🔑 bind UI หลัง render เท่านั้น
+  UI.bindHistoryFilter();
+  UI.bindOrderLinks();
+};
+
 
