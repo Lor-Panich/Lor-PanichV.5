@@ -185,3 +185,45 @@ Admin.login = async function (username, password) {
   }
 };
 
+/* ======================================================
+   STEP C.6.2 — HISTORY FILTER / SEARCH / SORT
+   - Read-only
+   - Frontend only
+====================================================== */
+
+Admin.getFilteredStockLogs = function () {
+  const logs = Core.state.admin.stockLogs || [];
+  const filter = Core.state.admin.historyFilter;
+
+  let result = [...logs];
+
+  /* ===== FILTER BY TYPE ===== */
+  if (filter.type && filter.type !== "ALL") {
+    result = result.filter(log => log.type === filter.type);
+  }
+
+  /* ===== SEARCH (productId / orderId / by) ===== */
+  if (filter.keyword) {
+    const kw = filter.keyword.toLowerCase();
+
+    result = result.filter(log =>
+      String(log.productId || "").toLowerCase().includes(kw) ||
+      String(log.orderId || "").toLowerCase().includes(kw) ||
+      String(log.by || "").toLowerCase().includes(kw)
+    );
+  }
+
+  /* ===== SORT BY TIMESTAMP ===== */
+  result.sort((a, b) => {
+    const ta = new Date(a.timestamp).getTime();
+    const tb = new Date(b.timestamp).getTime();
+
+    return filter.sort === "ASC"
+      ? ta - tb
+      : tb - ta;
+  });
+
+  return result;
+};
+
+
