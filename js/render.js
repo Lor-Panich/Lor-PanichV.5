@@ -852,7 +852,19 @@ Render.adminStockLogRow = function (log = {}) {
       <td>${log.before ?? "-"}</td>
       <td>${log.after ?? "-"}</td>
       <td>${log.by || "-"}</td>
-      <td>${log.orderId || "-"}</td>
+      <td>
+      ${
+         log.orderId
+           ? `<a
+             href="#"
+             class="order-link"
+             data-order-id="${log.orderId}"
+           >
+             ${log.orderId}
+           </a>`
+        : "-"
+    }
+  </td>
     </tr>
   `;
 };
