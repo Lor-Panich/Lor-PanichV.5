@@ -521,5 +521,14 @@ Admin.printTimeline = function () {
   setTimeout(() => {
     window.print();
   }, 100);
+
+ // 🧹 cleanup หลังพิมพ์ (สำคัญ)
+ const afterPrint = () => {
+   document.body.classList.remove("document-mode");
+   window.removeEventListener("afterprint", afterPrint);
+ };
+
+ window.addEventListener("afterprint", afterPrint);
+   
 };
 
