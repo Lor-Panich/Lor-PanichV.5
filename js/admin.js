@@ -32,10 +32,6 @@ Admin.init = async function () {
     return;
   }
 
- if (!Admin.guard("manageOrders", "คุณไม่มีสิทธิ์เข้าถึงคำสั่งซื้อ")) {
-   return;
- }
-
   await Admin.loadOrders();
 };
 
@@ -44,6 +40,10 @@ Admin.init = async function () {
 ====================================================== */
 
 Admin.loadOrders = async function () {
+  if (!Admin.guard("manageOrders", "คุณไม่มีสิทธิ์เข้าถึงคำสั่งซื้อ")) {
+    return;
+  }   
+   
   UI.showLoading("กำลังโหลดคำสั่งซื้อ...");
 
   try {
