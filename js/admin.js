@@ -263,7 +263,9 @@ Admin.renderOrderDetail = function (order) {
 
   // UI binding (back button)
   if (window.UI && typeof UI.bindOrderDetail === "function") {
-    UI.bindOrderDetail();
+    UI.bindOrderDetail({
+      onBack: Admin.renderHistory
+    });
   }
 };
 
