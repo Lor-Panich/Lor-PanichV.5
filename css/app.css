@@ -2223,3 +2223,88 @@ body.document-mode .a4-page {
   text-underline-offset: 2px;
 }
 
+/* ======================================================
+   STEP C.10.6 — TIMELINE FILTER (iOS / CLEAN)
+   - Read-only UI
+   - Used by STEP C.10.x
+====================================================== */
+
+.timeline-filter {
+  display: flex;
+  gap: 10px;
+
+  padding: 10px;
+  margin-bottom: 16px;
+
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+
+  border-radius: 14px;
+  border: 1px solid var(--glass-border);
+
+  box-shadow:
+    0 6px 18px rgba(0,0,0,.06),
+    inset 0 1px 0 rgba(255,255,255,.5);
+}
+
+.timeline-filter button {
+  flex: 1;
+
+  height: 36px;
+  border-radius: 10px;
+  border: none;
+
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+
+  color: var(--text-secondary);
+  background: transparent;
+
+  cursor: pointer;
+
+  transition:
+    background 160ms ease,
+    color 160ms ease,
+    transform 120ms ease,
+    box-shadow 160ms ease;
+}
+
+/* active state */
+.timeline-filter button.active {
+  color: var(--text-primary);
+
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(255,255,255,.65),
+      rgba(255,255,255,.35)
+    );
+
+  box-shadow:
+    0 4px 10px rgba(0,0,0,.12),
+    inset 0 1px 0 rgba(255,255,255,.6);
+}
+
+/* press feedback (iOS-like) */
+.timeline-filter button:active {
+  transform: scale(0.96);
+}
+
+@media (prefers-color-scheme: dark) {
+  .timeline-filter button.active {
+    background:
+      linear-gradient(
+        to bottom,
+        rgba(255,255,255,.18),
+        rgba(255,255,255,.08)
+      );
+
+    box-shadow:
+      0 6px 18px rgba(0,0,0,.5),
+      inset 0 1px 0 rgba(255,255,255,.12);
+  }
+}
+
+
