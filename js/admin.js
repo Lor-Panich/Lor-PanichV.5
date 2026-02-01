@@ -250,6 +250,87 @@ Admin.login = async function (username, password) {
 };
 
 /* ======================================================
+   STEP A2.2.2 — SUBMIT ADD PRODUCT
+   - Frontend only
+   - Call backend addProduct
+====================================================== */
+
+Admin.submitAddProduct = async function () {
+  if (!Admin.guard("manageProducts", "ไม่มีสิทธิ์เพิ่มสินค้า")) {
+    return;
+  }
+
+  const idEl = document.getElementById("newProductId");
+  const nameEl = document.getElementById("newProductName");
+  const priceEl = document.getElementById("newProductPrice");
+  const stockEl = document.getElementById("newProductStock");
+  const activeEl = document.getElementById("newProductActive");
+
+  if (!idEl || !nameEl || !priceEl || !stockEl) {
+    UI.showToast("ฟอร์มไม่สมบูรณ์", "error");
+    return;
+  }
+
+  const productId = idEl.value.trim();
+  const name = nameEl.value.trim();
+  const price = Number(priceEl.value);
+  const stock = Number(stockEl.value);
+  const active = activeEl ? activeEl.checked : false;
+
+  /* ===== BASIC VALIDATION ===== */
+  if (!productId || !name) {
+    UI.showToast("กรุณากรอก SKU และชื่อสินค้า", "warning");
+    return;
+  }
+
+  if (!Number.isInteger(price) || price < 0) {
+    UI.showToast("ราคาต้องเป็นตัวเลขจำนวนเต็ม ≥ 0", "warning");
+    return;
+  }
+
+  if (!Number.isInteger(stock) || stock < 0) {
+    UI.showToast("สต๊อกต้องเป็นตัวเลขจำนวนเต็ม ≥ 0", "warning");
+    return;
+  }
+
+  UI.showLoading("กำลังเพิ่มสินค้า...");
+
+  try {
+    await API.addProduct(Core.state.admin.token, {
+      productId,
+      name,
+      price,
+      stock,
+      active
+    });
+
+    UI.showToast("เพิ่มสินค้าเรียบร้อย", "success");
+
+    // ปิด sheet
+    if (window.UI && typeof UI.closeOverlay === "function") {
+      UI.closeOverlay("adminSheet");
+    }
+
+    // reload products (viewer source of truth)
+    if (typeof Core.loadProducts === "function") {
+      await Core.loadProducts();
+    }
+
+    // render products view ใหม่
+    Admin.render();
+
+  } catch (err) {
+    console.error("[Admin.submitAddProduct]", err);
+    UI.showToast(
+      err.message || "เพิ่มสินค้าไม่สำเร็จ",
+      "error"
+    );
+  } finally {
+    UI.hideLoading();
+  }
+};
+
+/* ======================================================
    STEP C.6.2 — HISTORY FILTER / SEARCH / SORT
    - Read-only
    - Frontend only
