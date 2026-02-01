@@ -193,7 +193,15 @@ Render.adminProductsView = function (products = []) {
 
       ${Render.adminHeader(
         "สินค้า",
-        ""
+         `
+   <button
+     class="btn primary"
+     type="button"
+     data-action="add-product"
+   >
+     + เพิ่มสินค้า
+   </button>
+ `
       )}
 
       <section class="admin-products-section">
