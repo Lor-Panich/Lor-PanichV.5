@@ -106,10 +106,10 @@ Admin.render = function () {
       break;
 
     case "products":
-      // placeholder (STEP A2 จะมาเติม)
-      if (typeof Admin.renderProducts === "function") {
-        content = Admin.renderProducts();
-      }
+  // STEP A2.1 — Products List (read-only)
+  content = Render.adminProductsView(
+    Core.state.products || []
+  );
       break;
 
      case "timeline":
