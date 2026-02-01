@@ -1059,7 +1059,18 @@ Render.adminTimelineView = function (events = []) {
 
       ${Render.adminHeader(
         "Timeline การเคลื่อนไหว",
-        ""
+        `
+          <button
+            class="secondary-btn"
+            type="button"
+            data-action="export-timeline"
+          >
+            Export CSV
+          </button>
+
+          <button
+            class="secondary-btn"
+     
       )}
 
       ${Render.adminTimelineFilterBar()}      
