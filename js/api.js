@@ -55,7 +55,7 @@ API._post = async function (params = {}) {
       throw err;
     }
 
-    return json.data !== undefined ? json.data : json;
+    return json.data;
 
   } catch (err) {
     // 🔍 debug support (V5 way)
@@ -161,6 +161,8 @@ API.stockAdjust = async function (token, productId, newQty, reason = "") {
 };
 
 API.fetchStockLogs = async function (token) {
+  // 🔒 READ-ONLY: ใช้สำหรับ History Viewer เท่านั้น
+  // ❌ ห้ามใช้ API นี้กับ action ที่แก้ข้อมูล   
   return await API._post({
     action: "stockLogs",
     token
