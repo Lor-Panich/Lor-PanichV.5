@@ -55,7 +55,7 @@ API._post = async function (params = {}) {
       throw err;
     }
 
-    return json.data;
+    return json.data !== undefined ? json.data : json;
 
   } catch (err) {
     // 🔍 debug support (V5 way)
