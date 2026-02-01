@@ -396,3 +396,86 @@ Admin.renderTimeline = function () {
   }
 };
 
+/* ======================================================
+   STEP C.11.1 — EXPORT TIMELINE → CSV
+   - Use normalized timeline events
+   - Respect current timeline filter (scope)
+   - Read-only
+====================================================== */
+
+Admin.exportTimelineCSV = function () {
+  if (!Admin.guard("viewHistory", "ไม่มีสิทธิ์ Export Timeline")) {
+    return;
+  }
+
+  const events = Admin.buildTimelineEvents();
+
+  if (!Array.isArray(events) || events.length === 0) {
+    UI.showToast("ไม่มีข้อมูลให้ Export", "warning");
+    return;
+  }
+
+  const headers = [
+    "time",
+    "kind",
+    "type",
+    "title",
+    "orderId",
+    "by",
+    "productId",
+    "qty",
+    "before",
+    "after",
+    "total"
+  ];
+
+  const rows = events.map(ev => ([
+    ev.time instanceof Date ? ev.time.toISOString() : "",
+    ev.kind || "",
+    ev.type || "",
+    ev.title || "",
+    ev.orderId || "",
+    (ev.meta && ev.meta.by) || "",
+    (ev.meta && ev.meta.productId) || "",
+    ev.meta && typeof ev.meta.qty === "number" ? ev.meta.qty : "",
+    ev.meta && typeof ev.meta.before === "number" ? ev.meta.before : "",
+    ev.meta && typeof ev.meta.after === "number" ? ev.meta.after : "",
+    ev.meta && typeof ev.meta.total === "number" ? ev.meta.total : ""
+  ]));
+
+  const csv = [headers, ...rows]
+    .map(row => row.map(Admin._csvEscape).join(","))
+    .join("\n");
+
+  Admin._downloadFile(
+    csv,
+    "timeline_" + Date.now() + ".csv",
+    "text/csv;charset=utf-8;"
+  );
+};
+
+/* ===== CSV HELPERS (LOCAL ONLY) ===== */
+
+Admin._csvEscape = function (value) {
+  if (value === null || value === undefined) return "";
+  const str = String(value);
+  return /[",\n]/.test(str)
+    ? `"${str.replace(/"/g, '""')}"`
+    : str;
+};
+
+Admin._downloadFile = function (content, filename, mimeType) {
+  const blob = new Blob([content], { type: mimeType });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+
+  document.body.appendChild(a);
+  a.click();
+
+  URL.revokeObjectURL(url);
+  a.remove();
+};
+
