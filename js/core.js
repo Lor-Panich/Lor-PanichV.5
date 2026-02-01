@@ -76,16 +76,17 @@ Core.state = {
     orders: [],
     stockLogs: [],
 
-    /* ================= HISTORY FILTER ================= */
-    historyFilter: {
-      type: "ALL",    // ALL | IN | OUT | ADJUST | CREATE
-      keyword: "",    // search: productId / orderId / by
-      sort: "DESC"    // DESC (ใหม่ → เก่า) | ASC
-    }
-     /* ================= TIMELINE FILTER ================= */
-     timelineFilter: {
-       scope: "ALL"    // ALL | ORDER | STOCK
-     }     
+/* ================= HISTORY FILTER ================= */
+historyFilter: {
+  type: "ALL",
+  keyword: "",
+  sort: "DESC"
+},
+
+/* ================= TIMELINE FILTER ================= */
+timelineFilter: {
+  scope: "ALL"    // ALL | ORDER | STOCK
+}    
   },   // 👈 ต้องมี comma ตรงนี้
 
   /* ================= UI ================= */
