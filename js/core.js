@@ -73,6 +73,9 @@ Core.state = {
       viewHistory: false
     },
 
+    // 🔑 current admin view (STEP A1)
+    view: "orders", // orders | products | timeline | history
+     
     orders: [],
     stockLogs: [],
 
