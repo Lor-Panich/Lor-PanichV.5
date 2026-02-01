@@ -697,3 +697,49 @@ UI.bindTimelineMenu = function () {
   });
 };
 
+/* ======================================================
+   STEP C.10.4 — TIMELINE FILTER UI BINDING
+   - UI only
+   - เปลี่ยน state อย่างเดียว
+   - Dispatch render ไป admin.js
+====================================================== */
+
+UI.bindTimelineFilter = function () {
+  // 🔐 permission guard (read-only)
+  if (
+    !window.Core ||
+    typeof Core.can !== "function" ||
+    !Core.can("viewHistory")
+  ) {
+    return;
+  }
+
+  const buttons =
+    document.querySelectorAll(".timeline-filter [data-scope]");
+
+  if (!buttons.length) return;
+
+  buttons.forEach(btn => {
+    // 🔒 guard กัน bind ซ้ำ
+    if (btn._bound) return;
+    btn._bound = true;
+
+    btn.addEventListener("click", function () {
+      const scope = btn.dataset.scope;
+      if (!scope) return;
+
+      // ✅ เปลี่ยน state อย่างเดียว
+      Core.state.admin.timelineFilter.scope = scope;
+
+      // 🔁 re-render timeline
+      if (
+        window.Admin &&
+        typeof Admin.renderTimeline === "function"
+      ) {
+        Admin.renderTimeline();
+      }
+    });
+  });
+};
+
+
