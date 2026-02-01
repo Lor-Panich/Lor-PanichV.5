@@ -2037,6 +2037,7 @@ body.document-mode .a4-page {
   width: 100%;
   border-collapse: collapse;
   font-size: 13px;
+  line-height: 1.55; /* 🔍 อ่านยาวสบายตา */ 
   background: var(--glass-bg);
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
@@ -2075,7 +2076,7 @@ body.document-mode .a4-page {
 }
 
 .admin-table tbody tr:hover td {
-  background: rgba(0,0,0,0.03);
+  background: rgba(0,0,0,0.025);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -2106,6 +2107,29 @@ body.document-mode .a4-page {
 
 .admin-order-history-table td:nth-child(2) {
   font-weight: 600;
+}
+
+/* STEP C.7.7 — Order Link (Document style) */
+.order-link {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.order-link:hover {
+  opacity: 0.8;
+}
+
+.order-detail-meta.card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px; /* 🔍 แยกบรรทัดเอกสาร */
+  font-size: 14px;
+}
+
+.admin-order-detail-table td.right {
+  font-variant-numeric: tabular-nums;
 }
 
 
