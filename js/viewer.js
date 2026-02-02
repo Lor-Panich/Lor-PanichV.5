@@ -298,7 +298,19 @@ if (window.UI && typeof UI.openAdminLogin === "function") {
   header.addEventListener("mouseleave", cancelPress);
 
   // Mobile
-  header.addEventListener("touchstart", startPress, { passive: true });
+   header.addEventListener(
+   "touchstart",
+   (e) => {
+     // ✅ เฉพาะกดที่ชื่อร้านเท่านั้น
+     if (!e.target.closest(".shop-title")) return;
+
+     // 🔑 ป้องกัน iOS hijack long-press
+     e.preventDefault();
+     startPress(e);
+   },
+   { passive: false }
+ );
+
   header.addEventListener("touchend", cancelPress);
   header.addEventListener("touchcancel", cancelPress);
 };
