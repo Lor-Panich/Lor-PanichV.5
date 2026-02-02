@@ -864,9 +864,6 @@ Admin.openStockAdjust = function (product) {
     if (!Admin.guard("manageStock", "ไม่มีสิทธิ์จัดการสต๊อก")) {
     return;
   }
-
-  Core.state.admin.currentStockProduct = product;
-
   const overlay = document.getElementById("adminSheet");
   if (!overlay) return;
 
