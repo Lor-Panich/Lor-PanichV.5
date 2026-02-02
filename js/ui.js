@@ -913,6 +913,42 @@ UI.bindEditProductSheet = function (handlers = {}) {
 };
 
 /* ======================================================
+   STEP A2.4.2.3 — STOCK ADJUST SHEET UI BINDING
+   - UI only
+   - No state mutation
+   - Dispatch to admin.js
+====================================================== */
+
+UI.bindStockAdjustSheet = function (handlers = {}) {
+  const sheet = document.querySelector(".admin-stock-sheet");
+  if (!sheet) return;
+
+  // 🔒 guard กัน bind ซ้ำ
+  if (sheet._bound) return;
+  sheet._bound = true;
+
+  sheet.addEventListener("click", function (e) {
+    const btn = e.target.closest("[data-action]");
+    if (!btn) return;
+
+    const action = btn.dataset.action;
+
+    if (
+      action === "cancel-stock-adjust" ||
+      action === "close-sheet"
+    ) {
+      handlers.onCancel && handlers.onCancel();
+      return;
+    }
+
+    if (action === "submit-stock-adjust") {
+      handlers.onSubmit && handlers.onSubmit();
+      return;
+    }
+  });
+};
+
+/* ======================================================
    STEP A2.3.1 — EDIT PRODUCT BUTTON UI BINDING
    - UI only
    - No state mutation
