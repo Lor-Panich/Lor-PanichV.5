@@ -36,6 +36,9 @@ Admin.init = async function () {
   if (!Core.state.admin.view) {
     Core.state.admin.view = "orders";
   }
+
+  // 🔑 PATCH: ensure admin layout is mounted immediately
+  Admin.render();   
    
   await Admin.loadOrders();
 };
@@ -249,6 +252,9 @@ Admin.login = async function (username, password) {
     Core.state.admin.permissions = permissions;
 
     Core.state.mode = "admin";
+     
+    // 🔑 PATCH: mark DOM as admin mode (for theme / layout)
+    document.body.classList.add("admin-mode");     
 
     UI.showToast("เข้าสู่ระบบสำเร็จ", "success");
 
