@@ -861,6 +861,7 @@ Admin.printTimeline = function () {
 ====================================================== */
 
 Admin.openStockAdjust = function (product) {
+  Core.state.admin.currentStockProduct = product;
   if (!Admin.guard("manageStock", "ไม่มีสิทธิ์จัดการสต๊อก")) {
     return;
   }
