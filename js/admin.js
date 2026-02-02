@@ -871,7 +871,13 @@ Admin.openStockAdjust = function (product) {
   overlay.innerHTML = Render.adminStockAdjustSheet(product);
 
   UI.openOverlay("adminSheet");
-
+  // 🔑 bind stock adjust sheet actions AFTER render
+  if (window.UI && typeof UI.bindStockAdjustSheet === "function") {
+    UI.bindStockAdjustSheet({
+      onCancel: () => UI.closeOverlay("adminSheet"),
+      onSubmit: Admin.submitStockAdjust // (ยังไม่ต้อง implement ก็ได้)
+    });
+  }
 };
 
 
