@@ -452,12 +452,32 @@ Admin.submitEditProduct = async function () {
   UI.showLoading("กำลังบันทึกการแก้ไขสินค้า...");
 
   try {
+    let imageUrl;
+
+    // 🔁 upload image first (if selected)
+    const sheet = document.querySelector(".admin-sheet");
+    if (sheet && sheet.dataset.imageBase64) {
+      const base64 = sheet.dataset.imageBase64;
+      const filename = sheet.dataset.imageName || "product.jpg";
+      const mimeType = sheet.dataset.imageType || "image/jpeg";
+
+      const uploadRes = await API.uploadProductImage(
+        Core.state.admin.token,
+        base64,
+        filename,
+        mimeType
+      );
+
+      imageUrl = uploadRes.imageUrl;
+    }
+ 
     await API.updateProduct(Core.state.admin.token, {
       productId,
       name,
       price,
       stock,
-      active
+      active,
+      ...(imageUrl ? { image: imageUrl } : {})
     });
 
     UI.showToast("บันทึกการแก้ไขเรียบร้อย", "success");
