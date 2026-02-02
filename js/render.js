@@ -385,6 +385,36 @@ Render.adminEditProductSheet = function (product = {}) {
 
       <div class="sheet-content">
 
+  <!-- ===============================
+       Product Image (UI only)
+       STEP A2.4.1.2
+  =============================== -->
+
+  <div class="image-picker">
+    <div class="image-preview">
+      ${
+        product.image
+          ? `<img src="${product.image}" alt="product image" />`
+          : `<div class="placeholder">ไม่มีรูป</div>`
+      }
+    </div>
+
+    <button
+      type="button"
+      class="btn"
+      data-action="pick-image"
+    >
+      เปลี่ยนรูป
+    </button>
+
+    <input
+      type="file"
+      accept="image/*"
+      data-action="file-input"
+      hidden
+    />
+  </div>      
+
         <label class="form-field">
           <span>รหัสสินค้า (SKU)</span>
           <input
