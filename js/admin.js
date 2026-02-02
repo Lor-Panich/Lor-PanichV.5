@@ -1038,4 +1038,3 @@ Admin.openStockAdjust = function (product) {
   }
 };
 
-
