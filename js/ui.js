@@ -847,7 +847,7 @@ UI.bindTimelineActions = function () {
 ====================================================== */
 
 UI.bindAddProductSheet = function (handlers = {}) {
-  const sheet = document.querySelector(".admin-sheet");
+  const sheet = document.querySelector(".admin-product-sheet");
   if (!sheet) return;
 
   // 🔒 guard กัน bind ซ้ำ
