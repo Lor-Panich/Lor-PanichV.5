@@ -515,7 +515,7 @@ Admin.submitEditProduct = async function () {
 ====================================================== */
 
 Admin.submitStockIn = async function () {
-  if (!Admin.guard("manageStock", "ไม่มีสิทธิ์จัดการสต๊อก")) {
+  if (!Admin.guard("manageProducts", "ไม่มีสิทธิ์จัดการสต๊อก")) {
     return;
   }
 
@@ -944,9 +944,16 @@ Admin.openStockAdjust = function (product) {
   if (window.UI && typeof UI.bindStockAdjustSheet === "function") {
     UI.bindStockAdjustSheet({
       onCancel: () => UI.closeOverlay("adminSheet"),
-      onSubmit: () => {
-        Admin.submitStockIn();
-      }
+        onSubmit: () => {
+        const modeEl = document.getElementById("stockAdjustMode");
+         const mode = modeEl ? modeEl.value : "IN";
+
+       if (mode === "IN") {
+         Admin.submitStockIn();
+       } else {
+         Admin.submitStockAdjust();
+       }
+     }
     });
   }
 };
