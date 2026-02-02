@@ -944,7 +944,9 @@ Admin.openStockAdjust = function (product) {
   if (window.UI && typeof UI.bindStockAdjustSheet === "function") {
     UI.bindStockAdjustSheet({
       onCancel: () => UI.closeOverlay("adminSheet"),
-      onSubmit: Admin.submitStockIn
+      onSubmit: () => {
+        Admin.submitStockIn();
+      }
     });
   }
 };
