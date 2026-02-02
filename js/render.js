@@ -469,6 +469,14 @@ Render.adminEditProductSheet = function (product = {}) {
       </div>
 
       <div class="sheet-footer">
+   <button
+     type="button"
+     class="secondary-btn"
+     data-action="open-stock-adjust"
+   >
+     📦 จัดการสต๊อก
+   </button>
+   
         <button
           type="button"
           class="secondary-btn"
