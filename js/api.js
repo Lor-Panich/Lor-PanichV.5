@@ -168,3 +168,23 @@ API.fetchStockLogs = async function (token) {
     token
   });
 };
+
+/* ======================================================
+   STEP A2.4.1.1 — UPLOAD PRODUCT IMAGE
+   - Frontend wrapper only
+====================================================== */
+
+API.uploadProductImage = async function (
+  token,
+  base64Data,
+  filename,
+  mimeType
+) {
+  return await API._post({
+    action: "uploadProductImage",
+    token,
+    data: base64Data,
+    filename,
+    mimeType
+  });
+};
