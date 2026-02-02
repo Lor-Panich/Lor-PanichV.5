@@ -145,6 +145,16 @@ Admin.render = function () {
   if (window.UI) {
     UI.bindAdminMenu();
 
+    // 🔑 PATCH: bind order actions when in orders view
+    if (Core.state.admin.view === "orders") {
+      if (typeof UI.bindAdminOrderActions === "function") {
+        UI.bindAdminOrderActions({
+          onApprove: Admin.confirmApprove,
+          onReject: Admin.confirmReject
+        });
+      }
+    }
+     
    // STEP A2 — Products view bindings
    if (Core.state.admin.view === "products") {
      if (typeof UI.bindEditProductButtons === "function") {
