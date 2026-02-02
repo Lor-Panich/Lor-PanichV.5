@@ -517,7 +517,7 @@ Admin.submitEditProduct = async function () {
 ====================================================== */
 
 Admin.submitStockIn = async function () {
-  if (!Admin.guard("manageStock", "ไม่มีสิทธิ์จัดการสต๊อก")) {
+  if (!Admin.guard("manageProducts", "ไม่มีสิทธิ์จัดการสต๊อก")) {
     return;
   }
 
@@ -557,10 +557,12 @@ Admin.submitStockIn = async function () {
   UI.showLoading("กำลังรับสินค้าเข้า...");
 
   try {
-    await API.stockIn(Core.state.admin.token, {
-      productId,
-      qty,
-      reason
+ await API.stockIn(
+   Core.state.admin.token,
+   productId,
+   qty,
+   reason
+ );
     });
 
     UI.showToast("รับสินค้าเข้าเรียบร้อย", "success");
