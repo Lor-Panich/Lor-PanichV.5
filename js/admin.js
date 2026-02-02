@@ -400,7 +400,10 @@ Admin.openEditProduct = function (productId) {
   if (window.UI && typeof UI.bindEditProductSheet === "function") {
     UI.bindEditProductSheet({
       onCancel: () => UI.closeOverlay("adminSheet"),
-      onSubmit: Admin.submitEditProduct // STEP A2.3.2
+      onSubmit: Admin.submitEditProduct,
+      onOpenStockAdjust: () => {
+     Admin.openStockAdjust(product);
+   }
     });
   }
 };
@@ -849,4 +852,32 @@ Admin.printTimeline = function () {
  window.addEventListener("afterprint", afterPrint);
    
 };
+
+/* ======================================================
+   STEP A2.4.2.3 — OPEN STOCK ADJUST SHEET
+   - Open overlay
+   - Render stock adjust sheet
+   - Bind cancel / submit (submit ยังไม่ทำก็ได้)
+====================================================== */
+
+Admin.openStockAdjust = function (product) {
+  if (!Admin.guard("manageStock", "ไม่มีสิทธิ์จัดการสต๊อก")) {
+    return;
+  }
+
+  const overlay = document.getElementById("adminSheet");
+  if (!overlay) return;
+
+  overlay.innerHTML = Render.adminStockAdjustSheet(product);
+
+  UI.openOverlay("adminSheet");
+
+  // bind เฉพาะ cancel ตอนนี้
+  if (window.UI && typeof UI.bindStockAdjustSheet === "function") {
+    UI.bindStockAdjustSheet({
+      onCancel: () => UI.closeOverlay("adminSheet")
+    });
+  }
+};
+
 
