@@ -42,6 +42,9 @@
         console.log("[INIT] StockBuilder V5 starting...");
       }
 
+    // 🕵️ Hidden Admin Entry (Tap Anywhere 5x)
+    if (window.AdminEntry?.mount) AdminEntry.mount();
+
      // 🔐 MODE GUARD — เลือก entry point ตามสถานะ
      if (
        Core.state?.admin?.loggedIn === true &&
