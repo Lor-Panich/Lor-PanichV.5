@@ -147,7 +147,11 @@ Admin.render = function () {
      if (typeof UI.bindEditProductButtons === "function") {
        UI.bindEditProductButtons();
      }
-
+      if (typeof UI.bindProductToggle === "function") {
+      UI.bindProductToggle({
+        onToggle: () => {} // STEP A2.4.3.2 จะมาใส่ logic
+      });
+    }
    }     
   }   
 };
