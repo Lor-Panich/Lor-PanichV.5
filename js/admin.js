@@ -406,6 +406,10 @@ Admin.openEditProduct = function (productId) {
    }
     });
   }
+  // 🔑 DIFF #5 — bind image picker AFTER edit sheet render
+  if (window.UI && typeof UI.bindImagePicker === "function") {
+    UI.bindImagePicker();
+  }   
 };
 
 /* ======================================================
