@@ -511,6 +511,80 @@ Admin.submitEditProduct = async function () {
 };
 
 /* ======================================================
+   STEP A2.4.2.2 — SUBMIT STOCK IN
+   - Frontend only
+   - Call backend stockIn
+====================================================== */
+
+Admin.submitStockIn = async function () {
+  if (!Admin.guard("manageStock", "ไม่มีสิทธิ์จัดการสต๊อก")) {
+    return;
+  }
+
+  const modeEl = document.getElementById("stockAdjustMode");
+  if (!modeEl || modeEl.value !== "IN") {
+    return; // เฉพาะโหมด IN
+  }
+
+  const qtyEl = document.getElementById("stockAdjustQty");
+  const reasonEl = document.getElementById("stockAdjustReason");
+
+  if (!qtyEl) {
+    UI.showToast("ฟอร์มไม่สมบูรณ์", "error");
+    return;
+  }
+
+  const qty = Number(qtyEl.value);
+  const reason = reasonEl ? reasonEl.value : "";
+
+  if (!Number.isInteger(qty) || qty <= 0) {
+    UI.showToast("จำนวนต้องเป็นตัวเลขมากกว่า 0", "warning");
+    return;
+  }
+
+  // productId จาก sheet title
+  const title = document.querySelector(".admin-sheet h3");
+  const productId =
+    title && title.textContent.split("•")[1]
+      ? title.textContent.split("•")[1].trim()
+      : "";
+
+  if (!productId) {
+    UI.showToast("ไม่พบรหัสสินค้า", "error");
+    return;
+  }
+
+  UI.showLoading("กำลังรับสินค้าเข้า...");
+
+  try {
+    await API.stockIn(Core.state.admin.token, {
+      productId,
+      qty,
+      reason
+    });
+
+    UI.showToast("รับสินค้าเข้าเรียบร้อย", "success");
+
+    UI.closeOverlay("adminSheet");
+
+    if (typeof Core.loadProducts === "function") {
+      await Core.loadProducts();
+    }
+
+    Admin.render();
+
+  } catch (err) {
+    console.error("[Admin.submitStockIn]", err);
+    UI.showToast(
+      err.message || "รับสินค้าเข้าไม่สำเร็จ",
+      "error"
+    );
+  } finally {
+    UI.hideLoading();
+  }
+};
+
+/* ======================================================
    STEP C.6.2 — HISTORY FILTER / SEARCH / SORT
    - Read-only
    - Frontend only
@@ -878,7 +952,7 @@ Admin.openStockAdjust = function (product) {
   if (window.UI && typeof UI.bindStockAdjustSheet === "function") {
     UI.bindStockAdjustSheet({
       onCancel: () => UI.closeOverlay("adminSheet"),
-      onSubmit: Admin.submitStockAdjust // (ยังไม่ต้อง implement ก็ได้)
+      onSubmit: Admin.submitStockIn
     });
   }
 };
