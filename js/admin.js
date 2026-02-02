@@ -512,19 +512,15 @@ Admin.submitEditProduct = async function () {
 
 /* ======================================================
    STEP A2.4.2.2 — SUBMIT STOCK IN
-   - Frontend only
-   - Call backend stockIn
 ====================================================== */
 
 Admin.submitStockIn = async function () {
-  if (!Admin.guard("manageProducts", "ไม่มีสิทธิ์จัดการสต๊อก")) {
+  if (!Admin.guard("manageStock", "ไม่มีสิทธิ์จัดการสต๊อก")) {
     return;
   }
 
   const modeEl = document.getElementById("stockAdjustMode");
-  if (!modeEl || modeEl.value !== "IN") {
-    return; // เฉพาะโหมด IN
-  }
+  if (!modeEl || modeEl.value !== "IN") return;
 
   const qtyEl = document.getElementById("stockAdjustQty");
   const reasonEl = document.getElementById("stockAdjustReason");
@@ -542,7 +538,6 @@ Admin.submitStockIn = async function () {
     return;
   }
 
-  // productId จาก sheet title
   const title = document.querySelector(".admin-sheet h3");
   const productId =
     title && title.textContent.split("•")[1]
@@ -557,22 +552,17 @@ Admin.submitStockIn = async function () {
   UI.showLoading("กำลังรับสินค้าเข้า...");
 
   try {
- await API.stockIn(
-   Core.state.admin.token,
-   productId,
-   qty,
-   reason
- );
-    });
+  await API.stockIn(Core.state.admin.token, {
+    productId,
+    qty,
+    reason
+  });
 
     UI.showToast("รับสินค้าเข้าเรียบร้อย", "success");
 
     UI.closeOverlay("adminSheet");
 
-    if (typeof Core.loadProducts === "function") {
-      await Core.loadProducts();
-    }
-
+    await Core.loadProducts();
     Admin.render();
 
   } catch (err) {
@@ -941,7 +931,7 @@ Admin.printTimeline = function () {
 ====================================================== */
 
 Admin.openStockAdjust = function (product) {
-    if (!Admin.guard("manageStock", "ไม่มีสิทธิ์จัดการสต๊อก")) {
+   if (!Admin.guard("manageProducts", "ไม่มีสิทธิ์จัดการสต๊อก")) {
     return;
   }
   const overlay = document.getElementById("adminSheet");
