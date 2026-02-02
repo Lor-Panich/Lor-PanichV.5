@@ -128,6 +128,72 @@ Render.adminHeader = function (title = "", rightHTML = "") {
 };
 
 /* ======================================================
+   STEP H2 — ADMIN LOGIN SHEET (RENDER ONLY)
+   - HTML only
+   - No state mutation
+   - No API
+   - No event binding
+====================================================== */
+
+Render.adminLoginSheet = function () {
+  return `
+    <div class="sheet admin-login-sheet">
+
+      <div class="sheet-header">
+        <div class="sheet-title">เข้าสู่ระบบแอดมิน</div>
+        <button
+          type="button"
+          class="sheet-close-btn"
+          data-action="close-sheet"
+        >✕</button>
+      </div>
+
+      <div class="sheet-content">
+
+        <label class="form-field">
+          <span>Username</span>
+          <input
+            type="text"
+            id="adminLoginUsername"
+            autocomplete="username"
+          />
+        </label>
+
+        <label class="form-field">
+          <span>Password</span>
+          <input
+            type="password"
+            id="adminLoginPassword"
+            autocomplete="current-password"
+          />
+        </label>
+
+      </div>
+
+      <div class="sheet-footer">
+        <button
+          type="button"
+          class="secondary-btn"
+          data-action="cancel-login"
+        >
+          ยกเลิก
+        </button>
+
+        <button
+          type="button"
+          class="primary-btn"
+          data-action="submit-login"
+        >
+          เข้าสู่ระบบ
+        </button>
+      </div>
+
+    </div>
+  `;
+};
+
+
+/* ======================================================
    STEP A1.2 — ADMIN MENU (RENDER ONLY)
    - View switcher (UI only)
    - No logic
