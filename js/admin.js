@@ -252,6 +252,9 @@ Admin.login = async function (username, password) {
 
     UI.showToast("เข้าสู่ระบบสำเร็จ", "success");
 
+     if (window.UI && typeof UI.closeOverlay === "function") {
+       UI.closeOverlay("adminSheet");
+     } 
     await Admin.init();
 
   } catch (err) {
