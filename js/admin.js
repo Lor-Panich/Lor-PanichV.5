@@ -149,7 +149,7 @@ Admin.render = function () {
      }
       if (typeof UI.bindProductToggle === "function") {
       UI.bindProductToggle({
-        onToggle: () => {} // STEP A2.4.3.2 จะมาใส่ logic
+        onToggle: Admin.toggleProductActive
       });
     }
    }     
@@ -509,6 +509,63 @@ Admin.submitEditProduct = async function () {
       err.message || "บันทึกการแก้ไขไม่สำเร็จ",
       "error"
     );
+  } finally {
+    UI.hideLoading();
+  }
+};
+
+/* ======================================================
+   STEP A2.4.3.2 — TOGGLE PRODUCT ACTIVE
+   - Quick toggle from products list
+   - Use updateProduct (backend unchanged)
+====================================================== */
+
+Admin.toggleProductActive = async function (productId, currentActive) {
+  if (!Admin.guard("manageProducts", "ไม่มีสิทธิ์เปิด/ปิดขายสินค้า")) {
+    return;
+  }
+
+  const products = Core.state.products || [];
+  const product = products.find(p => p.productId === productId);
+
+  if (!product) {
+    UI.showToast("ไม่พบสินค้า", "error");
+    return;
+  }
+
+  const nextActive = !currentActive;
+
+  UI.showLoading("กำลังอัปเดตสถานะสินค้า...");
+
+  try {
+    await API.updateProduct(Core.state.admin.token, {
+      productId: product.productId,
+      name: product.name,
+      price: product.price,
+      stock: product.stock,
+      active: nextActive,
+      image: product.image || ""
+    });
+
+    UI.showToast(
+      nextActive ? "เปิดขายสินค้าแล้ว" : "ปิดขายสินค้าแล้ว",
+      "success"
+    );
+
+    await Core.loadProducts();
+    Admin.render();
+
+  } catch (err) {
+    console.error("[Admin.toggleProductActive]", err);
+    UI.showToast(
+      err.message || "เปลี่ยนสถานะสินค้าไม่สำเร็จ",
+      "error"
+    );
+
+    // fallback: reload to revert UI
+    await Core.loadProducts();
+    Admin.render();
+
   } finally {
     UI.hideLoading();
   }
