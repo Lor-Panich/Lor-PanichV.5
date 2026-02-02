@@ -892,6 +892,10 @@ UI.bindEditProductSheet = function (handlers = {}) {
     if (!btn) return;
 
     const action = btn.dataset.action;
+    if (action === "open-stock-adjust") {
+      handlers.onOpenStockAdjust && handlers.onOpenStockAdjust();
+      return;
+    }     
 
     if (
       action === "close-sheet" ||
@@ -907,35 +911,6 @@ UI.bindEditProductSheet = function (handlers = {}) {
     }
   });
 };
-
-/* ======================================================
-   STEP A2.4.2.1 — STOCK ADJUST BUTTON UI BINDING
-   - UI only
-   - No state mutation
-   - Dispatch to admin.js
-====================================================== */
-
-UI.bindStockAdjustButton = function () {
-  const sheet = document.querySelector(".admin-product-sheet");
-  if (!sheet) return;
-
-  const btn = sheet.querySelector(
-    "[data-action='open-stock-adjust']"
-  );
-
-  if (!btn || btn._bound) return;
-  btn._bound = true;
-
-  btn.addEventListener("click", function () {
-    if (
-      window.Admin &&
-      typeof Admin.openStockAdjust === "function"
-    ) {
-      Admin.openStockAdjust();
-    }
-  });
-};
-
 
 /* ======================================================
    STEP A2.3.1 — EDIT PRODUCT BUTTON UI BINDING
