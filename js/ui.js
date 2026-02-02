@@ -133,6 +133,67 @@ UI._syncBackdrop = function () {
 };
 
 /* ======================================================
+   STEP H2 — OPEN ADMIN LOGIN SHEET
+   - UI only
+   - No API
+   - No state mutation
+====================================================== */
+
+UI.openAdminLogin = function () {
+  const overlay = document.getElementById("adminSheet");
+  if (!overlay) return;
+
+  // render sheet
+  overlay.innerHTML = Render.adminLoginSheet();
+
+  // open via overlay stack
+  UI.openOverlay("adminSheet");
+
+  // bind login actions (submit / cancel)
+  const sheet = overlay.querySelector(".admin-login-sheet");
+  if (!sheet || sheet._bound) return;
+  sheet._bound = true;
+
+  sheet.addEventListener("click", function (e) {
+    const btn = e.target.closest("[data-action]");
+    if (!btn) return;
+
+    const action = btn.dataset.action;
+
+    if (action === "close-sheet" || action === "cancel-login") {
+      UI.closeOverlay("adminSheet");
+      overlay.innerHTML = "";
+      return;
+    }
+
+    if (action === "submit-login") {
+      const usernameEl =
+        document.getElementById("adminLoginUsername");
+      const passwordEl =
+        document.getElementById("adminLoginPassword");
+
+      if (!usernameEl || !passwordEl) return;
+
+      const username = usernameEl.value.trim();
+      const password = passwordEl.value;
+
+      if (!username || !password) {
+        UI.showToast("กรุณากรอกชื่อผู้ใช้และรหัสผ่าน", "warning");
+        return;
+      }
+
+      // 👉 ส่งต่อให้ Admin Controller (STEP H3)
+      if (
+        window.Admin &&
+        typeof Admin.login === "function"
+      ) {
+        Admin.login(username, password);
+      }
+    }
+  });
+};
+
+/* ======================================================
    STEP 9.2 — QTY SHEET CONTROLLER
    - use overlay stack
    - no business logic
