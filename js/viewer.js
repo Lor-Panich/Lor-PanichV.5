@@ -277,8 +277,11 @@ Viewer.bindHiddenAdminEntry = function () {
     pressTimer = setTimeout(() => {
       pressTimer = null;
 
-      console.log("[HiddenAdmin] long-press detected");
-      // STEP H2 จะมาเรียก UI.openAdminLogin()
+console.log("[HiddenAdmin] long-press detected");
+
+if (window.UI && typeof UI.openAdminLogin === "function") {
+  UI.openAdminLogin();
+}
     }, HOLD_MS);
   };
 
