@@ -872,12 +872,6 @@ Admin.openStockAdjust = function (product) {
 
   UI.openOverlay("adminSheet");
 
-  // bind เฉพาะ cancel ตอนนี้
-  if (window.UI && typeof UI.bindStockAdjustSheet === "function") {
-    UI.bindStockAdjustSheet({
-      onCancel: () => UI.closeOverlay("adminSheet")
-    });
-  }
 };
 
 
