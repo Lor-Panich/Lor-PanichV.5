@@ -155,6 +155,16 @@ html, body {
   line-height: 1.2;
 }
 
+/* ======================================================
+   🔐 HIDDEN ADMIN ENTRY — DISABLE TEXT SELECTION (iOS)
+====================================================== */
+
+.shop-title,
+.shop-subtitle {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none; /* ❌ iOS copy menu */
+
 .shop-subtitle {
   font-size: 14px;
   color: var(--text-secondary);
