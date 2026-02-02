@@ -245,11 +245,15 @@ Render.adminProductRow = function (product = {}) {
         ${Number(product.stock || 0)}
       </td>
       <td>
-        ${
-          product.active
-            ? `<span class="status-active">เปิดขาย</span>`
-            : `<span class="status-inactive">ปิดขาย</span>`
-        }
+          <button
+            type="button"
+            class="product-toggle ${product.active ? "on" : "off"}"
+            data-action="toggle-active"
+            data-product-id="${product.productId || ""}"
+            title="${product.active ? "เปิดขาย" : "ปิดขาย"}"
+          >
+            ${product.active ? "🟢" : "⚪"}
+          </button>
       </td>
       <td class="right">
        <button
