@@ -1037,4 +1037,3 @@ Admin.openStockAdjust = function (product) {
     });
   }
 };
-
