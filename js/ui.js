@@ -941,6 +941,54 @@ UI.bindEditProductButtons = function () {
 };
 
 /* ======================================================
+   STEP A2.4.1.2 — IMAGE PICKER UI
+   - UI only
+   - No state mutation
+   - No API
+====================================================== */
+
+UI.bindImagePicker = function () {
+  const sheet = document.querySelector(".admin-product-sheet");
+  if (!sheet || sheet._imageBound) return;
+
+  sheet._imageBound = true;
+
+  const pickBtn   = sheet.querySelector("[data-action='pick-image']");
+  const fileInput = sheet.querySelector("[data-action='file-input']");
+  const preview   = sheet.querySelector(".image-preview");
+
+  if (!pickBtn || !fileInput || !preview) return;
+
+  pickBtn.addEventListener("click", function () {
+    fileInput.click();
+  });
+
+  fileInput.addEventListener("change", function () {
+    const file = fileInput.files && fileInput.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      UI.showToast("กรุณาเลือกไฟล์รูปภาพ", "warning");
+      fileInput.value = "";
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function () {
+      preview.innerHTML =
+        `<img src="${reader.result}" alt="preview" />`;
+
+      // เก็บไว้ชั่วคราว (ใช้ใน STEP A2.4.1.3)
+      sheet.dataset.imageBase64 = reader.result;
+      sheet.dataset.imageName   = file.name;
+      sheet.dataset.imageType   = file.type;
+    };
+
+    reader.readAsDataURL(file);
+  });
+};
+
+/* ======================================================
    STEP A2.x — ADD PRODUCT BUTTON UI BINDING
    - UI only
    - No state mutation
