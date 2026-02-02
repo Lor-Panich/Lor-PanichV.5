@@ -207,6 +207,7 @@ Viewer._mount = function (html) {
     Viewer._bindProductCardClick();
     Viewer.bindHeaderSearch();
     Viewer.bindHeaderCart();
+    Viewer.bindHiddenAdminEntry();   
     Viewer.updateCartBadge();
   }
 };
@@ -253,6 +254,51 @@ Viewer._isOverlayOpen = function () {
       || UI._overlayStack.includes("qtySheet");
 };
 
+/* ======================================================
+   STEP H1 — HIDDEN ADMIN ENTRY (LONG PRESS)
+   - Viewer only
+   - No UI change
+====================================================== */
+
+Viewer.bindHiddenAdminEntry = function () {
+  const header = document.getElementById("appHeader");
+  if (!header || header._adminBound) return;
+  header._adminBound = true;
+
+  let pressTimer = null;
+  const HOLD_MS = 2500; // 2.5 วินาที
+
+  const startPress = (e) => {
+    // ✅ เฉพาะกดที่ “ชื่อร้าน” เท่านั้น
+    if (!e.target.closest(".shop-title")) return;
+
+    if (pressTimer) return;
+
+    pressTimer = setTimeout(() => {
+      pressTimer = null;
+
+      console.log("[HiddenAdmin] long-press detected");
+      // STEP H2 จะมาเรียก UI.openAdminLogin()
+    }, HOLD_MS);
+  };
+
+  const cancelPress = () => {
+    if (pressTimer) {
+      clearTimeout(pressTimer);
+      pressTimer = null;
+    }
+  };
+
+  // Desktop
+  header.addEventListener("mousedown", startPress);
+  header.addEventListener("mouseup", cancelPress);
+  header.addEventListener("mouseleave", cancelPress);
+
+  // Mobile
+  header.addEventListener("touchstart", startPress, { passive: true });
+  header.addEventListener("touchend", cancelPress);
+  header.addEventListener("touchcancel", cancelPress);
+};
 
 /* ======================================================
    VIEWER HELPERS (PURE)
