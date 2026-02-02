@@ -87,6 +87,8 @@ UI.openOverlay = function (overlayId) {
   el.classList.add("show");
   el.classList.remove("hidden");
 
+  if (window.Core && Core.state) Core.state.sheetOpen = true;
+
   UI._syncBackdrop();
 };
 
@@ -95,6 +97,10 @@ UI.closeOverlay = function (overlayId) {
   if (!el) return;
 
   UI._overlayStack = UI._overlayStack.filter(id => id !== overlayId);
+
+  if (window.Core && Core.state && UI._overlayStack.length === 0) {
+    Core.state.sheetOpen = false;
+  }
 
   el.classList.remove("show");
 
