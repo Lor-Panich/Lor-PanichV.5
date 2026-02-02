@@ -150,7 +150,7 @@ UI.openAdminLogin = function () {
   UI.openOverlay("adminSheet");
 
   // bind login actions (submit / cancel)
-  const sheet = overlay.querySelector(".admin-login-sheet");
+  const sheet = overlay.querySelector(".admin-sheet");
   if (!sheet || sheet._bound) return;
   sheet._bound = true;
 
@@ -182,13 +182,14 @@ UI.openAdminLogin = function () {
         return;
       }
 
-      // 👉 ส่งต่อให้ Admin Controller (STEP H3)
-      if (
-        window.Admin &&
-        typeof Admin.login === "function"
-      ) {
-        Admin.login(username, password);
-      }
+ if (
+   window.Admin &&
+   typeof Admin.login === "function"
+ ) {
+   Admin.login(username, password);
+ } else {
+   UI.showToast("ระบบแอดมินยังไม่พร้อม", "error");
+ }
     }
   });
 };
