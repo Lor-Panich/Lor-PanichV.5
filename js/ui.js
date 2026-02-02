@@ -981,6 +981,35 @@ UI.bindEditProductButtons = function () {
 };
 
 /* ======================================================
+   STEP A2.4.3.1 — QUICK TOGGLE UI BINDING
+   - UI only
+   - No state mutation
+   - Dispatch to admin.js
+====================================================== */
+
+UI.bindProductToggle = function (handlers = {}) {
+  const root = document.querySelector(".admin-products");
+  if (!root) return;
+
+  // 🔒 guard กัน bind ซ้ำ
+  if (root._toggleBound) return;
+  root._toggleBound = true;
+
+  root.addEventListener("click", function (e) {
+    const btn = e.target.closest("[data-action='toggle-active']");
+    if (!btn) return;
+
+    const productId = btn.dataset.productId;
+    if (!productId) return;
+
+    const isActive = btn.classList.contains("on");
+
+    // 👉 dispatch ไป admin controller
+    handlers.onToggle && handlers.onToggle(productId, isActive);
+  });
+};
+
+/* ======================================================
    STEP A2.4.1.2 — IMAGE PICKER UI
    - UI only
    - No state mutation
