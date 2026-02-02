@@ -498,6 +498,82 @@ Render.adminEditProductSheet = function (product = {}) {
   `;
 };
 
+/* ======================================================
+   STEP A2.4.2.1 — ADMIN STOCK ADJUST SHEET (RENDER ONLY)
+   - HTML only
+   - No state mutation
+   - No API
+   - No event binding
+====================================================== */
+
+Render.adminStockAdjustSheet = function (product = {}) {
+  return `
+    <div class="sheet admin-stock-sheet">
+
+      <div class="sheet-header">
+        <div class="sheet-title">
+          จัดการสต๊อก • ${product.productId || ""}
+        </div>
+        <button
+          type="button"
+          class="sheet-close-btn"
+          data-action="close-sheet"
+        >✕</button>
+      </div>
+
+      <div class="sheet-content">
+
+        <label class="form-field">
+          <span>โหมดการทำงาน</span>
+          <select id="stockAdjustMode">
+            <option value="IN">รับเข้า (IN)</option>
+            <option value="ADJUST">ปรับยอด (ADJUST)</option>
+          </select>
+        </label>
+
+        <label class="form-field">
+          <span>จำนวน</span>
+          <input
+            type="number"
+            id="stockAdjustQty"
+            min="0"
+            step="1"
+          />
+        </label>
+
+        <label class="form-field">
+          <span>เหตุผล</span>
+          <input
+            type="text"
+            id="stockAdjustReason"
+            placeholder="เช่น รับของเข้า / แก้ไขยอด"
+            autocomplete="off"
+          />
+        </label>
+
+      </div>
+
+      <div class="sheet-footer">
+        <button
+          type="button"
+          class="secondary-btn"
+          data-action="cancel-stock-adjust"
+        >
+          ยกเลิก
+        </button>
+
+        <button
+          type="button"
+          class="primary-btn"
+          data-action="submit-stock-adjust"
+        >
+          บันทึกสต๊อก
+        </button>
+      </div>
+
+    </div>
+  `;
+};
 
 /* ======================================================
    CANONICAL: EMPTY STATE
