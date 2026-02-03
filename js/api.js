@@ -161,30 +161,8 @@ API.stockAdjust = async function (token, productId, newQty, reason = "") {
 };
 
 API.fetchStockLogs = async function (token) {
-  // 🔒 READ-ONLY: ใช้สำหรับ History Viewer เท่านั้น
-  // ❌ ห้ามใช้ API นี้กับ action ที่แก้ข้อมูล   
   return await API._post({
     action: "stockLogs",
     token
-  });
-};
-
-/* ======================================================
-   STEP A2.4.1.1 — UPLOAD PRODUCT IMAGE
-   - Frontend wrapper only
-====================================================== */
-
-API.uploadProductImage = async function (
-  token,
-  base64Data,
-  filename,
-  mimeType
-) {
-  return await API._post({
-    action: "uploadProductImage",
-    token,
-    data: base64Data,
-    filename,
-    mimeType
   });
 };
