@@ -307,6 +307,12 @@ Admin.login = async function (username, password) {
    });
  };
 
+
+// 🔑 auto-bind if login sheet already exists (safe no-op)
+if (document.getElementById("adminLoginForm")) {
+  Admin.bindLogin();
+}
+   
 /* ======================================================
    STEP A2.2.2 — SUBMIT ADD PRODUCT
    - Frontend only
