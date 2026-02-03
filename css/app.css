@@ -161,19 +161,45 @@ html, body {
 }
 
 /* ======================================================
+   FIX — SHOP TITLE ADMIN ENTRY (CLICKABLE)
+====================================================== */
+
+.shop-title {
+  pointer-events: auto;      /* 🔑 เปิดให้รับ tap */
+  cursor: pointer;
+
+  position: relative;        /* 🔑 ยก layer */
+  z-index: 30;               /* 🔑 สูงกว่า glass header */
+
+  -webkit-tap-highlight-color: transparent;
+}
+
+
+/* ======================================================
    SEARCH BAR (SUB HEADER)
 ====================================================== */
 
+/* SEARCH BAR — FIX HIT AREA */
 .search-bar {
-  padding: 12px 16px;
-  background: var(--app-bg);
+  position: absolute;        /* 🔑 เอาออกจาก flow */
+  left: 0;
+  right: 0;
+  top: 100%;
 
   pointer-events: none;
   opacity: 0;
+  visibility: hidden;        /* 🔑 kill hit-area */
+  transform: translateY(-18px) scale(0.96);
+
+  height: auto;              /* ❌ ห้ามใช้ height:0 */
 }
 body.search-open .search-bar {
   pointer-events: auto;
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(0.995);
 }
+
 
 .search-input {
   width: 100%;
