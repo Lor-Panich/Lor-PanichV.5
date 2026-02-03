@@ -133,68 +133,6 @@ UI._syncBackdrop = function () {
 };
 
 /* ======================================================
-   STEP H2 — OPEN ADMIN LOGIN SHEET
-   - UI only
-   - No API
-   - No state mutation
-====================================================== */
-
-UI.openAdminLogin = function () {
-  const overlay = document.getElementById("adminSheet");
-  if (!overlay) return;
-
-  // render sheet
-  overlay.innerHTML = Render.adminLoginSheet();
-
-  // open via overlay stack
-  UI.openOverlay("adminSheet");
-
-  // bind login actions (submit / cancel)
-  const sheet = overlay.querySelector(".admin-sheet");
-  if (!sheet || sheet._bound) return;
-  sheet._bound = true;
-
-  sheet.addEventListener("click", function (e) {
-    const btn = e.target.closest("[data-action]");
-    if (!btn) return;
-
-    const action = btn.dataset.action;
-
-    if (action === "close-sheet" || action === "cancel-login") {
-      UI.closeOverlay("adminSheet");
-      overlay.innerHTML = "";
-      return;
-    }
-
-    if (action === "submit-login") {
-      const usernameEl =
-        document.getElementById("adminLoginUsername");
-      const passwordEl =
-        document.getElementById("adminLoginPassword");
-
-      if (!usernameEl || !passwordEl) return;
-
-      const username = usernameEl.value.trim();
-      const password = passwordEl.value;
-
-      if (!username || !password) {
-        UI.showToast("กรุณากรอกชื่อผู้ใช้และรหัสผ่าน", "warning");
-        return;
-      }
-
- if (
-   window.Admin &&
-   typeof Admin.login === "function"
- ) {
-   Admin.login(username, password);
- } else {
-   UI.showToast("ระบบแอดมินยังไม่พร้อม", "error");
- }
-    }
-  });
-};
-
-/* ======================================================
    STEP 9.2 — QTY SHEET CONTROLLER
    - use overlay stack
    - no business logic
@@ -624,6 +562,34 @@ sheet.addEventListener("touchmove", e => {
 };
 
 /* ======================================================
+   STEP A — ADMIN LOGIN UI
+   - UI only
+   - รับ input อย่างเดียว
+   - ส่งต่อให้ admin.js
+====================================================== */
+
+UI.bindAdminLogin = function (handlers = {}) {
+  const btn = document.getElementById("adminLoginBtn");
+  if (!btn) return;
+
+  // 🔒 guard กัน bind ซ้ำ
+  if (btn._bound) return;
+  btn._bound = true;
+
+  btn.addEventListener("click", function () {
+    const usernameEl = document.getElementById("adminUsername");
+    const passwordEl = document.getElementById("adminPassword");
+
+    if (!usernameEl || !passwordEl) return;
+
+    const username = usernameEl.value.trim();
+    const password = passwordEl.value;
+
+    handlers.onLogin && handlers.onLogin(username, password);
+  });
+};
+
+/* ======================================================
    STEP C.6.4 — HISTORY FILTER UI BINDING
    - UI only
    - เปลี่ยน state อย่างเดียว
@@ -881,7 +847,7 @@ UI.bindTimelineActions = function () {
 ====================================================== */
 
 UI.bindAddProductSheet = function (handlers = {}) {
-  const sheet = document.querySelector(".admin-product-sheet");
+  const sheet = document.querySelector(".admin-sheet");
   if (!sheet) return;
 
   // 🔒 guard กัน bind ซ้ำ
@@ -926,10 +892,6 @@ UI.bindEditProductSheet = function (handlers = {}) {
     if (!btn) return;
 
     const action = btn.dataset.action;
-    if (action === "open-stock-adjust") {
-      handlers.onOpenStockAdjust && handlers.onOpenStockAdjust();
-      return;
-    }     
 
     if (
       action === "close-sheet" ||
@@ -940,42 +902,6 @@ UI.bindEditProductSheet = function (handlers = {}) {
     }
 
     if (action === "submit-edit-product") {
-      handlers.onSubmit && handlers.onSubmit();
-      return;
-    }
-  });
-};
-
-/* ======================================================
-   STEP A2.4.2.3 — STOCK ADJUST SHEET UI BINDING
-   - UI only
-   - No state mutation
-   - Dispatch to admin.js
-====================================================== */
-
-UI.bindStockAdjustSheet = function (handlers = {}) {
-  const sheet = document.querySelector(".admin-stock-sheet");
-  if (!sheet) return;
-
-  // 🔒 guard กัน bind ซ้ำ
-  if (sheet._bound) return;
-  sheet._bound = true;
-
-  sheet.addEventListener("click", function (e) {
-    const btn = e.target.closest("[data-action]");
-    if (!btn) return;
-
-    const action = btn.dataset.action;
-
-    if (
-      action === "cancel-stock-adjust" ||
-      action === "close-sheet"
-    ) {
-      handlers.onCancel && handlers.onCancel();
-      return;
-    }
-
-    if (action === "submit-stock-adjust") {
       handlers.onSubmit && handlers.onSubmit();
       return;
     }
@@ -1011,83 +937,6 @@ UI.bindEditProductButtons = function () {
     ) {
       Admin.openEditProduct(productId);
     }
-  });
-};
-
-/* ======================================================
-   STEP A2.4.3.1 — QUICK TOGGLE UI BINDING
-   - UI only
-   - No state mutation
-   - Dispatch to admin.js
-====================================================== */
-
-UI.bindProductToggle = function (handlers = {}) {
-  const root = document.querySelector(".admin-products");
-  if (!root) return;
-
-  // 🔒 guard กัน bind ซ้ำ
-  if (root._toggleBound) return;
-  root._toggleBound = true;
-
-  root.addEventListener("click", function (e) {
-    const btn = e.target.closest("[data-action='toggle-active']");
-    if (!btn) return;
-
-    const productId = btn.dataset.productId;
-    if (!productId) return;
-
-    const isActive = btn.classList.contains("on");
-
-    // 👉 dispatch ไป admin controller
-    handlers.onToggle && handlers.onToggle(productId, isActive);
-  });
-};
-
-/* ======================================================
-   STEP A2.4.1.2 — IMAGE PICKER UI
-   - UI only
-   - No state mutation
-   - No API
-====================================================== */
-
-UI.bindImagePicker = function () {
-  const sheet = document.querySelector(".admin-product-sheet");
-  if (!sheet || sheet._imageBound) return;
-
-  sheet._imageBound = true;
-
-  const pickBtn   = sheet.querySelector("[data-action='pick-image']");
-  const fileInput = sheet.querySelector("[data-action='file-input']");
-  const preview   = sheet.querySelector(".image-preview");
-
-  if (!pickBtn || !fileInput || !preview) return;
-
-  pickBtn.addEventListener("click", function () {
-    fileInput.click();
-  });
-
-  fileInput.addEventListener("change", function () {
-    const file = fileInput.files && fileInput.files[0];
-    if (!file) return;
-
-    if (!file.type.startsWith("image/")) {
-      UI.showToast("กรุณาเลือกไฟล์รูปภาพ", "warning");
-      fileInput.value = "";
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = function () {
-      preview.innerHTML =
-        `<img src="${reader.result}" alt="preview" />`;
-
-      // เก็บไว้ชั่วคราว (ใช้ใน STEP A2.4.1.3)
-      sheet.dataset.imageBase64 = reader.result;
-      sheet.dataset.imageName   = file.name;
-      sheet.dataset.imageType   = file.type;
-    };
-
-    reader.readAsDataURL(file);
   });
 };
 
