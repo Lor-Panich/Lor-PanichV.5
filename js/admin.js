@@ -271,6 +271,7 @@ Admin.login = async function (username, password) {
      if (window.UI && typeof UI.closeOverlay === "function") {
        UI.closeOverlay("adminSheet");
      } 
+   
     await Admin.init();
 
   } catch (err) {
@@ -279,6 +280,32 @@ Admin.login = async function (username, password) {
     UI.hideLoading();
   }
 };
+
+ /* ======================================================
+    ADMIN LOGIN UI BINDING (MISSING LINK)
+ ====================================================== */
+
+ Admin.bindLogin = function () {
+   const form = document.getElementById("adminLoginForm");
+  if (!form) {
+    console.warn("[Admin.bindLogin] adminLoginForm not found");
+    return;
+  }
+
+   form.addEventListener("submit", (e) => {
+     e.preventDefault();
+
+     const username = form.querySelector("[name=username]")?.value;
+     const password = form.querySelector("[name=password]")?.value;
+
+     if (!username || !password) {
+       UI.showToast("กรุณากรอกชื่อผู้ใช้และรหัสผ่าน", "warning");
+       return;
+     }
+
+     Admin.login(username, password);
+   });
+ };
 
 /* ======================================================
    STEP A2.2.2 — SUBMIT ADD PRODUCT
