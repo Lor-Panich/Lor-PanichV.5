@@ -14,6 +14,9 @@ window.Admin = {};
 Admin.guard = function (permission, message) {
   // 🔒 allow during admin bootstrap
   if (!Core?.state?.admin?.loggedIn) {
+    if (Core?.state?.mode === "admin") {
+      UI.showToast("กรุณาเข้าสู่ระบบแอดมิน", "warning");
+    }
     return false;
   }
 
