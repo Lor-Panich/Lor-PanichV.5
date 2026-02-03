@@ -158,6 +158,7 @@ UI.finalizeOverlays = function () {
   if (backdrop) {
     backdrop.classList.add("hidden");
     backdrop.onclick = null;
+    backdrop.style.pointerEvents = "none";     
   }
 };
 
@@ -216,12 +217,12 @@ UI.openAdminLogin = function () {
        window.Admin &&
        typeof Admin.login === "function"
      ) {
-       // 🔑 robust: finalize overlay after login flow
-       Admin.login(username, password)
-         .finally(() => {
-           UI.finalizeOverlays();
-           overlay.innerHTML = "";
-         });
+        // 🔑 robust: finalize overlay after login flow
+        Admin.login(username, password);
+       
+        // 🔑 force finalize UI immediately after dispatch login
+        UI.finalizeOverlays();
+        overlay.innerHTML = "";
      } else {
        UI.showToast("ระบบแอดมินยังไม่พร้อม", "error");
      }
