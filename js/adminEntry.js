@@ -76,7 +76,10 @@ window.AdminEntry = (() => {
     lastTapTime = now
 
     if (tapCount === REQUIRED_TAPS) {
-      trigger()
+    // 🔑 kill THIS click completely (iOS-safe)
+    e.stopImmediatePropagation()
+    e.preventDefault()
+    trigger()
     }
   }
 
