@@ -187,6 +187,17 @@ UI.openAdminLogin = function () {
 
   // open via overlay stack
   UI.openOverlay("adminSheet");
+  // ==============================
+ // 🔑 FIX PLAN A — iOS INPUT SAFE
+ // กัน event ไม่ให้ทะลุออกจาก admin sheet
+ // ==============================
+ overlay.addEventListener("pointerdown", function (e) {
+   e.stopPropagation();
+ });
+
+ overlay.addEventListener("click", function (e) {
+   e.stopPropagation();
+ });
 
   // bind login actions (submit / cancel)
  if (overlay._bound) return;
