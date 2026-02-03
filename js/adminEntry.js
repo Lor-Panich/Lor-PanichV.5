@@ -6,6 +6,7 @@
 ====================================================== */
 
 window.AdminEntry = (() => {
+  console.log('[AdminEntry] loaded')
   const REQUIRED_TAPS = 5
   const WINDOW_MS = 2000
   const COOLDOWN_MS = 20000
@@ -50,6 +51,7 @@ window.AdminEntry = (() => {
   /* ---------- Tap Logic ---------- */
 
   function handleTap(e) {
+    console.log('[AdminEntry] tap detected', e.target)
     if (!canRegisterTap(e)) return
 
     const now = Date.now()
@@ -85,6 +87,7 @@ window.AdminEntry = (() => {
   function mount() {
     if (active) return
     active = true
+    console.log('[AdminEntry] mounted') 
     document.addEventListener('click', handleTap, true)
   }
 
