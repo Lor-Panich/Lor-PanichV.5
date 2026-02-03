@@ -1019,7 +1019,13 @@ UI.bindShopNameEntry = function () {
   });
 };
 
-// 🔑 auto-bind admin entry from shop name (safe no-op)
-if (typeof UI.bindShopNameEntry === "function") {
-  UI.bindShopNameEntry();
+// 🔑 auto-bind admin entry from shop name (after render)
+if (
+  window.Render &&
+  typeof Render.after === "function" &&
+  typeof UI.bindShopNameEntry === "function"
+) {
+  Render.after(() => {
+    UI.bindShopNameEntry();
+  });
 }
