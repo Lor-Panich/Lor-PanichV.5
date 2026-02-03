@@ -193,6 +193,17 @@ UI.openAdminLogin = function () {
  overlay._bound = true;
 
  overlay.addEventListener("click", function (e) {
+  // ❗ iOS Safari: กัน click ที่เกิดจากการแตะ input / textarea
+  const tag = e.target && e.target.tagName;
+  if (tag === "INPUT" || tag === "TEXTAREA") {
+    return;
+  }
+
+  // ❗ กันกรณี label ที่ผูกกับ input
+  if (e.target && e.target.closest("label")) {
+    return;
+  }
+
  const btn =
    e.target.closest("[data-action]") ||
    e.target.closest("button");
