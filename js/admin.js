@@ -12,11 +12,24 @@ window.Admin = {};
 ====================================================== */
 
 Admin.guard = function (permission, message) {
+  // 🔒 allow during admin bootstrap
+  if (!Core?.state?.admin?.loggedIn) {
+    return false;
+  }
+
+  // 🔒 allow before permissions are ready
+  if (!Core.state.admin.permissions) {
+    return true;
+  }
+ 
   if (!Core.can(permission)) {
-    UI.showToast(
-      message || "คุณไม่มีสิทธิ์ดำเนินการนี้",
-      "error"
-    );
+    // ❗ show error only in active admin mode
+    if (Core.state.mode === "admin") {
+      UI.showToast(
+        message || "คุณไม่มีสิทธิ์ดำเนินการนี้",
+        "error"
+      );
+    }
     return false;
   }
   return true;
