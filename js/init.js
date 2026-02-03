@@ -42,11 +42,6 @@
         console.log("[INIT] StockBuilder V5 starting...");
       }
 
-     // 🕵️ Hidden Admin Entry mounted in adminEntry.js
-     if (window.AdminEntry?.mount) {
-       AdminEntry.mount(); // safe: internal guard prevents double mount
-     }  
-
      // 🔐 MODE GUARD — เลือก entry point ตามสถานะ
      if (
        Core.state?.admin?.loggedIn === true &&
