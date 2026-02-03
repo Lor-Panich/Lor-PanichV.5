@@ -6,6 +6,30 @@
 ====================================================== */
  
 window.Admin = {};
+
+/* ======================================================
+   ADMIN ENTRY STATE (STEP 9.A)
+====================================================== */
+
+Admin.entryOpen = false;
+
+/* ======================================================
+   ADMIN ENTRY TOGGLE (CLICK SHOP NAME)
+====================================================== */
+
+Admin.toggleEntry = function () {
+  Admin.entryOpen = !Admin.entryOpen;
+
+  if (Admin.entryOpen) {
+    if (window.UI && typeof UI.openAdminLogin === "function") {
+      UI.openAdminLogin();
+    }
+  } else {
+    if (window.UI && typeof UI.closeOverlay === "function") {
+      UI.closeOverlay("adminSheet");
+    }
+  }
+};
  
 /* ======================================================
    PERMISSION GUARD (STEP B)
