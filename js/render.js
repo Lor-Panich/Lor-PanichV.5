@@ -103,6 +103,11 @@ Render.shopHeader = function (title = "", subtitle = "") {
       </div>
     </div>
   `;
+   
+  // 🔑 fire after-render hooks (V5 extension point)
+  if (typeof Render.afterRender === "function") {
+    Render.afterRender();
+  }
 };
 
 /* ======================================================
