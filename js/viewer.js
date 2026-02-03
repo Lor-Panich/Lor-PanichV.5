@@ -266,10 +266,12 @@ Viewer.bindHiddenAdminEntry = function () {
   header._adminBound = true;
 
   // ✅ TAP ONCE — Admin Entry
-  header.addEventListener("click", function (e) {
+    header.addEventListener("pointerdown", function (e) {
     const title = e.target.closest(".shop-title");
     if (!title) return;
 
+    e.stopPropagation(); // 🔑 กัน search auto-close กิน event
+       
     if (window.UI && typeof UI.openAdminLogin === "function") {
       UI.openAdminLogin();
     }
