@@ -253,10 +253,7 @@ UI.openAdminLogin = function () {
      ) {
         // 🔑 robust: finalize overlay after login flow
         Admin.login(username, password);
-       
-        // 🔑 force finalize UI immediately after dispatch login
-        UI.finalizeOverlays();
-        overlay.innerHTML = "";
+        
      } else {
        UI.showToast("ระบบแอดมินยังไม่พร้อม", "error");
      }
