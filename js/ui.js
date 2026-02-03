@@ -449,7 +449,7 @@ UI.bindQtySelector = function (handlers = {}, rootEl) {
 ====================================================== */
 
 UI.bindAddToCart = function (onAdd) {
-  const sheet = document.getElementById("productDetailSheet");
+  const sheet = document.getElementById("productSheet");
   if (!sheet) return;
 
   const btn = sheet.querySelector("[data-action='add-to-cart']");
