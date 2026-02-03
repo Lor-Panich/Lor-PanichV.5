@@ -29,7 +29,8 @@ window.AdminEntry = (() => {
 
   function isHomePage() {
     // ปรับตาม routing ของคุณ
-    return !Core.state.view || Core.state.view === 'home'
+   if (!window.Core || !Core.state) return false
+   return !Core.state.view || Core.state.view === 'home'
   }
 
   function isBlockedTarget(target) {
@@ -112,3 +113,6 @@ window.AdminEntry = (() => {
     unmount
   }
 })()
+
+// auto-mount on load (safe)
+window.AdminEntry.mount()
