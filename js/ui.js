@@ -87,8 +87,6 @@ UI.openOverlay = function (overlayId) {
   el.classList.add("show");
   el.classList.remove("hidden");
 
-  if (window.Core && Core.state) Core.state.sheetOpen = true;
-
   UI._syncBackdrop();
 };
 
@@ -97,10 +95,6 @@ UI.closeOverlay = function (overlayId) {
   if (!el) return;
 
   UI._overlayStack = UI._overlayStack.filter(id => id !== overlayId);
-
-  if (window.Core && Core.state && UI._overlayStack.length === 0) {
-    Core.state.sheetOpen = false;
-  }
 
   el.classList.remove("show");
 
@@ -131,43 +125,12 @@ UI._syncBackdrop = function () {
     backdrop.classList.remove("hidden");
 
     // ✅ backdrop ทำหน้าที่เดียว: ปิด overlay บนสุด
-    backdrop.onclick = function (e) {
-   
-  // ✅ ปิดเฉพาะกรณีคลิกที่ backdrop เองเท่านั้น
-  if (e.target !== backdrop) return;
-  UI.closeTopOverlay()
-  };
-
+    backdrop.onclick = UI.closeTopOverlay;
   } else {
     backdrop.classList.add("hidden");
     backdrop.onclick = null;
   }
 };
-
-/* ======================================================
-   OVERLAY FINALIZATION (CRITICAL FLOW)
-   - force clear overlay stack
-   - reset backdrop & state safely
-====================================================== */
-
-UI.finalizeOverlays = function () {
-  // clear internal stack
-  UI._overlayStack.length = 0;
-
-  // reset Core state
-  if (window.Core && Core.state) {
-    Core.state.sheetOpen = false;
-  }
-
-  // hide backdrop explicitly
-  const backdrop = document.getElementById("globalBackdrop");
-  if (backdrop) {
-    backdrop.classList.add("hidden");
-    backdrop.onclick = null;
-    backdrop.style.pointerEvents = "none";     
-  }
-};
-
 
 /* ======================================================
    STEP H2 — OPEN ADMIN LOGIN SHEET
@@ -185,54 +148,17 @@ UI.openAdminLogin = function () {
 
   // open via overlay stack
   UI.openOverlay("adminSheet");
-  // ==============================
- // 🔑 FIX PLAN A — iOS INPUT SAFE
- // กัน event ไม่ให้ทะลุออกจาก admin sheet
- // ==============================
- overlay.addEventListener("pointerdown", function (e) {
-   e.stopPropagation();
- });
-
- overlay.addEventListener("click", function (e) {
-   e.stopPropagation();
- });
 
   // bind login actions (submit / cancel)
- if (overlay._bound) return;
- overlay._bound = true;
+  const sheet = overlay.querySelector(".admin-sheet");
+  if (!sheet || sheet._bound) return;
+  sheet._bound = true;
 
- overlay.addEventListener("click", function (e) {
-  // ❗ iOS Safari: กัน click ที่เกิดจากการแตะ input / textarea
-  const tag = e.target && e.target.tagName;
-  if (tag === "INPUT" || tag === "TEXTAREA") {
-    return;
-  }
+  sheet.addEventListener("click", function (e) {
+    const btn = e.target.closest("[data-action]");
+    if (!btn) return;
 
-  // ❗ กันกรณี label ที่ผูกกับ input
-  if (e.target && e.target.closest("label")) {
-    return;
-  }
-
- const btn =
-   e.target.closest("[data-action]") ||
-   e.target.closest("button");
-
- if (!btn) return;
-
- let action = btn.dataset.action || null;
-
- // fallback สำหรับปุ่มที่ไม่มี data-action
- if (!action) {
-   if (btn.classList.contains("primary-btn")) {
-     action = "submit-login";
-   } else if (btn.classList.contains("secondary-btn")) {
-     action = "cancel-login";
-   } else if (btn.classList.contains("sheet-close-btn")) {
-     action = "close-sheet";
-   }
- }
-
- if (!action) return;
+    const action = btn.dataset.action;
 
     if (action === "close-sheet" || action === "cancel-login") {
       UI.closeOverlay("adminSheet");
@@ -256,16 +182,14 @@ UI.openAdminLogin = function () {
         return;
       }
 
-     if (
-       window.Admin &&
-       typeof Admin.login === "function"
-     ) {
-        // 🔑 robust: finalize overlay after login flow
-        Admin.login(username, password);
-
-     } else {
-       UI.showToast("ระบบแอดมินยังไม่พร้อม", "error");
-     }
+ if (
+   window.Admin &&
+   typeof Admin.login === "function"
+ ) {
+   Admin.login(username, password);
+ } else {
+   UI.showToast("ระบบแอดมินยังไม่พร้อม", "error");
+ }
     }
   });
 };
@@ -393,7 +317,7 @@ UI.bindCartEvents = function (handlers = {}) {
       handlers.onQtyInput(itemEl, qty);
   });
 };
-
+   
 /* ======================================================
    STEP 10.2 — ORDER SUCCESS UI (DOCUMENT MODE)
    - UI only
@@ -458,7 +382,7 @@ UI.bindAdminOrderActions = function (handlers = {}) {
    ) {
      return;
    }
-
+   
   // 🔒 Optional guard: กัน bind ซ้ำ
   if (root.dataset.bound === "1") return;
   root.dataset.bound = "1";
