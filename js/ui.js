@@ -131,7 +131,15 @@ UI._syncBackdrop = function () {
     backdrop.classList.remove("hidden");
 
     // ✅ backdrop ทำหน้าที่เดียว: ปิด overlay บนสุด
-    backdrop.onclick = UI.closeTopOverlay;
+    backdrop.onclick = function (e) {
+    // ❗ ถ้าคลิกมาจากใน admin sheet ห้ามปิด
+    const adminSheet = document.getElementById("adminSheet");
+    if (adminSheet && adminSheet.contains(e.target)) {
+      return;
+    }
+    UI.closeTopOverlay();
+  };
+     
   } else {
     backdrop.classList.add("hidden");
     backdrop.onclick = null;
