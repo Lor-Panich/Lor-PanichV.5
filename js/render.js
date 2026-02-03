@@ -128,72 +128,6 @@ Render.adminHeader = function (title = "", rightHTML = "") {
 };
 
 /* ======================================================
-   STEP H2 — ADMIN LOGIN SHEET (RENDER ONLY)
-   - HTML only
-   - No state mutation
-   - No API
-   - No event binding
-====================================================== */
-
-Render.adminLoginSheet = function () {
-  return `
-    <div class="sheet admin-login-sheet">
-
-      <div class="sheet-header">
-        <div class="sheet-title">เข้าสู่ระบบแอดมิน</div>
-        <button
-          type="button"
-          class="sheet-close-btn"
-          data-action="close-sheet"
-        >✕</button>
-      </div>
-
-      <div class="sheet-content">
-
-        <label class="form-field">
-          <span>Username</span>
-          <input
-            type="text"
-            id="adminLoginUsername"
-            autocomplete="username"
-          />
-        </label>
-
-        <label class="form-field">
-          <span>Password</span>
-          <input
-            type="password"
-            id="adminLoginPassword"
-            autocomplete="current-password"
-          />
-        </label>
-
-      </div>
-
-      <div class="sheet-footer">
-        <button
-          type="button"
-          class="secondary-btn"
-          data-action="cancel-login"
-        >
-          ยกเลิก
-        </button>
-
-        <button
-          type="button"
-          class="primary-btn"
-          data-action="submit-login"
-        >
-          เข้าสู่ระบบ
-        </button>
-      </div>
-
-    </div>
-  `;
-};
-
-
-/* ======================================================
    STEP A1.2 — ADMIN MENU (RENDER ONLY)
    - View switcher (UI only)
    - No logic
@@ -311,15 +245,11 @@ Render.adminProductRow = function (product = {}) {
         ${Number(product.stock || 0)}
       </td>
       <td>
-          <button
-            type="button"
-            class="product-toggle ${product.active ? "on" : "off"}"
-            data-action="toggle-active"
-            data-product-id="${product.productId || ""}"
-            title="${product.active ? "เปิดขาย" : "ปิดขาย"}"
-          >
-            ${product.active ? "🟢" : "⚪"}
-          </button>
+        ${
+          product.active
+            ? `<span class="status-active">เปิดขาย</span>`
+            : `<span class="status-inactive">ปิดขาย</span>`
+        }
       </td>
       <td class="right">
        <button
@@ -455,36 +385,6 @@ Render.adminEditProductSheet = function (product = {}) {
 
       <div class="sheet-content">
 
-  <!-- ===============================
-       Product Image (UI only)
-       STEP A2.4.1.2
-  =============================== -->
-
-  <div class="image-picker">
-    <div class="image-preview">
-      ${
-        product.image
-          ? `<img src="${product.image}" alt="product image" />`
-          : `<div class="placeholder">ไม่มีรูป</div>`
-      }
-    </div>
-
-    <button
-      type="button"
-      class="btn"
-      data-action="pick-image"
-    >
-      เปลี่ยนรูป
-    </button>
-
-    <input
-      type="file"
-      accept="image/*"
-      data-action="file-input"
-      hidden
-    />
-  </div>      
-
         <label class="form-field">
           <span>รหัสสินค้า (SKU)</span>
           <input
@@ -539,14 +439,6 @@ Render.adminEditProductSheet = function (product = {}) {
       </div>
 
       <div class="sheet-footer">
-   <button
-     type="button"
-     class="secondary-btn"
-     data-action="open-stock-adjust"
-   >
-     📦 จัดการสต๊อก
-   </button>
-   
         <button
           type="button"
           class="secondary-btn"
@@ -568,82 +460,6 @@ Render.adminEditProductSheet = function (product = {}) {
   `;
 };
 
-/* ======================================================
-   STEP A2.4.2.1 — ADMIN STOCK ADJUST SHEET (RENDER ONLY)
-   - HTML only
-   - No state mutation
-   - No API
-   - No event binding
-====================================================== */
-
-Render.adminStockAdjustSheet = function (product = {}) {
-  return `
-    <div class="sheet admin-stock-sheet">
-
-      <div class="sheet-header">
-        <div class="sheet-title">
-          จัดการสต๊อก • ${product.productId || ""}
-        </div>
-        <button
-          type="button"
-          class="sheet-close-btn"
-          data-action="close-sheet"
-        >✕</button>
-      </div>
-
-      <div class="sheet-content">
-
-        <label class="form-field">
-          <span>โหมดการทำงาน</span>
-          <select id="stockAdjustMode">
-            <option value="IN">รับเข้า (IN)</option>
-            <option value="ADJUST">ปรับยอด (ADJUST)</option>
-          </select>
-        </label>
-
-        <label class="form-field">
-          <span>จำนวน</span>
-          <input
-            type="number"
-            id="stockAdjustQty"
-            min="0"
-            step="1"
-          />
-        </label>
-
-        <label class="form-field">
-          <span>เหตุผล</span>
-          <input
-            type="text"
-            id="stockAdjustReason"
-            placeholder="เช่น รับของเข้า / แก้ไขยอด"
-            autocomplete="off"
-          />
-        </label>
-
-      </div>
-
-      <div class="sheet-footer">
-        <button
-          type="button"
-          class="secondary-btn"
-          data-action="cancel-stock-adjust"
-        >
-          ยกเลิก
-        </button>
-
-        <button
-          type="button"
-          class="primary-btn"
-          data-action="submit-stock-adjust"
-        >
-          บันทึกสต๊อก
-        </button>
-      </div>
-
-    </div>
-  `;
-};
 
 /* ======================================================
    CANONICAL: EMPTY STATE
@@ -1726,3 +1542,4 @@ Render.adminTimelinePrintView = function (events = []) {
     </div>
   `;
 };
+
