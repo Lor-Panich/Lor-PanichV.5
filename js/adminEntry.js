@@ -52,6 +52,7 @@ window.AdminEntry = (() => {
   /* ---------- Tap Logic ---------- */
 
   function handleTap(e) {
+    if (!active) return   
     console.log('[AdminEntry] tap detected', e.target)
     if (!canRegisterTap(e)) {
    console.warn('[AdminEntry] blocked', {
