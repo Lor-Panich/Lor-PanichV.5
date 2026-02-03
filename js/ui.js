@@ -996,3 +996,25 @@ UI.openAdminLogin = function () {
     Admin.bindLogin();
   }
 };
+
+/* ======================================================
+   STEP 9.B — SHOP NAME CLICK (ADMIN ENTRY)
+====================================================== */
+
+UI.bindShopNameEntry = function () {
+  const el = document.querySelector(".shop-title"); // ← เปลี่ยน selector ให้ตรงของคุณ
+  if (!el) return;
+
+  // 🔒 guard กัน bind ซ้ำ
+  if (el._adminEntryBound) return;
+  el._adminEntryBound = true;
+
+  el.addEventListener("click", function () {
+    if (
+      window.Admin &&
+      typeof Admin.toggleEntry === "function"
+    ) {
+      Admin.toggleEntry();
+    }
+  });
+};
