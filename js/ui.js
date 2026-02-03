@@ -181,11 +181,10 @@ UI.openAdminLogin = function () {
   UI.openOverlay("adminSheet");
 
   // bind login actions (submit / cancel)
-  const sheet = overlay.querySelector(".admin-sheet");
-  if (!sheet || sheet._bound) return;
-  sheet._bound = true;
+ if (overlay._bound) return;
+ overlay._bound = true;
 
-  sheet.addEventListener("click", function (e) {
+ overlay.addEventListener("click", function (e) {
  const btn =
    e.target.closest("[data-action]") ||
    e.target.closest("button");
