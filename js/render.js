@@ -1726,5 +1726,3 @@ Render.adminTimelinePrintView = function (events = []) {
     </div>
   `;
 };
-
-
