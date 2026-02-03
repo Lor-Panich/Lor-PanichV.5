@@ -1018,3 +1018,8 @@ UI.bindShopNameEntry = function () {
     }
   });
 };
+
+// 🔑 auto-bind admin entry from shop name (safe no-op)
+if (typeof UI.bindShopNameEntry === "function") {
+  UI.bindShopNameEntry();
+}
