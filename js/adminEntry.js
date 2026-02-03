@@ -59,7 +59,7 @@ window.AdminEntry = (() => {
      home: isHomePage(),
      overlay: isOverlayOpen(),
      blockedTarget: isBlockedTarget(e.target),
-     view: Core.state.view
+     view: Core?.state?.view
    })
    return
  }
