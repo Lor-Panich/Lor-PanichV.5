@@ -139,6 +139,30 @@ UI._syncBackdrop = function () {
 };
 
 /* ======================================================
+   OVERLAY FINALIZATION (CRITICAL FLOW)
+   - force clear overlay stack
+   - reset backdrop & state safely
+====================================================== */
+
+UI.finalizeOverlays = function () {
+  // clear internal stack
+  UI._overlayStack.length = 0;
+
+  // reset Core state
+  if (window.Core && Core.state) {
+    Core.state.sheetOpen = false;
+  }
+
+  // hide backdrop explicitly
+  const backdrop = document.getElementById("globalBackdrop");
+  if (backdrop) {
+    backdrop.classList.add("hidden");
+    backdrop.onclick = null;
+  }
+};
+
+
+/* ======================================================
    STEP H2 — OPEN ADMIN LOGIN SHEET
    - UI only
    - No API
@@ -188,14 +212,19 @@ UI.openAdminLogin = function () {
         return;
       }
 
- if (
-   window.Admin &&
-   typeof Admin.login === "function"
- ) {
-   Admin.login(username, password);
- } else {
-   UI.showToast("ระบบแอดมินยังไม่พร้อม", "error");
- }
+     if (
+       window.Admin &&
+       typeof Admin.login === "function"
+     ) {
+       // 🔑 robust: finalize overlay after login flow
+       Admin.login(username, password)
+         .finally(() => {
+           UI.finalizeOverlays();
+           overlay.innerHTML = "";
+         });
+     } else {
+       UI.showToast("ระบบแอดมินยังไม่พร้อม", "error");
+     }
     }
   });
 };
