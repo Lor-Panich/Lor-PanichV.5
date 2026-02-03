@@ -80,17 +80,20 @@ window.AdminEntry = (() => {
   }
 
   function trigger() {
-    reset()
-    cooldownUntil = Date.now() + COOLDOWN_MS
+  reset()
+  cooldownUntil = Date.now() + COOLDOWN_MS
 
-    console.info('[AdminEntry] Triggered')
+  console.info('[AdminEntry] Triggered')
 
-    if (window.UI?.openAdminLogin) {
-      UI.openAdminLogin()
-    } else {
-      console.warn('[AdminEntry] UI.openAdminLogin not found')
-    }
+  // 🔑 STOP listening immediately after trigger
+  unmount()
+
+  if (window.UI?.openAdminLogin) {
+    UI.openAdminLogin()
+  } else {
+    console.warn('[AdminEntry] UI.openAdminLogin not found')
   }
+ }
 
   /* ---------- Lifecycle ---------- */
 
