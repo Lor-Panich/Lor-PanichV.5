@@ -132,12 +132,9 @@ UI._syncBackdrop = function () {
 
     // ✅ backdrop ทำหน้าที่เดียว: ปิด overlay บนสุด
     backdrop.onclick = function (e) {
-    // ❗ ถ้าคลิกมาจากใน admin sheet ห้ามปิด
-    const adminSheet = document.getElementById("adminSheet");
-    if (adminSheet && adminSheet.contains(e.target)) {
-      return;
-    }
-    UI.closeTopOverlay();
+  // ✅ ปิดเฉพาะกรณีคลิกที่ backdrop เองเท่านั้น
+  if (e.target !== backdrop) return;
+  UI.closeTopOverlay()
   };
      
   } else {
