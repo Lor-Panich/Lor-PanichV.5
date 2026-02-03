@@ -265,6 +265,16 @@ Viewer.bindHiddenAdminEntry = function () {
   if (!header || header._adminBound) return;
   header._adminBound = true;
 
+  // ✅ TAP ONCE — Admin Entry
+  header.addEventListener("click", function (e) {
+    const title = e.target.closest(".shop-title");
+    if (!title) return;
+
+    if (window.UI && typeof UI.openAdminLogin === "function") {
+      UI.openAdminLogin();
+    }
+  });   
+
   let pressTimer = null;
   const HOLD_MS = 2500; // 2.5 วินาที
 
