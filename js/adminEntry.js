@@ -52,7 +52,16 @@ window.AdminEntry = (() => {
 
   function handleTap(e) {
     console.log('[AdminEntry] tap detected', e.target)
-    if (!canRegisterTap(e)) return
+    if (!canRegisterTap(e)) {
+   console.warn('[AdminEntry] blocked', {
+     cooldown: isCooldown(),
+     home: isHomePage(),
+     overlay: isOverlayOpen(),
+     blockedTarget: isBlockedTarget(e.target),
+     view: Core.state.view
+   })
+   return
+ }
 
     const now = Date.now()
 
