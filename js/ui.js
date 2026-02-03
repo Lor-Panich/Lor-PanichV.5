@@ -968,3 +968,31 @@ UI.bindAddProductButtons = function () {
     }
   });
 };
+
+/* ======================================================
+   STEP 9.B — ADMIN LOGIN ENTRY UI
+   - UI only
+   - No state mutation
+   - Use overlay stack
+====================================================== */
+
+UI.openAdminLogin = function () {
+  const overlay = document.getElementById("adminSheet");
+  if (!overlay) return;
+
+  // render login UI
+  if (window.Render && typeof Render.adminLoginSheet === "function") {
+    overlay.innerHTML = Render.adminLoginSheet();
+  }
+
+  // open via overlay stack
+  UI.openOverlay("adminSheet");
+
+  // bind login action
+  if (
+    window.Admin &&
+    typeof Admin.bindLogin === "function"
+  ) {
+    Admin.bindLogin();
+  }
+};
