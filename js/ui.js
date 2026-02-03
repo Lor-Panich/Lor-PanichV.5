@@ -186,10 +186,26 @@ UI.openAdminLogin = function () {
   sheet._bound = true;
 
   sheet.addEventListener("click", function (e) {
-    const btn = e.target.closest("[data-action]");
-    if (!btn) return;
+ const btn =
+   e.target.closest("[data-action]") ||
+   e.target.closest("button");
 
-    const action = btn.dataset.action;
+ if (!btn) return;
+
+ let action = btn.dataset.action || null;
+
+ // fallback สำหรับปุ่มที่ไม่มี data-action
+ if (!action) {
+   if (btn.classList.contains("primary-btn")) {
+     action = "submit-login";
+   } else if (btn.classList.contains("secondary-btn")) {
+     action = "cancel-login";
+   } else if (btn.classList.contains("sheet-close-btn")) {
+     action = "close-sheet";
+   }
+ }
+
+ if (!action) return;
 
     if (action === "close-sheet" || action === "cancel-login") {
       UI.closeOverlay("adminSheet");
